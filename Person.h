@@ -9,6 +9,7 @@ class Person{ // Abstract
 };
 class Patient:public Person{
 
+
 };
 class doctor:public Person{
 
