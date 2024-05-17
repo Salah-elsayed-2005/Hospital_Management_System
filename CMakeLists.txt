@@ -1,6 +1,19 @@
-cmake_minimum_required(VERSION 3.24)
-project(Hopsital_Management_System)
+cmake_minimum_required(VERSION 3.27)
+project(untitled1)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(Hopsital_Management_System main.cpp DatabaseManager.cpp DatabaseManager.h CustomHeap.cpp CustomHeap.h CustomPriorityQueue.cpp Person.cpp Clinics.cpp Clinics.h  Person.h CustomPriorityQueue.h CustomPriorityQueue.h)
+add_executable(Hospital_Management_System
+        main.cpp
+        PriorityQueue.cpp
+        PriorityQueue.h
+        MaxHeap.cpp
+        MaxHeap.h
+        Patient.cpp
+        Patient.h
+        Diagnosis.cpp
+        Diagnosis.h
+        Clinics.cpp
+        Clinics.h
+        DatabaseManager.cpp
+        DatabaseManager.h)
