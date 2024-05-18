@@ -1,3 +1,7 @@
+#ifndef PRIORITYQUEUE_H
+#define PRIORITYQUEUE_H
+
+
 #include <iostream>
 #include "MaxHeap.h"
 using namespace std;
@@ -10,4 +14,4 @@ public:
     bool isEmpty();
 };
 
-
+#endif

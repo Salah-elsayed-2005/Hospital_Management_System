@@ -1,3 +1,6 @@
+//#ifndef DIAGNOSIS_H
+//#define DIAGNOSIS_H
+
 #include <iostream>
 using namespace std;
 
@@ -11,8 +14,9 @@ class Diagnosis {
     int triage_level;
 
 public:
-
-    void setAirwayLevel(int);
+    Diagnosis();
+    Diagnosis(int, int, int, int ,int);
+    void setAirwayLevel(int airway_observed);
     void setBreathingLevel(double);
     void setPulseLevel(int);
     void setDisabilityLevel(int);
@@ -23,3 +27,4 @@ public:
     int getTriageLevel();
 };
 
+//#endif

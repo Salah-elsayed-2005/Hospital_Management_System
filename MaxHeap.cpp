@@ -25,7 +25,7 @@ int inline MaxHeap::right_child(int index) {
 
 
 void MaxHeap::shiftUp(int index){
-    for(int i = index; i >= 0; i = parent(i)){
+    for(int i = index; i > 0; i = parent(i)){
 
         if(heap.at(i) > heap.at(parent(i))){
             swap(heap.at(i), heap.at(parent(i)));
@@ -83,3 +83,4 @@ Patient MaxHeap::extractMax() {
 bool MaxHeap::empty() {
     return heap.empty();
 }
+

@@ -44,16 +44,7 @@ void Diagnosis::setDisabilityLevel(int agitation_level) {
      * moderately agitated          2                   2
      * normal pupils                1                   1
      */
-
-    if(agitation_level == 4)
-        disability_level = 4;
-    else if(agitation_level == 3)
-        disability_level = 3;
-    else if(agitation_level == 2)
-        disability_level = 2;
-    else
-        disability_level = 1;
-
+    disability_level = agitation_level;
 
 }
 
@@ -80,3 +71,15 @@ int Diagnosis::getTriageLevel() {
 }
 
 
+Diagnosis::Diagnosis() {}
+
+
+Diagnosis::Diagnosis(int _airway_level, int _breathing_level, int _pulse_level, int _disability_level, int _exposure_level) {
+    airway_level = _airway_level;
+    breathing_level = _breathing_level;
+    pulse_level = _pulse_level;
+    disability_level = _disability_level;
+    exposure_level = _exposure_level;
+
+    setTriageLevel();
+}

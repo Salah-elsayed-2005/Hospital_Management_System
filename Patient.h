@@ -1,3 +1,6 @@
+#ifndef PATIENT_H
+#define PATIENT_H
+
 #include <iostream>
 #include "Diagnosis.h"
 using namespace std;
@@ -13,6 +16,9 @@ class Patient {
     int urgency_level;
 
 public:
+
+    Patient();
+    Patient(string, string, int, bool, string, Diagnosis);
     string getName();
     string getId();
     int getAge();
@@ -39,3 +45,5 @@ public:
         return this->urgency_level == obj.urgency_level;
     }
 };
+
+#endif

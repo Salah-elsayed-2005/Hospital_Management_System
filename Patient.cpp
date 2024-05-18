@@ -1,5 +1,19 @@
 #include "Patient.h"
 
+Patient::Patient() {
+
+}
+
+Patient::Patient(string _name, string _id, int _age, bool _gender, string _cond_descr, Diagnosis _diagnosis) {
+    name = _name;
+    id = _id;
+    age = _age;
+    gender = _gender;
+    condition_description = _cond_descr;
+    diagnosis = _diagnosis;
+    urgency_level = diagnosis.getTriageLevel();
+}
+
 string Patient::getName() {
     return name;
 }
@@ -55,7 +69,4 @@ void Patient::setDiagnosis(Diagnosis & _diagnosis) {
     diagnosis.setTriageLevel();
     urgency_level = diagnosis.getTriageLevel();
 }
-
-
-
 

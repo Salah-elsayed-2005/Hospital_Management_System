@@ -1,3 +1,7 @@
+#ifndef MAXHEAP_H
+#define MAXHEAP_H
+
+
 #include <iostream>
 #include <vector>
 #include "Patient.h"
@@ -29,4 +33,4 @@ public:
 
 };
 
-
+#endif
