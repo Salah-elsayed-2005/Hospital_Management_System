@@ -66,7 +66,7 @@ void MaxHeap::insert(Patient &obj) {
 }
 
 
-Patient inline MaxHeap::getMax() {
+Patient MaxHeap::getMax() {
     return heap.at(0);
 }
 

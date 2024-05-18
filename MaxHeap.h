@@ -23,7 +23,7 @@ public:
     }
     void build();
     void insert(Patient&);
-    Patient inline getMax();
+    Patient  getMax();
     Patient extractMax();
     bool empty();
 

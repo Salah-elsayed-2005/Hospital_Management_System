@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.27)
+cmake_minimum_required(VERSION 3.24)
 project(untitled1)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -16,4 +16,6 @@ add_executable(Hospital_Management_System
         Clinics.cpp
         Clinics.h
         DatabaseManager.cpp
-        DatabaseManager.h)
+        DatabaseManager.h
+        Doctor.cpp
+        Doctor.h)
