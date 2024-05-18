@@ -15,7 +15,7 @@ public:
     void setDoctor(Doctor*&);
     void addtoWaiting(Patient);
 
-    void removefromWaiting(Patient);
+    void removefromWaiting();
     void printInfo();
 
     string getType();
