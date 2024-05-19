@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+
 #include "Patient.h"
 #include "PriorityQueue.h"
 #include "Doctor.h"
@@ -10,11 +11,16 @@ vector<Patient>hospitalPatients;
 vector<Doctor>hospitalDoctors;
 vector<Clinic>hospitalClinics;
 
+void searchPatient(string id);
 void addPatient();
-void removePatient();
+void removePatient(string);
+
+void searchDoctor(string id);
 void addDoctor();
-void removeDoctor();
+void removeDoctor(string);
+
 void clinicmenu();
+
 int main() {
 
     Diagnosis d[5];
@@ -94,6 +100,20 @@ int main() {
         <<"5-Update Clinic info"<<endl // clinic functions
         <<"For further Update";
 }
+
+
+void searchPatient(string id){
+    for (int i = 0; i < hospitalPatients.size() ; i++ ){
+        if (id == hospitalPatients[i].getId() ){
+            cout << "id "<< id << " found..."<<endl;
+            return ;
+        }
+    }
+    cout << "patient with ID " << id << " not found." << endl;
+}
+
+
+
 void addPatient() {
     string name;
     string id;
@@ -113,7 +133,67 @@ void addPatient() {
     patient.setId(id);
     patient.setAge(age);
     patient.setGender(gender);
+    hospitalPatients.push_back(patient); //to be tested
 }
-void removePatient();
-void addDoctor();
-void removeDoctor();
+
+
+void removePatient(string id_toberemoved){ // to be tested
+    for (int i = 0; i < hospitalPatients.size() ; i++ ){
+        if (id_toberemoved == hospitalPatients[i].getId() ){
+            cout << "The patient is being removed... "<< endl;
+            hospitalPatients.erase(hospitalPatients.begin() + i);
+            cout << "Patient removed successfully "<< endl;
+            return ;
+        }
+    }
+    cout << "patient with ID " << id_toberemoved << " not found." << endl;
+
+}
+
+
+void searchDoctor(string id){
+    for (int i = 0; i < hospitalDoctors.size() ; i++ ){
+        if (id == hospitalDoctors[i].getID() ){
+            cout << "id "<< id << " found..."<<endl;
+            return ;
+        }
+    }
+    cout << "patient with ID " << id << " not found." << endl;
+}
+
+
+void addDoctor(){
+    string name;
+    vector<string>availableDays;
+    int appointmentPrice;
+    string clinicType;
+    string id;
+    cout<<"Enter Doctor Data"<<endl;
+    cout<<"Name : ";
+    cin>>name;
+    cout<<"\nAvailable Days : ";
+   // getline(cin, availableDays);
+    cout << "\nAppointment price : ";
+    cin >> appointmentPrice;
+    cout << "\nClinic type : ";
+    cin >> clinicType;
+    cout << "\nDoctor id : ";
+    cin >> id;
+    Doctor doc(name,availableDays,appointmentPrice,clinicType,id);
+    hospitalDoctors.push_back(doc); // to be checked
+
+
+}
+
+
+void removeDoctor(string id_toberemoved){ //to be tested
+    for (auto i = 0; i < hospitalDoctors.size() ; i++ ){
+        if (id_toberemoved == hospitalDoctors[i].getID() ){
+            cout << "The Doctor is being removed... "<< endl;
+            hospitalDoctors.erase( hospitalDoctors.begin() + i );
+            cout << "Doctor removed successfully "<< endl;
+            return ;
+        }
+    }
+    cout << "Doctor with ID " << id_toberemoved << " not found." << endl;
+}

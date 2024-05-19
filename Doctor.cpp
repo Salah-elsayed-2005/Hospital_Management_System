@@ -1,4 +1,11 @@
 #include "Doctor.h"
+
+Doctor :: Doctor(){}
+Doctor :: Doctor(string nm, vector<string> avdays, int prices , string cltype ,string id11) : name(nm)
+,avaialbleDays(avdays), appointmentPrice(prices),clinicType(cltype),id(id11) {}
+
+
+
 vector<string> Doctor::getAvailableDays() { return avaialbleDays;}
 int Doctor::getPrice() {return appointmentPrice;}
 string Doctor::getName() {return name;}

@@ -10,6 +10,10 @@ class Doctor{
     string clinicType;
     string id;
 public:
+    Doctor();
+    Doctor(string, vector<string> , int , string,string);
+
+
     void setName(string);
     void setPrice(int);
     void setAvailableDays(vector<string>);
