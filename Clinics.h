@@ -9,11 +9,11 @@
 using namespace std;
 class Clinic{
     string type;
-    PriorityQueue waiting;// to be changed with priority queue
-    Doctor*doctor;
+    PriorityQueue waitingList;
+    Doctor doctor;
 public:
     void setType(string);
-    void setDoctor(Doctor*&);
+    void setDoctor(Doctor &);
     void addtoWaiting(Patient);
 
     void removefromWaiting();
@@ -21,6 +21,6 @@ public:
 
     string getType();
     PriorityQueue getWaitingList();
-    Doctor*getDoctor();
+    Doctor getDoctor();
 };
 #endif //HOPSITAL_MANAGEMENT_SYSTEM_CLINICS_H

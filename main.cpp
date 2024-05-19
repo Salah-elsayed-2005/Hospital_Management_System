@@ -1,9 +1,20 @@
 #include <iostream>
 #include <vector>
-
 #include "Patient.h"
 #include "PriorityQueue.h"
+#include "Doctor.h"
+#include "Clinics.h"
 using namespace std;
+
+vector<Patient>hospitalPatients;
+vector<Doctor>hospitalDoctors;
+vector<Clinic>hospitalClinics;
+
+void addPatient();
+void removePatient();
+void addDoctor();
+void removeDoctor();
+void clinicmenu();
 int main() {
 
     Diagnosis d[5];
@@ -44,22 +55,65 @@ int main() {
 
 
     Patient p[5] = {
-            {"Atta", "8621562",20 , 1, "zy elfol", d[0]},
-            {"Ali", "8512616",19 , 0, "negro", d[1]},
-            {"nabarawy", "54124522",34 , 1, "el3tba 3alnazr", d[2]},
-            {"shafey", "8985564",17 , 1, "t3ban ya capten", d[3]},
-            {"se7s", "87755151",988 , 1, "whar", d[4]},
+            {"Atta", "8621562",20 , true, "zy elfol", d[0]},
+            {"Ali", "8512616",19 , false, "negro", d[1]},
+            {"nabarawy", "54124522",34 , true, "el3tba 3alnazr", d[2]},
+            {"shafey", "8985564",17 , true, "t3ban ya capten", d[3]},
+            {"se7s", "87755151",988 , true, "whar", d[4]},
     };
 
     PriorityQueue pq;
-    pq.enqueue(p[1]);
-    pq.enqueue(p[4]);
-    pq.enqueue(p[2]);
-    pq.enqueue(p[0]);
-    pq.enqueue(p[3]);
+    for (auto & i : p) {
+        pq.enqueue(i);
+    }
     Patient pt;
     while(!pq.isEmpty()){
-        pt = pq.dequeue();
+        cout<<pq.dequeue().getName()<<endl;
     }
+    Doctor doctor;
+    doctor.setName("Salah");
+    doctor.setClinicType("ENT");
+    doctor.setID("69420");
+    doctor.setAvailableDays({"Monday","friday"});
+    Clinic clinic;
+    clinic.setDoctor(doctor);
+    clinic.setType("ENT");
+    for (auto &it : p) {
+        clinic.addtoWaiting(it);
+    }
+    clinic.printInfo();
 
+
+    cout<<"Welcome To Fla7een El3asema Hospital "<<endl
+        <<"Please Choose your desired option : "<<endl;
+
+    cout<<"1-Add patient to Database"<<endl
+        <<"2-Remove patient from Database"<<endl
+        <<"3-Add doctor to the Database"<<endl
+        <<"4-Remove doctor from the Database"<<endl
+        <<"5-Update Clinic info"<<endl // clinic functions
+        <<"For further Update";
 }
+void addPatient() {
+    string name;
+    string id;
+    int age;
+    bool gender;
+    cout<<"Enter Patient Data"<<endl;
+    cout<<"\nName : ";
+    cin>>name;
+    cout<<"\nID : ";
+    cin>>id;
+    cout<<"\nage: ";
+    cin>>age;
+    cout<<"\ngender (1 male 0 female ) : ";
+    cin>>gender;
+    Patient patient;
+    patient.setName(name);
+    patient.setId(id);
+    patient.setAge(age);
+    patient.setGender(gender);
+}
+void removePatient();
+void addDoctor();
+void removeDoctor();

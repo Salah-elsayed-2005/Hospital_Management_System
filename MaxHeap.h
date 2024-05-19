@@ -20,7 +20,7 @@ class MaxHeap {
     void shiftUp(int);
     void shiftDown(int);
 
-public:
+protected:
     MaxHeap(){}
     MaxHeap(vector<Patient> vec){
         heap = vec;

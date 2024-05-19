@@ -76,7 +76,6 @@ Patient MaxHeap::extractMax() {
     heap.at(0) = heap.at(heap.size() - 1);
     heap.pop_back();
     shiftDown(0);
-
     return max;
 }
 
