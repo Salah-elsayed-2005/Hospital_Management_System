@@ -34,6 +34,8 @@ public:
     void setConditionDescription(string&);
     void setDiagnosis(Diagnosis&);
 
+    void displayinfo();
+
 
     bool operator >(Patient& obj) const{
         return this->urgency_level > obj.urgency_level;

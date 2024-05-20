@@ -12,7 +12,7 @@ void Clinic ::printInfo() {
          << "Doctor is : "<<doctor.getName()<<endl
          << "Current waiting List is : "<<endl;
     PriorityQueue toprint=waitingList;
-    while(!toprint.empty()){
+    while(!toprint.isEmpty()){
         cout<<toprint.dequeue().getName()<<endl;
     }
 }

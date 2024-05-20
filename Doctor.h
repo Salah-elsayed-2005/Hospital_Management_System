@@ -5,7 +5,7 @@ using namespace std;
 #define UNTITLED1_DOCTOR_H
 class Doctor{
     string name;
-    vector<string>avaialbleDays;// enum or Date.h ?
+    vector<string>availableDays;// enum or Date.h ?
     int appointmentPrice;
     string clinicType;
     string id;
@@ -19,10 +19,13 @@ public:
     void setAvailableDays(vector<string>);
     void setClinicType(string);
     void setID(string);
+
     string getName();
     int getPrice();
     vector<string>getAvailableDays();
     string getClinicType();
     string getID();
+
+    void displayinfo();
 };
 #endif //UNTITLED1_DOCTOR_H

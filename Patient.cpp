@@ -70,3 +70,21 @@ void Patient::setDiagnosis(Diagnosis & _diagnosis) {
     urgency_level = diagnosis.getTriageLevel();
 }
 
+//display patient's details
+void Patient :: displayinfo(){
+    cout << "Patient's Name : " <<name<<endl;
+    cout << "Patient's id : " << id<<endl;
+    cout << "Patient's age : " <<age<<endl;
+    cout << "Patient's gender : ";
+    if (gender == 1){
+        cout << "male"<<endl;
+    }
+    else{
+     cout << "female"<<endl;
+    }
+    cout << "condition description : " << condition_description << endl;
+    //display diagnosis missing
+    cout << "urgency level : "<< urgency_level<<endl;
+
+
+}

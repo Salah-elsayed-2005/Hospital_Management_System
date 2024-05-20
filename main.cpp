@@ -14,14 +14,17 @@ vector<Clinic>hospitalClinics;
 void searchPatient(string id);
 void addPatient();
 void removePatient(string);
+void displaypatients();
 
 void searchDoctor(string id);
 void addDoctor();
 void removeDoctor(string);
+void displaydoctors();
 
 void clinicmenu();
 
 int main() {
+
 
     Diagnosis d[5];
     d[0].setAirwayLevel(3);
@@ -68,6 +71,58 @@ int main() {
             {"se7s", "87755151",988 , true, "whar", d[4]},
     };
 
+    //start of nabarawy's tests
+/*
+    //patients functions test
+
+    hospitalPatients.push_back(p[0]);
+    hospitalPatients.push_back(p[1]);
+    hospitalPatients.push_back(p[2]);
+    hospitalPatients.push_back(p[3]);
+    hospitalPatients.push_back(p[4]);
+
+    removePatient("87755151");
+    removePatient("8512616");
+    searchPatient("8985564");
+    searchPatient("87755151");
+    //addPatient(); // diagnosis level missing and urgency levelriu
+
+
+   // displaypatients();
+    //end of patients tests
+
+
+    // doctors functions test
+    vector<string> days1 = {"Monday", "Wednesday", "Friday"};
+    vector<string> days2 = {"Tuesday", "Thursday"};
+    vector<string> days3 = {"Monday", "Thursday"};
+    vector<string> days4 = {"Wednesday", "Saturday"};
+    vector<string> days5 = {"Friday", "Sunday"};
+
+
+    Doctor doctors[5] = {
+            {"Salah", days1, 100, "General", "D001"},
+            {"Hussein", days2, 150, "Specialist", "D002"},
+            {"Abo Guendia", days3, 200, "Surgeon", "D003"},
+            {"Behiry", days4, 250, "Dentist", "D004"},
+            {"Atta Tany 3shan Bhebo", days5, 300, "Pediatrician", "D005"}
+    };
+    hospitalDoctors.push_back(doctors[0]);
+    hospitalDoctors.push_back(doctors[1]);
+    hospitalDoctors.push_back(doctors[2]);
+    hospitalDoctors.push_back(doctors[3]);
+    hospitalDoctors.push_back(doctors[4]);
+
+    removeDoctor("D004");
+    removeDoctor("D002");
+    searchDoctor("D003");
+    searchDoctor("D004");
+
+    displaydoctors();
+*/
+    //Nabarawy's tests ends here
+
+
     PriorityQueue pq;
     for (auto & i : p) {
         pq.enqueue(i);
@@ -102,6 +157,9 @@ int main() {
 }
 
 
+
+//Patients' funcions
+
 void searchPatient(string id){
     for (int i = 0; i < hospitalPatients.size() ; i++ ){
         if (id == hospitalPatients[i].getId() ){
@@ -111,8 +169,6 @@ void searchPatient(string id){
     }
     cout << "patient with ID " << id << " not found." << endl;
 }
-
-
 
 void addPatient() {
     string name;
@@ -142,7 +198,7 @@ void removePatient(string id_toberemoved){ // to be tested
         if (id_toberemoved == hospitalPatients[i].getId() ){
             cout << "The patient is being removed... "<< endl;
             hospitalPatients.erase(hospitalPatients.begin() + i);
-            cout << "Patient removed successfully "<< endl;
+            cout << "Patient with id "<<id_toberemoved << " is removed successfully "<< endl;
             return ;
         }
     }
@@ -150,6 +206,17 @@ void removePatient(string id_toberemoved){ // to be tested
 
 }
 
+void displaypatients(){
+    cout << "printing all patients details..."<<endl;
+    for (int i = 0;i<hospitalPatients.size();i++){
+        hospitalPatients[i].displayinfo();
+        cout<<endl<<endl;
+    }
+    cout << "This is the end of the patients list "<<endl;
+}
+
+
+//Doctors' functions
 
 void searchDoctor(string id){
     for (int i = 0; i < hospitalDoctors.size() ; i++ ){
@@ -158,7 +225,7 @@ void searchDoctor(string id){
             return ;
         }
     }
-    cout << "patient with ID " << id << " not found." << endl;
+    cout << "Doctor with ID " << id << " not found." << endl;
 }
 
 
@@ -191,9 +258,19 @@ void removeDoctor(string id_toberemoved){ //to be tested
         if (id_toberemoved == hospitalDoctors[i].getID() ){
             cout << "The Doctor is being removed... "<< endl;
             hospitalDoctors.erase( hospitalDoctors.begin() + i );
-            cout << "Doctor removed successfully "<< endl;
+            cout << "Doctor with id "<< id_toberemoved<< " is removed successfully "<< endl;
             return ;
         }
     }
     cout << "Doctor with ID " << id_toberemoved << " not found." << endl;
+}
+
+void displaydoctors(){
+    cout << "printing all doctors details..."<<endl;
+    for (int i = 0 ; i<hospitalDoctors.size();i++){
+        hospitalDoctors[i].displayinfo();
+        cout<<endl<<endl;
+    }
+    cout << "This is the end of the doctors list "<<endl;
+
 }
