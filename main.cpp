@@ -21,8 +21,12 @@ void addDoctor();
 void removeDoctor(string);
 void displaydoctors();
 
+void startingmenu();
+void mainmenu();
+void editmenu();
+void displaymenu();
 void clinicmenu();
-
+void creditsmenu();
 int main() {
 
 
@@ -139,25 +143,64 @@ int main() {
     Clinic clinic;
     clinic.setDoctor(doctor);
     clinic.setType("ENT");
-    for (auto &it : p) {
-        clinic.addtoWaiting(it);
-    }
-    clinic.printInfo();
 
-
-    cout<<"Welcome To Fla7een El3asema Hospital "<<endl
-        <<"Please Choose your desired option : "<<endl;
-
-    cout<<"1-Add patient to Database"<<endl
-        <<"2-Remove patient from Database"<<endl
-        <<"3-Add doctor to the Database"<<endl
-        <<"4-Remove doctor from the Database"<<endl
-        <<"5-Update Clinic info"<<endl // clinic functions
-        <<"For further Update";
 }
 
+void startingmenu(){
+    cout<<"Welcome to Our Hospital Management System"<<endl;
+    cout<<"Please choose the desired option "<<endl;
+    cout<<"1-Main menu\n2-credits :";
+    int choice;
+    cin >> choice;
+    if (choice==1)
+        mainmenu();
+    if (choice==2)
+        creditsmenu();
+}
+void creditsmenu(){
+    cout<<"*******  Salah Eldin Elsayed *******"<<endl
+        <<"*******  Abdulrahman Abougendia  *******"<<endl
+        <<"*******  Omar Nabarawy   *******"<<endl
+        <<"*******  Fouad Hasheesh  *******"<<endl
+        <<"*******  Mohamed Farouk  *******"<<endl;
+}
+void mainmenu(){
+    cout<<"Please choose the desired option "<<endl;
+    cout<<"1-Edit Database\n2-Display Info\n3-Reserve a clinic :";
+    int choice;
+    cin >> choice;
+    if (choice==1)
+        editmenu();
+    if (choice==2)
+        displaymenu();
+    if (choice==3)
+        clinicmenu();
+}
 
-
+void editmenu(){
+    cout<<"Please choose the desired option "<<endl;
+    cout<<"1-Edit Doctor Info\n2-Add Doctor\n3-Remove Doctor\n4-Edit Patient Info\n5-Add Patient\n6-Remove Patient  :";
+    int choice;
+    cin >> choice;
+    if (choice==1)
+        //editDoctor();
+    if (choice==2)
+        addDoctor();
+    if (choice==3)
+        //removeDoctor(//put id);
+    if (choice==4)
+        //editPatient();
+    if (choice==5)
+        addPatient();
+    //if (choice==6)
+        //removePatient(put id);
+}
+void displaymenu(){
+    // Display Clinic,Doctor,Patient
+}
+void clinicmenu(){
+    // TBD
+}
 //Patients' funcions
 
 void searchPatient(string id){

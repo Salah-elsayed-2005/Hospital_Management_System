@@ -18,4 +18,6 @@ add_executable(Hospital_Management_System
         DatabaseManager.cpp
         DatabaseManager.h
         Doctor.cpp
-        Doctor.h)
+        Doctor.h
+        Date.cpp
+        Date.h)
