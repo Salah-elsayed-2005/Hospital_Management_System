@@ -5,6 +5,7 @@
 #include "PriorityQueue.h"
 #include "Doctor.h"
 #include "Clinics.h"
+#include "Trie.h"
 using namespace std;
 
 vector<Patient>hospitalPatients;
@@ -28,7 +29,6 @@ void displaymenu();
 void clinicmenu();
 void creditsmenu();
 int main() {
-
 
     Diagnosis d[5];
     d[0].setAirwayLevel(3);
@@ -68,12 +68,20 @@ int main() {
 
 
     Patient p[5] = {
-            {"Atta", "8621562",20 , true, "zy elfol", d[0]},
-            {"Ali", "8512616",19 , false, "negro", d[1]},
-            {"nabarawy", "54124522",34 , true, "el3tba 3alnazr", d[2]},
-            {"shafey", "8985564",17 , true, "t3ban ya capten", d[3]},
-            {"se7s", "87755151",988 , true, "whar", d[4]},
+            {"Mohamed Atta", "8621562",20 , true, "zy elfol", d[0]},
+            {"Ali Ayman ", "8512616",19 , false, "negro", d[1]},
+            {"nabarawy FTW", "54124522",34 , true, "el3tba 3alnazr", d[2]},
+            {"shafey Elzoz", "8985564",17 , true, "t3ban ya capten", d[3]},
+            {"se7s se7s", "87755151",988 , true, "whar", d[4]},
     };
+    for (auto & it :p) {
+        hospitalPatients.push_back(it);
+    }
+    Trie patientsnames;
+    for (auto it:hospitalPatients) {
+        patientsnames.insert(it.getName());
+    }
+    patientsnames.print();
 
     //start of nabarawy's tests
 /*
