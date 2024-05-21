@@ -1,11 +1,10 @@
 #include <iostream>
 #include <vector>
-
+#include "Trie.h"
 #include "Patient.h"
 #include "PriorityQueue.h"
 #include "Doctor.h"
 #include "Clinics.h"
-#include "Trie.h"
 using namespace std;
 
 vector<Patient>hospitalPatients;
@@ -77,11 +76,11 @@ int main() {
     for (auto & it :p) {
         hospitalPatients.push_back(it);
     }
-    Trie patientsnames;
+    Trie<Patient>patientsnames;
     for (auto it:hospitalPatients) {
-        patientsnames.insert(it.getName());
+        patientsnames.insert(it.getName(),&it);
     }
-    patientsnames.print();
+     cout<<patientsnames.search("Mohamed Atta")->getId();
 
     //start of nabarawy's tests
 /*
@@ -141,7 +140,7 @@ int main() {
     }
     Patient pt;
     while(!pq.isEmpty()){
-        cout<<pq.dequeue().getName()<<endl;
+   //     cout<<pq.dequeue().getName()<<endl;
     }
     Doctor doctor;
     doctor.setName("Salah");
