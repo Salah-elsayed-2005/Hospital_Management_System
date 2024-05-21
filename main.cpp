@@ -10,15 +10,16 @@ using namespace std;
 vector<Patient>hospitalPatients;
 vector<Doctor>hospitalDoctors;
 vector<Clinic>hospitalClinics;
-
-void searchPatient(string id);
+Trie<Patient>Patientnames;
+Trie<Doctor>Doctornames;
+void searchPatient();
 void addPatient();
-void removePatient(string);
+void removePatient();
 void displaypatients();
 
-void searchDoctor(string id);
+void searchDoctor();
 void addDoctor();
-void removeDoctor(string);
+void removeDoctor();
 void displaydoctors();
 
 void startingmenu();
@@ -76,11 +77,9 @@ int main() {
     for (auto & it :p) {
         hospitalPatients.push_back(it);
     }
-    Trie<Patient>patientsnames;
     for (auto it:hospitalPatients) {
-        patientsnames.insert(it.getName(),&it);
+        Patientnames.insert(it.getName(),&it);
     }
-     cout<<patientsnames.search("Mohamed Atta")->getId();
 
     //start of nabarawy's tests
 /*
@@ -139,9 +138,7 @@ int main() {
         pq.enqueue(i);
     }
     Patient pt;
-    while(!pq.isEmpty()){
-   //     cout<<pq.dequeue().getName()<<endl;
-    }
+
     Doctor doctor;
     doctor.setName("Salah");
     doctor.setClinicType("ENT");
@@ -150,9 +147,13 @@ int main() {
     Clinic clinic;
     clinic.setDoctor(doctor);
     clinic.setType("ENT");
-
+    startingmenu();
 }
-
+///////////////////////////////////////////////////////
+//////////////////////////////////////////////
+///////////////// End of main /////////////////////
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
 void startingmenu(){
     cout<<"Welcome to Our Hospital Management System"<<endl;
     cout<<"Please choose the desired option "<<endl;
@@ -194,13 +195,13 @@ void editmenu(){
     if (choice==2)
         addDoctor();
     if (choice==3)
-        //removeDoctor(//put id);
+   //     removeDoctor();
     if (choice==4)
-        //editPatient();
+    //    editPatient();
     if (choice==5)
         addPatient();
-    //if (choice==6)
-        //removePatient(put id);
+    if (choice==6)
+        removePatient();
 }
 void displaymenu(){
     // Display Clinic,Doctor,Patient
@@ -243,17 +244,15 @@ void addPatient() {
 }
 
 
-void removePatient(string id_toberemoved){ // to be tested
-    for (int i = 0; i < hospitalPatients.size() ; i++ ){
-        if (id_toberemoved == hospitalPatients[i].getId() ){
-            cout << "The patient is being removed... "<< endl;
-            hospitalPatients.erase(hospitalPatients.begin() + i);
-            cout << "Patient with id "<<id_toberemoved << " is removed successfully "<< endl;
-            return ;
-        }
-    }
-    cout << "patient with ID " << id_toberemoved << " not found." << endl;
-
+void removePatient(){ // to be tested
+    string nametoberemoved;
+    cout<<"Enter Name of Patient to be removed : ";
+    cin.ignore();
+    getline(cin,nametoberemoved);
+    if (Patientnames.search(nametoberemoved))
+        cout<<"Removed Successfully"<<endl;
+    else
+        cout<<"Patient not found"<<endl;
 }
 
 void displaypatients(){
