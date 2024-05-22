@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <sstream> //forthe vector of strings available days
 #include "Trie.h"
 #include "Patient.h"
 #include "PriorityQueue.h"
@@ -145,7 +146,7 @@ int main() {
     //Nabarawy's tests ends here
 
 
-    PriorityQueue pq;
+    /*PriorityQueue pq;
     for (auto & i : p) {
         pq.enqueue(i);
     }
@@ -160,7 +161,7 @@ int main() {
     doctor.setAvailableDays({"Monday","friday"});
     Clinic clinic;
     clinic.setDoctor(doctor);
-    clinic.setType("ENT");
+    clinic.setType("ENT");*/
 
 } // end of main function
 
@@ -210,7 +211,7 @@ void editmenu(){
         string id;
         cout << "Enter the id of the Doctor you want to edit : ";
         cin>> id;
-        //editDoctor(id);
+        editDoctor(id);
         }
     else if (choice==2){
         addDoctor();
@@ -225,7 +226,7 @@ void editmenu(){
         string id;
         cout << "Enter the id of the patient you want to edit : ";
         cin>> id;
-        //editPatient();
+        editPatient(id);
     }
     else if (choice==5) {
         addPatient();
@@ -249,6 +250,7 @@ void searchPatient(string id){
     for (int i = 0; i < hospitalPatients.size() ; i++ ){
         if (id == hospitalPatients[i].getId() ){
             cout << "id "<< id << " found..."<<endl;
+            //hospitalPatients[i].displayinfo();
             return ;
         }
     }
@@ -260,6 +262,7 @@ void addPatient() {
     string id;
     int age;
     bool gender;
+    string condition;
     cout<<"Enter Patient Data"<<endl;
     cout<<"\nName : ";
     cin>>name;
@@ -269,6 +272,8 @@ void addPatient() {
     cin>>age;
     cout<<"\ngender (1 male 0 female ) : ";
     cin>>gender;
+    cout<<"\ncondition description : ";
+    cin >>condition;
     int airwaylevel,breathinglevel,pulselevel,disabilitylevel,exposurelevel;
     cout << "please enter the airway level : ";
     cin >> airwaylevel;
@@ -281,13 +286,13 @@ void addPatient() {
     cout << "please enter the exposure level : ";
     cin >> exposurelevel;
     Diagnosis d1(airwaylevel,breathinglevel,pulselevel,disabilitylevel,exposurelevel);
-    Patient patient;
-    patient.setName(name);
+    Patient patient(name,id,age,gender,condition,d1);
+    /*patient.setName(name);
     patient.setId(id);
     patient.setAge(age);
     patient.setGender(gender);
-    patient.setDiagnosis(d1);
-    hospitalPatients.push_back(patient); //to be tested
+    patient.setDiagnosis(d1);*/
+    hospitalPatients.push_back(patient);
 }
 
 
@@ -384,6 +389,7 @@ void searchDoctor(string id){
     for (int i = 0; i < hospitalDoctors.size() ; i++ ){
         if (id == hospitalDoctors[i].getID() ){
             cout << "id "<< id << " found..."<<endl;
+            //hospitalDoctors[i].displayinfo();
             return ;
         }
     }
@@ -393,7 +399,7 @@ void searchDoctor(string id){
 
 void addDoctor(){
     string name;
-    vector<string>availableDays;
+    vector<string>availableDays; string inputline;
     int appointmentPrice;
     string clinicType;
     string id;
@@ -401,7 +407,13 @@ void addDoctor(){
     cout<<"Name : ";
     cin>>name;
     cout<<"\nAvailable Days : ";
-   // getline(cin, availableDays);
+    cin.ignore();
+    getline(cin, inputline);
+    stringstream line(inputline);
+    string day;
+    while(line>>day){ //days separated by spaces not commas
+        availableDays.push_back(day);
+    }
     cout << "\nAppointment price : ";
     cin >> appointmentPrice;
     cout << "\nClinic type : ";
@@ -409,7 +421,7 @@ void addDoctor(){
     cout << "\nDoctor id : ";
     cin >> id;
     Doctor doc(name,availableDays,appointmentPrice,clinicType,id);
-    hospitalDoctors.push_back(doc); // to be checked
+    hospitalDoctors.push_back(doc);
 
 
 }
@@ -445,7 +457,14 @@ void editDoctor(string id_tobe_edited){
             if (choice == 2){
                 vector<string> avd;
                 cout << "Enter Doctor's available days: ";
-                //missing cin method
+                string inputline;
+                cin.ignore();
+                getline(cin, inputline);
+                stringstream line(inputline);
+                string day;
+                while(line>>day){ //days separated by spaces not commas
+                    avd.push_back(day);
+                }
                 hospitalDoctors[i].setAvailableDays(avd);
             }
             if (choice == 3){
