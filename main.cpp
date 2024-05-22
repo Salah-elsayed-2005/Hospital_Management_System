@@ -24,6 +24,9 @@ void removeDoctor(string);
 void editDoctor(string);
 void displaydoctors();
 
+void reserveClinic(); //needs to be implemented
+void displayClinicSchedule(); //needs to be implemented
+
 void startingmenu();
 void mainmenu();
 void editmenu();
