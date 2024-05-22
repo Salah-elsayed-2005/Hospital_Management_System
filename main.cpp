@@ -109,7 +109,7 @@ int main() {
 
 
     // doctors functions test
-/*    vector<string> days1 = {"Monday", "Wednesday", "Friday"};
+    vector<string> days1 = {"Monday", "Wednesday", "Friday"};
     vector<string> days2 = {"Tuesday", "Thursday"};
     vector<string> days3 = {"Monday", "Thursday"};
     vector<string> days4 = {"Wednesday", "Saturday"};
@@ -141,7 +141,7 @@ int main() {
     editDoctor(id);
 
     displaydoctors();
-    */
+
     //Nabarawy's tests ends here
 
 
@@ -269,12 +269,24 @@ void addPatient() {
     cin>>age;
     cout<<"\ngender (1 male 0 female ) : ";
     cin>>gender;
-    //Na2es diagnosis
+    int airwaylevel,breathinglevel,pulselevel,disabilitylevel,exposurelevel;
+    cout << "please enter the airway level : ";
+    cin >> airwaylevel;
+    cout << "please enter the breathing level : ";
+    cin >> breathinglevel;
+    cout << "please enter the pulse level : ";
+    cin >> pulselevel;
+    cout << "please enter the disbaility level : ";
+    cin >> disabilitylevel;
+    cout << "please enter the exposure level : ";
+    cin >> exposurelevel;
+    Diagnosis d1(airwaylevel,breathinglevel,pulselevel,disabilitylevel,exposurelevel);
     Patient patient;
     patient.setName(name);
     patient.setId(id);
     patient.setAge(age);
     patient.setGender(gender);
+    patient.setDiagnosis(d1);
     hospitalPatients.push_back(patient); //to be tested
 }
 
@@ -305,37 +317,49 @@ void editPatient(string id_tobe_edited){
             if (choice == 1){
                 string name;
                 cout << "Enter the new name of the patient : ";
-                getline(cin,name);
+                cin.ignore();
                 getline(cin,name); // msh btshtgal b getline wahda w m3rfsh leh
                 hospitalPatients[i].setName(name);
             }
-            if (choice == 2){
+            else if (choice == 2){
                 string id;
                 cout << "Enter the new id of the patient : ";
                 cin >> id;
                 hospitalPatients[i].setId(id);
             }
-            if (choice == 3){
+            else if (choice == 3){
                 int age;
                 cout << "Enter the new age of the patient : ";
                 cin >> age;
                 hospitalPatients[i].setAge(age);
             }
-            if (choice == 4){
+            else if (choice == 4){
                 bool gen;
                 cout << "Enter the right gender of the patient (1 for male and 0 for female)  : ";
                 cin >> gen;
                 hospitalPatients[i].setGender(gen);
             }
-            if (choice == 5){
+            else if (choice == 5){
                 string condition;
                 cout << "Enter the condition description of the patient : ";
+                cin.ignore();
                 getline(cin,condition);
-                getline(cin,condition); //msh btshtghal b getline wahda w m3rfsh leh
                 hospitalPatients[i].setConditionDescription(condition);
             }
-            if(choice == 6){
-                //diagnosissssssssssssssssssss
+            else if(choice == 6){
+                int airwaylevel,breathinglevel,pulselevel,disabilitylevel,exposurelevel;
+                cout << "please enter the airway level : ";
+                cin >> airwaylevel;
+                cout << "please enter the breathing level : ";
+                cin >> breathinglevel;
+                cout << "please enter the pulse level : ";
+                cin >> pulselevel;
+                cout << "please enter the disbaility level : ";
+                cin >> disabilitylevel;
+                cout << "please enter the exposure level : ";
+                cin >> exposurelevel;
+                Diagnosis d1(airwaylevel,breathinglevel,pulselevel,disabilitylevel,exposurelevel);
+                hospitalPatients[i].setDiagnosis(d1);
             }
             cout << "Patient is edited successfully"<<endl;
             return;
@@ -414,8 +438,8 @@ void editDoctor(string id_tobe_edited){
             if (choice == 1){
                 string name;
                 cout << "Enter the Doctor's right name: ";
+                cin.ignore();
                 getline(cin,name);
-                getline(cin,name); //msh btshtghal b getline wahda w m3rfsh leh
                 hospitalDoctors[i].setName(name);
             }
             if (choice == 2){
@@ -433,8 +457,8 @@ void editDoctor(string id_tobe_edited){
             if (choice == 4){
                 string clinic;
                 cout <<"Enter the clinic type : ";
+                cin.ignore();
                 getline(cin,clinic);
-                getline(cin,clinic); //msh btshtghal b getline wahda w m3rfsh leh
                 hospitalDoctors[i].setClinicType(clinic);
             }
             if (choice == 5){
