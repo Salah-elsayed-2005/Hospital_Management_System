@@ -202,8 +202,9 @@ void mainmenu(){
 }
 
 void editmenu(){
-    cout<<"Please choose the desired option "<<endl;
-    cout<<"1-Edit Doctor Info\n2-Add Doctor\n3-Remove Doctor\n4-Edit Patient Info\n5-Add Patient\n6-Remove Patient  :";
+    cout<<"===Edit menu=== "<<endl;
+    cout<<"1-Edit Doctor Info\n2-Add Doctor\n3-Remove Doctor\n4-Edit Patient Info\n5-Add Patient\n6-Remove Patient\n ";
+    cout<<"Enter your choice : ";
     int choice;
     cin >> choice;
     choice = checkinput(choice,1,6);
@@ -242,13 +243,33 @@ void displaymenu(){
     // Display Clinic,Doctor,Patient
 }
 void clinicmenu(){
-    // TBD
+    int choice;
+    cout << "===Clinic Menu===\n";
+    cout << "1- Reserve a Clinic\n";
+    cout << "2- Display Clinic Schedule\n";
+    cout << "3- Return to Main Menu\n";
+    cout << "Enter your choice: ";
+    cin >> choice;
+    choice = checkinput(choice, 1, 3);
+
+    switch (choice) {
+        case 1:
+            //reserveClinic(); lesa htt3mel
+            break;
+        case 2:
+            //displayClinicSchedule(); // lesa htt3mel
+            break;
+        case 3:
+            mainmenu(); //return to main menu
+            break;
+    }
 }
 //Patients' funcions
 
+//function to search patient by id
 void searchPatient(string id){
-    for (int i = 0; i < hospitalPatients.size() ; i++ ){
-        if (id == hospitalPatients[i].getId() ){
+    for (int i = 0; i < hospitalPatients.size() ; i++ ){ //iterate over the whole vector
+        if (id == hospitalPatients[i].getId() ){//if condition to get the patientwith the id
             cout << "id "<< id << " found..."<<endl;
             //hospitalPatients[i].displayinfo();
             return ;
@@ -265,42 +286,49 @@ void addPatient() {
     string condition;
     cout<<"Enter Patient Data"<<endl;
     cout<<"\nName : ";
-    cin>>name;
+    cin>>name; //takes the name of the patient from the user
     cout<<"\nID : ";
-    cin>>id;
+    cin>>id; //takes the id of the patient from the user
     cout<<"\nage: ";
-    cin>>age;
+    cin>>age; //takes the age of the patient from the user
     cout<<"\ngender (1 male 0 female ) : ";
-    cin>>gender;
+    cin>>gender; //takes the gender of the patient from the user
     cout<<"\ncondition description : ";
-    cin >>condition;
+    cin >>condition; //takes the condition of the patient from the user
+
     int airwaylevel,breathinglevel,pulselevel,disabilitylevel,exposurelevel;
     cout << "please enter the airway level : ";
-    cin >> airwaylevel;
+    cin >> airwaylevel; //takes the airway level of the patient from the user
     cout << "please enter the breathing level : ";
-    cin >> breathinglevel;
+    cin >> breathinglevel; //takes the breathing level of the patient from the user
     cout << "please enter the pulse level : ";
-    cin >> pulselevel;
+    cin >> pulselevel; //takes the pulse level of the patient from the user
     cout << "please enter the disbaility level : ";
-    cin >> disabilitylevel;
+    cin >> disabilitylevel; //takes the disability level of the patient from the user
     cout << "please enter the exposure level : ";
-    cin >> exposurelevel;
+    cin >> exposurelevel; //takes the exposure level of the patient from the user
+    //The following line initializes an object of class diagnosis and calls its constructor with the
+    //given info from the user to put it in the patient class
     Diagnosis d1(airwaylevel,breathinglevel,pulselevel,disabilitylevel,exposurelevel);
+    //The following line initializes an object of class patient with all the members collected from the user
     Patient patient(name,id,age,gender,condition,d1);
     /*patient.setName(name);
     patient.setId(id);
     patient.setAge(age);
     patient.setGender(gender);
     patient.setDiagnosis(d1);*/
-    hospitalPatients.push_back(patient);
+    hospitalPatients.push_back(patient); // push(store) patient object(with all the info collected from the user )
+    // in the vector
 }
 
-
-void removePatient(string id_toberemoved){ // to be tested
-    for (int i = 0; i < hospitalPatients.size() ; i++ ){
-        if (id_toberemoved == hospitalPatients[i].getId() ){
+//function to remove the patient from the vector
+void removePatient(string id_toberemoved){
+    for (int i = 0; i < hospitalPatients.size() ; i++ ){ //iterate over the whole vector
+        if (id_toberemoved == hospitalPatients[i].getId() ){  //if condition to get the patient
+            // with the id to be removed 
             cout << "The patient is being removed... "<< endl;
-            hospitalPatients.erase(hospitalPatients.begin() + i);
+            hospitalPatients.erase(hospitalPatients.begin() + i); //remove the patient wanted to remove
+            // from the vector
             cout << "Patient with id "<<id_toberemoved << " is removed successfully "<< endl;
             return ;
         }
@@ -314,16 +342,18 @@ void editPatient(string id_tobe_edited){
     for (int i = 0; i < hospitalPatients.size() ; i++ ){
         int choice;
         if(id_tobe_edited == hospitalPatients[i].getId()){
-            cout << "what do you want to edit in the patient with id "<< id_tobe_edited<<endl;
-            cout << "1-Patient's name\n2-Patient's id\n3-Patient's age\n4-Patient's gender\n5-condition description\n";
-            cout <<"6-diagnosis level : ";
+            cout << "===Edit menu===\n";
+            cout << "what do you want to edit in the patient with id : "<< id_tobe_edited<<endl;
+            cout << "1- Patient's name\n2- Patient's id\n3- Patient's age\n4- Patient's gender\n";
+            cout << "5- Condition description\n";
+            cout <<"6- Diagnosis level\nEnter your choice : ";
             cin >> choice;
             choice = checkinput(choice,1,6);
             if (choice == 1){
                 string name;
                 cout << "Enter the new name of the patient : ";
-                cin.ignore();
-                getline(cin,name); // msh btshtgal b getline wahda w m3rfsh leh
+                cin.ignore(); //clear the buffer to ensure that getline works correctly
+                getline(cin,name);
                 hospitalPatients[i].setName(name);
             }
             else if (choice == 2){
@@ -347,7 +377,7 @@ void editPatient(string id_tobe_edited){
             else if (choice == 5){
                 string condition;
                 cout << "Enter the condition description of the patient : ";
-                cin.ignore();
+                cin.ignore(); //clear the buffer to ensure that getline works correctly
                 getline(cin,condition);
                 hospitalPatients[i].setConditionDescription(condition);
             }
@@ -386,8 +416,8 @@ void displaypatients(){
 //Doctors' functions
 
 void searchDoctor(string id){
-    for (int i = 0; i < hospitalDoctors.size() ; i++ ){
-        if (id == hospitalDoctors[i].getID() ){
+    for (int i = 0; i < hospitalDoctors.size() ; i++ ){ //iterate over the whole vector
+        if (id == hospitalDoctors[i].getID() ){ //if condition to get the doctor with the id
             cout << "id "<< id << " found..."<<endl;
             //hospitalDoctors[i].displayinfo();
             return ;
@@ -405,10 +435,10 @@ void addDoctor(){
     string id;
     cout<<"Enter Doctor Data"<<endl;
     cout<<"Name : ";
-    cin>>name;
+    cin>>name; //takes the name of the doctor from the user
     cout<<"\nAvailable Days : ";
-    cin.ignore();
-    getline(cin, inputline);
+    cin.ignore(); //clear the buffer to ensure that getline works correctly
+    getline(cin, inputline);//get the whole line as inputline becausecin can't take more than one word
     stringstream line(inputline);
     string day;
     while(line>>day){ //days separated by spaces not commas
@@ -428,63 +458,64 @@ void addDoctor(){
 
 
 void removeDoctor(string id_toberemoved){ //to be tested
-    for (auto i = 0; i < hospitalDoctors.size() ; i++ ){
-        if (id_toberemoved == hospitalDoctors[i].getID() ){
+    for (auto i = 0; i < hospitalDoctors.size() ; i++ ){ // iterate over the whole vector of Doctors
+        if (id_toberemoved == hospitalDoctors[i].getID() ){  //if condition to get the doctor with the id to be removed
             cout << "The Doctor is being removed... "<< endl;
-            hospitalDoctors.erase( hospitalDoctors.begin() + i );
+            hospitalDoctors.erase( hospitalDoctors.begin() + i ); //remove the doctor from the vector
             cout << "Doctor with id "<< id_toberemoved<< " is removed successfully "<< endl;
-            return ;
+            return ; // exits the function after erasing the doctor
         }
     }
-    cout << "Doctor with ID " << id_toberemoved << " not found." << endl;
+    cout << "Doctor with ID " << id_toberemoved << " not found." << endl; // if the id doesn't exist
 }
 
 void editDoctor(string id_tobe_edited){
     int choice;
-    for(int i = 0; i < hospitalDoctors.size() ; i++ ){
-        if( id_tobe_edited == hospitalDoctors[i].getID() ){
+    for(int i = 0; i < hospitalDoctors.size() ; i++ ){ //loop over the whole vector
+        if( id_tobe_edited == hospitalDoctors[i].getID() ){ //if condition to get the doctor with the id to be edited
             cout << "What do you want to edit in the doctor with id "<<id_tobe_edited <<endl;
             cout << "1-Doctor's name\n2-Doctor's available days\n3-appointment price\n4-clinic type\n5-Doctor's id : ";
             cin >> choice;
-            choice = checkinput(choice,1,5);
+            choice = checkinput(choice,1,5); // make sure that the user entered a number from 1 to 5
             if (choice == 1){
                 string name;
-                cout << "Enter the Doctor's right name: ";
-                cin.ignore();
-                getline(cin,name);
-                hospitalDoctors[i].setName(name);
+                cout <<"Enter the Doctor's right name: ";
+                cin.ignore(); //clear the buffer to ensure that getline works correctly
+                getline(cin,name); //get the whole line as the name as cin gets only the first word
+                hospitalDoctors[i].setName(name); //set the name to the edited name
             }
             if (choice == 2){
                 vector<string> avd;
-                cout << "Enter Doctor's available days: ";
-                string inputline;
-                cin.ignore();
-                getline(cin, inputline);
+                cout <<"Enter Doctor's available days: ";
+                string inputline; //string that'll be used to obtain the whole line
+                cin.ignore(); //clear the buffer to ensure that getline works correctly
+                getline(cin, inputline); //function to obtain the whole line and store it in inputline
                 stringstream line(inputline);
                 string day;
+                //The following loop takes every whole word, store it in string day and push it in the vector
                 while(line>>day){ //days separated by spaces not commas
                     avd.push_back(day);
                 }
-                hospitalDoctors[i].setAvailableDays(avd);
+                hospitalDoctors[i].setAvailableDays(avd); //edit the available days to the inserted one
             }
             if (choice == 3){
                 int apprice;
                 cout << "Enter the appointment price: ";
-                cin >> apprice;
-                hospitalDoctors[i].setPrice(apprice);
+                cin >> apprice; //take the price as input from the user
+                hospitalDoctors[i].setPrice(apprice); //edit the price to the entered one
             }
             if (choice == 4){
                 string clinic;
                 cout <<"Enter the clinic type : ";
-                cin.ignore();
-                getline(cin,clinic);
+                cin.ignore(); //clear the buffer to ensure that getline works correctly
+                getline(cin,clinic); //function to obtain the whole line and store it in inputline
                 hospitalDoctors[i].setClinicType(clinic);
             }
             if (choice == 5){
                 string id;
                 cout << "Enter the Doctor's new id : ";
-                cin >> id;
-                hospitalDoctors[i].setID(id);
+                cin >> id; //take the id as input to give it to the setter
+                hospitalDoctors[i].setID(id); //set the id to the inserted idfrom the user
             }
             cout << "Patient is edited successfully"<<endl;
             return;
@@ -496,9 +527,9 @@ void editDoctor(string id_tobe_edited){
 
 void displaydoctors(){
     cout << "printing all doctors details..."<<endl;
-    for (int i = 0 ; i<hospitalDoctors.size();i++){
-        hospitalDoctors[i].displayinfo();
-        cout<<endl<<endl;
+    for (int i = 0 ; i<hospitalDoctors.size();i++){ // iterate over the whole vector
+        hospitalDoctors[i].displayinfo(); //display the info of each doctor in the vector
+        cout<<endl<<endl; // user-friendly interface
     }
     cout << "This is the end of the doctors list "<<endl;
 
@@ -507,10 +538,10 @@ void displaydoctors(){
 
 //function that will be used multiple times to check the input
 int checkinput(int choice,int first,int last){
-
+    //The while loop is to check if the choice is within the range of the list
     while (choice < first || choice > last ){
         cout << "Please enter a number between "<<first<< " and " <<last <<" inclusively : ";
         cin >> choice;
     }
-    return choice;
+    return choice; // return the value after exiting the while loop with the right value that's within the range
 }
