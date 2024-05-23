@@ -11,24 +11,26 @@ class node {
 public:
     vector<node*> next;
     char value;
-    bool isEndOfWord;
     T* item;
 
-    node(char val) : value(val), isEndOfWord(false), item(nullptr) {}
+    node(char val) : value(val), item(nullptr) {}
 };
 
 template <typename T>
 class Trie {
     vector<node<T>*> roots;
     void printHelper(node<T>* current, string path);
+    bool deleteHelper(node<T>* current, const string &s, int depth);
 public:
     void print();
     void insert(string s, T* item);
-    T* search(string s);  // Modified return type
+    T* search(string s);
+    void deleteWord(string s);
 };
 
 template <typename T>
 void Trie<T>::insert(string s, T* item) {
+    s += '#';  // Add the special character at the end of the word
     char rootval = s[0];
     bool found = false;
     node<T>* current = nullptr;
@@ -62,12 +64,12 @@ void Trie<T>::insert(string s, T* item) {
             current = toinsert;
         }
     }
-    current->isEndOfWord = true;
     current->item = item;
 }
 
 template <typename T>
 T* Trie<T>::search(string s) {
+    s += '#';  // Add the special character at the end of the word
     for (auto root : roots) {
         if (s[0] == root->value) {
             int i = 1;
@@ -86,26 +88,63 @@ T* Trie<T>::search(string s) {
                 }
                 i++;
             }
-            if (current->isEndOfWord) {
-                return current->item;
-            } else {
-                return nullptr;
-            }
+            return current->item;
         }
     }
     return nullptr;
 }
 
 template <typename T>
+bool Trie<T>::deleteHelper(node<T>* current, const string &s, int depth) {
+    if (!current) return false;
+
+    if (depth == s.size()) {
+        if (current->value == '#') {
+            current->item = nullptr;
+            return current->next.empty();  // If true, delete this node
+        }
+        return false;
+    }
+
+    char ch = s[depth];
+    node<T>* child = nullptr;
+    for (auto it = current->next.begin(); it != current->next.end(); ++it) {
+        if ((*it)->value == ch) {
+            child = *it;
+            if (deleteHelper(child, s, depth + 1)) {
+                current->next.erase(it);
+                delete child;
+                return current->next.empty() && current->item == nullptr;
+            }
+            return false;
+        }
+    }
+    return false;
+}
+
+template <typename T>
+void Trie<T>::deleteWord(string s) {
+    s += '#';  // Add the special character at the end of the word
+    for (auto it = roots.begin(); it != roots.end(); ++it) {
+        if ((*it)->value == s[0]) {
+            if (deleteHelper(*it, s, 1)) {
+                delete *it;
+                roots.erase(it);
+            }
+            break;
+        }
+    }
+}
+
+template <typename T>
 void Trie<T>::printHelper(node<T>* current, string path) {
     if (!current) return;
 
-    path += current->value;
-
-    if (current->isEndOfWord) {
-        cout << path;
-        cout << endl;
+    if (current->value == '#') {
+        cout << path << endl;  // Print the complete path
+        return;
     }
+    path += current->value;
 
     for (auto child : current->next) {
         printHelper(child, path);

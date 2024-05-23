@@ -21,4 +21,6 @@ add_executable(Hospital_Management_System
         Doctor.h
         Date.cpp
         Date.h
-        Trie.h)
+        Trie.h
+        Functionalities.cpp
+        Functionalities.h)

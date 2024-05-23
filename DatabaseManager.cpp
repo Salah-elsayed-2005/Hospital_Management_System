@@ -4,7 +4,7 @@
 #include "Patient.h"
 #include "Doctor.h"
 #include "Clinics.h"
-/*
+# if 0
 // The external vectors that holds references to books, users, and loans
 vector<Patient>hospitalPatients;
 vector<Doctor>hospitalDoctors;
@@ -41,7 +41,6 @@ DatabaseManager::~DatabaseManager() {
  * @param azColName Array of strings containing the column names.
  * @return Always returns 0 to indicate successful processing of the row.
  */
-/*
 int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azColName) {
     // Loop through each column in the current row
     for (int i = 0; i < argc; i++) {
@@ -67,7 +66,7 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
  *       If a callback function is provided, it will be invoked for each row of the result set.
  *       Any error messages encountered during execution are printed to the standard error stream.
  */
-/*int DatabaseManager::execute_sql(const std::string& sql, int (*callback)(void*,int,char**,char**), void* data) {
+int DatabaseManager::execute_sql(const std::string& sql, int (*callback)(void*,int,char**,char**), void* data) {
     // Variable to store error message
     char* errorMessage;
     // Execute the SQL statement and store the result code
@@ -94,7 +93,7 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
  * The Members table has fields: MemberID, Name, Email, and PhoneNumber.
  * These tables are essential for managing book records and member information in the library system.
  */
-/*void DatabaseManager::createTables() {
+void DatabaseManager::createTables() {
     // Creating Books table
     std::string sqlBooks = "CREATE TABLE IF NOT EXISTS Books ("
                            "ISBN VARCHAR(20) PRIMARY KEY,"
@@ -142,7 +141,7 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
  * @param quantity        The quantity of the book available.
  *
  */
-/*void DatabaseManager::insertBook(const std::string& isbn, const std::string& title, const std::string& author,
+void DatabaseManager::insertBook(const std::string& isbn, const std::string& title, const std::string& author,
                                  int publicationYear, const std::string& genre, bool availability, int quantity) {
     std::string sql = "INSERT OR REPLACE INTO Books (ISBN, Title, Author, PublicationYear, Genre, Availability, Quantity) VALUES ('" +
                       isbn + "', '" + title + "', '" + author + "', " +
@@ -160,7 +159,7 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
  * @param book A pointer to the Book object representing the book record to be inserted or updated.
  *
  */
-/*void DatabaseManager::insertBook(Book *book) {
+void DatabaseManager::insertBook(Book *book) {
 
     std::string sql = "INSERT OR REPLACE INTO Books (ISBN, Title, Author, PublicationYear, Genre, Availability, Quantity) VALUES ('" +
                       book->getIsbn().str2string() + "', '" + book->getTitle().str2string() + "', '" + book->getAuthor().str2string() + "', " +
@@ -180,7 +179,7 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
  * @param loanPtr A pointer to the Loan object representing the loan record to be inserted or updated.
  *
  */
-/*void DatabaseManager::insertLoan(Loan* loanPtr){
+void DatabaseManager::insertLoan(Loan* loanPtr){
     // Insert loans details into the Loans table
     std::string loanSql = "INSERT OR REPLACE INTO Loans (ID, ISBN, BorrowingDate, DueDate, Status) VALUES ('" +
                           loanPtr->getBorrower()->getId().str2string() + "', '" +
@@ -200,7 +199,7 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
  * @param userPtr A pointer to the User object to be inserted or updated.
  *
  */
-/*void DatabaseManager::insertUser(User* userPtr) {
+void DatabaseManager::insertUser(User* userPtr) {
     if (Member *memberPtr = dynamic_cast<Member *>(userPtr)) {
         // Insert user details into the Users table
         std::string userSql = "INSERT OR REPLACE INTO Users (ID, Name, Password, Fines) VALUES ('" +
@@ -230,7 +229,7 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
  * @param isbn The ISBN of the book to be deleted.
  * This function deletes the record associated with the given ISBN from the Books table.
  */
-/*void DatabaseManager::deleteBook(const std::string& isbn) {
+void DatabaseManager::deleteBook(const std::string& isbn) {
     std::string sql = "DELETE FROM Books WHERE ISBN = '" + isbn + "';";
     std::cout << "Deleting book with ISBN " << isbn << "..." << std::endl;
     execute_sql(sql);
@@ -240,7 +239,7 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
  * Displays all the records in the Books table.
  * This function retrieves and prints all columns (the whole record) of each record in the Books table.
  */
-/*void DatabaseManager::displayBooks() {
+void DatabaseManager::displayBooks() {
     std::string sql = "SELECT * FROM Books;";
     std::cout << "Current state of the Books table:" << std::endl;
     execute_sql(sql, callback);
@@ -253,7 +252,7 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
  * @param attribute The attribute to search for (e.g., ISBN, Title, Author, PublicationYear, Genre, Availability, Quantity).
  * @param value The value to search for within the specified attribute.
  */
-/*void DatabaseManager::searchBooks(const std::string& attribute, const std::string& value) {
+void DatabaseManager::searchBooks(const std::string& attribute, const std::string& value) {
     std::string sql = "SELECT * FROM Books WHERE " + attribute + " LIKE '%" + value + "%';";
     std::cout << "Searching for books with " << attribute << " like " << value << ":" << std::endl;
     execute_sql(sql, callback);
@@ -266,7 +265,7 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
  * @param attribute The attribute to search for (e.g., ID, Name, Password, Fines).
  * @param value The value to search for within the specified attribute.
  */
-/*void DatabaseManager::searchUsers(const std::string& attribute, const std::string& value) {
+void DatabaseManager::searchUsers(const std::string& attribute, const std::string& value) {
     std::string sql = "SELECT * FROM Users WHERE " + attribute + " LIKE '%" + value + "%';";
     std::cout << "Searching for books with " << attribute << " like " << value << ":" << std::endl;
     execute_sql(sql, callback);
@@ -279,7 +278,7 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
  * @param attribute The attribute to search for (e.g., ID, ISBN, BorrowingDate, DueDate, Status).
  * @param value The value to search for within the specified attribute.
  */
-/*void DatabaseManager::searchLoans(const std::string& attribute, const std::string& value) {
+void DatabaseManager::searchLoans(const std::string& attribute, const std::string& value) {
     std::string sql = "SELECT * FROM Loans WHERE " + attribute + " LIKE '%" + value + "%';";
     std::cout << "Searching for books with " << attribute << " like " << value << ":" << std::endl;
     execute_sql(sql, callback);
@@ -291,7 +290,7 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
  *
  * @param isbn The ISBN of the book to decrement the quantity.
  */
-/*void DatabaseManager::decrementBookQuantity(const std::string& isbn) {
+void DatabaseManager::decrementBookQuantity(const std::string& isbn) {
     // First, check the current quantity
     std::string checkQuantitySql = "SELECT Quantity FROM Books WHERE ISBN = '" + isbn + "';";
     int quantity = -1;
@@ -327,7 +326,7 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
  * It inserts sample books, users, and loans with there attributes into their respective tables.
  *
  */
-/*void DatabaseManager::insertSampleData() {
+void DatabaseManager::insertSampleData() {
     // Inserting sample data into Books
     std::string sqlBooks = "INSERT OR IGNORE INTO Books VALUES ('8624625635653', 'Calculus', 'Stewart', 2012, 'Math', 1, 13),('8624625635673', 'Advanced Calculus', 'Larson', 2010, 'Math', 1, 12),('8622625632663', 'Physics', 'Mo. Ismail', 2016, 'Physics', 1, 11),('8622625632673', 'Quantum Mechanics', 'Dirac', 1988, 'Physics', 1, 10),('8622625632683', 'Classical Mechanics', 'Taylor', 2005, 'Physics', 1, 13),('8624625635683', 'Statistics', 'Freedman', 2009, 'Math', 1, 13),('8624625635693', 'Algebra', 'Artin', 2011, 'Math', 0, 0),('8624625635703', 'Geometry', 'Coxeter', 1969, 'Math', 1, 1),('8624625635713', 'Trigonometry', 'Lial', 1992, 'Math', 1, 1),('8622625632693', 'Thermodynamics', 'Salah', 1985, 'Physics', 1, 69),('8622625632703', 'Electrodynamics', 'Griffiths', 1999, 'Physics', 1, 1),('8622625632713', 'Particle Physics', 'Griffiths', 2008, 'Physics', 0, 0),('8622625632723', 'Astrophysics', 'Carroll', 2007, 'Physics', 1, 2),('8624625635733', 'Differential Equations', 'Arnold', 1973, 'Math', 1, 3),('8624625635743', 'Real Analysis', 'Rudin', 1976, 'Math', 1, 7),('8624625635753', 'Complex Analysis', 'Ahlfors', 1966, 'Math', 1, 16),('8624625635763', 'Number Theory', 'Hardy', 1938, 'Math', 1, 31),('8624625635773', 'Topology', 'Munkres', 1975, 'Math', 1, 1),('8622625632733', 'Fluid Mechanics', 'Batchelor', 1967, 'Physics', 1, 2),('8622625632743', 'Relativity', 'Hartle', 2003, 'Physics', 1, 8),('8622625632753', 'Quantum Field Theory', 'Peskin', 1995, 'Physics', 1, 1),('8622625632763', 'Solid State Physics', 'Ashcroft', 1976, 'Physics', 1, 11),('8622625632773', 'Optics', 'Hecht', 1987, 'Physics', 1, 22),('8624625635783', 'Probability', 'Ross', 2010, 'Math', 1, 24),('8624625635793', 'Biostatistics', 'Daniel', 1999, 'Math', 1, 12),('8624625635803', 'Discrete Mathematics', 'Rosen', 2012, 'Math', 1, 4),('8624625635813', 'Combinatorics', 'Bona', 2011, 'Math', 1, 6),('8624625635823', 'Logic and Proofs', 'Velleman', 2006, 'Math', 1, 15),('8622625632783', 'Nuclear Physics', 'Krane', 1988, 'Physics', 1, 10),('8622625632793', 'Molecular Physics', 'McQuarrie', 2008, 'Physics', 1, 4),('8622625632803', 'Cosmology', 'Weinberg', 2008, 'Physics', 1, 16),('8622625632813', 'Signal Processing', 'Oppenheim', 1999, 'Electronics', 1, 16),('8622625632823', 'Microelectronics', 'Sedra', 2004, 'Electronics', 1, 17),('8622625632833', 'VLSI Design', 'West', 2012, 'Electronics', 1, 12),('8622625632843', 'Antenna Theory', 'Balanis', 2016, 'Electronics', 1, 15),('8622625632853', 'Digital Communication', 'Proakis', 2007, 'Electronics', 1, 14),('8622625632863', 'Control Systems', 'Ogata', 2010, 'Electronics', 1, 6),('8622625632873', 'Robotics', 'Craig', 2005, 'Engineering', 1, 21),('8622625632883', 'Thermal Physics', 'Schroeder', 2000, 'Physics', 1, 14),('8622625632893', 'Organic Chemistry', 'Carey', 2013, 'Chemistry', 1, 13),('8622625632903', 'Inorganic Chemistry', 'Housecroft', 2010, 'Chemistry', 1, 16),('8622625632913', 'Biochemistry', 'Voet', 2016, 'Chemistry', 1, 21),('8622625632923', 'Analytical Chemistry', 'Skoog', 2014, 'Chemistry', 1, 19),('8622625632933', 'Environmental Science', 'Keller', 2018, 'Biology', 1, 14),('8622625632943', 'Molecular Biology', 'Weaver', 2012, 'Biology', 1, 18),('8622625632953', 'Cell Biology', 'Pollard', 2017, 'Biology', 1, 19),('8622625632963', 'Genetics', 'Pierce', 2014, 'Biology', 1, 12),('8622625632973', 'Evolutionary Biology', 'Freeman', 2011, 'Biology', 1, 13),('8622625632983', 'Neuroscience', 'Bear', 2015, 'Biology', 1, 17),('8622625632993', 'Ecology', 'Smith', 2014, 'Biology', 1, 14),('8622625633003', 'Anatomy and Physiology', 'Marieb', 2019, 'Biology', 1, 1),('8622625633013', 'Pathophysiology', 'Copstead', 2013, 'Medicine', 1, 11),('8622625633023', 'Pharmacology', 'Katzung', 2018, 'Medicine', 1, 11),('8622625633033', 'Public Health', 'Turnock', 2016, 'Medicine', 1, 11),('8622625633043', 'Epidemiology', 'Gordis', 2014, 'Medicine', 1, 12);";
 
@@ -356,7 +355,7 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
  * @param book_list A reference to a vector of Book pointers where the imported Book objects will be stored.
  *
  */
-/*void DatabaseManager::importBooks(vector<Book*> &book_list) {
+void DatabaseManager::importBooks(vector<Book*> &book_list) {
     std::string sql = "SELECT ISBN, Title, Author, PublicationYear, Genre, Availability, Quantity FROM Books;";
     auto callback = [](void* data, int argc, char** argv, char** azColName) -> int {
         vector<Book*>* bookList = static_cast<vector<Book*>*>(data);
@@ -393,7 +392,7 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
  * @param azColName Array of strings representing the names of each column in the result.
  * @return Returns 0 to continue processing rows, or a non-zero value to abort.
  */
-/*int DatabaseManager::userCallback(void *data, int argc, char **argv, char **azColName) {
+int DatabaseManager::userCallback(void *data, int argc, char **argv, char **azColName) {
     vector<User*>* userList = static_cast<vector<User*>*>(data);
     if (argc == 4) {
         std::string id = argv[0];
@@ -429,7 +428,7 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
  * @param user_list A reference to a vector of User pointers where the imported User objects will be stored.
  *                  This vector is cleared before populating it with the newly imported User objects.
  */
-/*void DatabaseManager::importUsers(vector<User*>& user_list) {
+void DatabaseManager::importUsers(vector<User*>& user_list) {
     // Clear existing users in the list
     user_list.clear();
 
@@ -457,7 +456,7 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
 * @param loan_list A reference to a vector of Loan pointers where the imported Loan objects will be stored.
 *                  This vector is cleared before populating it with the newly imported Loan objects.
 */
-/*void DatabaseManager::importLoans(vector<Loan*> &loan_list){
+void DatabaseManager::importLoans(vector<Loan*> &loan_list){
     loan_list.clear();
 
     std::string sql = "SELECT ID, ISBN, BorrowingDate, DueDate, Status FROM Loans;";
@@ -495,7 +494,7 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
  * This method does not return any value, but outputs to the console to indicate the completion
  * of the table clearing process.
  */
-/*void DatabaseManager::boomboom() {
+void DatabaseManager::boomboom() {
     // SQL command that deletes all rows from Books, Users, and Loans tables
     std::string sql ="DELETE FROM Books;DELETE FROM Users;DELETE FROM Loans;";
     std::cout << "Clearing all Tables..." << std::endl;
@@ -515,7 +514,7 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
  * @param userId The user ID string used to identify the user whose loaned books are being retrieved.
  * @return A vector containing pointers to Book objects that the specified user has currently loaned.
  */
-/*vector<Book*> DatabaseManager::getLoanedBooksByUser(const std::string& userId) {
+vector<Book*> DatabaseManager::getLoanedBooksByUser(const std::string& userId) {
     vector<Book*> loanedBooks;
 
 // SQL query that joins Books and Loans tables to find books currently loaned by the user
@@ -538,7 +537,7 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
 
     return loanedBooks;
 }
-*/
+
 /**
  * Retrieves a pointer to a Book object from a list of books using the book's ISBN.
  * This function iterates over a vector of Book pointers and returns the pointer
@@ -548,14 +547,14 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
  * @param book_list The vector containing pointers to Book objects.
  * @return A pointer to the Book object if found, or nullptr if no match is found.
  */
-/*Member* getMemberPtr(str id, vector<User*> &user_list){
+Member* getMemberPtr(str id, vector<User*> &user_list){
     for(auto &it : user_list){
         if(it->getId() == id){
             return dynamic_cast<Member*>(it);
         }
     }
     return nullptr;
-}*/
+}
 
 /**
  * Retrieves a pointer to a Member object from a list of users using the user's ID.
@@ -567,11 +566,12 @@ int DatabaseManager::callback(void *NotUsed, int argc, char **argv, char **azCol
  * @param user_list The vector containing pointers to User objects (ex_library_books).
  * @return A pointer to the Member object if found and the User is a Member, or nullptr if no match is found or the User is not a Member.
  */
-/*Book* getBookPtr(str isbn, vector<Book*> &book_list){
+Book* getBookPtr(str isbn, vector<Book*> &book_list){
     for(auto &it : book_list){
         if(it->getIsbn() == isbn){
             return it;
         }
     }
     return nullptr;
-}*/
+}
+#endif
