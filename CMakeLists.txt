@@ -23,4 +23,6 @@ add_executable(Hospital_Management_System
         Date.h
         Trie.h
         Functionalities.cpp
-        Functionalities.h)
+        Functionalities.h
+        CityGraph.cpp
+        CityGraph.h)

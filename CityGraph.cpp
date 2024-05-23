@@ -17,6 +17,7 @@ void CityGraph::buildSampleGraph() {
 
 CityGraph::CityGraph() {
     buildSampleGraph();
+    generateShortestPaths();
     buildSampleDistricts();
     buildSampleStreets();
 }

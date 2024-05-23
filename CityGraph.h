@@ -17,18 +17,17 @@ class CityGraph {
     unordered_map<int, int> estimates;
     unordered_map<int,int> precedence;
 
-
-    void buildSampleGraph();
-
-public:
     unordered_map<string, int> districts;
     unordered_map<int, string> streets;
 
-    CityGraph();
-
+    void buildSampleGraph();
+    void generateShortestPaths();
     void buildSampleDistricts();
     void buildSampleStreets();
-    void generateShortestPaths();
+
+public:
+    CityGraph();
+
     pair<int, string> shortestPath(string);
 
 };
