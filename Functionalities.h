@@ -5,14 +5,18 @@
 #ifndef UNTITLED1_FUNCTIONALITIES_H
 #define UNTITLED1_FUNCTIONALITIES_H
 #include <iostream>
+#include "Patient.h"
+#include "Doctor.h"
 using namespace std;
-void searchPatient(string id);
+Patient* searchPatient(string );
+Patient* searchPatient_byName(string );
 void addPatient();
 void removePatient(string);
 void editPatient(string);
 void displaypatients();
 
-void searchDoctor(string id);
+Doctor* searchDoctor(string );
+Doctor* searchDoctor_byname(string );
 void addDoctor();
 void removeDoctor(string);
 void editDoctor(string);

@@ -132,16 +132,34 @@ void clinicmenu(){
 }
 //Patients' funcions
 
-//function to search patient by id
-void searchPatient(string id){
-    for (int i = 0; i < hospitalPatients.size() ; i++ ){ //iterate over the whole vector
+
+/*for (int i = 0; i < hospitalPatients.size() ; i++ ){ //iterate over the whole vector
         if (id == hospitalPatients[i].getId() ){//if condition to get the patientwith the id
             cout << "id "<< id << " found..."<<endl;
             //hospitalPatients[i].displayinfo();
             return ;
         }
+    }*/
+//function to search patient by id
+Patient* searchPatient(string id){
+
+    if (patientsids.search(id)){
+        return patientsnames.search(id);
     }
-    cout << "patient with ID " << id << " not found." << endl;
+    else {
+        cout << "patient with ID " << id << " not found." << endl;
+    }
+
+}
+
+Patient* searchPatient_byName(string name){
+    if(patientsnames.search(name)) {
+        return patientsnames.search(name);
+    }
+    else {
+        cout << "patient with name " << name << " not found." << endl;
+
+    }
 }
 
 void addPatient() {
@@ -283,11 +301,20 @@ void displaypatients(){
 
 //Doctors' functions
 
-void searchDoctor(string id){
+Doctor* searchDoctor(string id){
     if (doctorsids.search(id))
-        cout<<"Doctor : "<<doctorsids.search(id)->getName()<<"ID : "<<doctorsids.search(id)->getID()<<endl;
+        return doctorsnames.search(id);
     else
         cout << "Doctor with ID " << id << " not found." << endl;
+}
+
+Doctor* searchDoctor_byname(string name){
+    if (doctorsids.search(name)) {
+        return doctorsnames.search(name);
+    }
+    else {
+        cout << "Doctor with name " << name << " not found." << endl;
+    }
 }
 
 
@@ -317,7 +344,7 @@ void addDoctor(){
     Doctor doc(name,availableDays,appointmentPrice,clinicType,id);
     hospitalDoctors.push_back(doc);
     doctorsnames.insert(name,&doc);
-    doctorsnames.insert(name,&doc);
+    doctorsids.insert(id,&doc);
 }
 
 
