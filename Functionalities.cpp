@@ -552,8 +552,7 @@ void reserveClinic() {
             if (searchPatient_byid(input) || searchPatient_byName(input)) {
                 searchPatient_byName(input) ? searchCLinic(type)->addtoWaiting(*searchPatient_byName(input))
                                             : searchCLinic(type)->addtoWaiting(*searchPatient_byid(input));
-                editDoctor(input);
-            } else
+             } else
                 cout << "ID not found" << endl;
         } else
             cout<<"Clinic isn't Available for Reserving Today "<<endl;
