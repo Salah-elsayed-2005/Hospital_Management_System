@@ -3,8 +3,15 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include "PriorityQueue.h"
+#include "Doctor.h"
+#include "Clinics.h"
+#include "Functionalities.h"
+#include "Doctor.h"
 #include "utility"
 #include "CityGraph.h"
+#include "Patient.h"
+
 
 
 // Dummy data
@@ -526,6 +533,7 @@ void open_add_patient_window(GtkWidget *widget, gpointer data) {
     label = gtk_label_new("Pulse measured: ");
     gtk_grid_attach(GTK_GRID(grid), label, 1, 8, 1, 1);
     entry = gtk_entry_new();
+    gtk_entry_set_input_purpose(GTK_ENTRY(entry), GTK_INPUT_PURPOSE_DIGITS);
     gtk_grid_attach(GTK_GRID(grid), entry, 2, 8, 2, 1);
     g_object_set_data(G_OBJECT(window), "pulse_entry", entry);
 
@@ -588,10 +596,22 @@ void save_patient_data(GtkWidget *widget, gpointer data) {
     gchar *condition = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
     gint airway = gtk_combo_box_get_active(GTK_COMBO_BOX(airway_combo));
     gint spo2 = gtk_adjustment_get_value(gtk_range_get_adjustment(GTK_RANGE(spo2_slider)));
-    const gchar *pulse = gtk_editable_get_text(GTK_EDITABLE(pulse_entry));
+    gint pulse = atoi(gtk_editable_get_text(GTK_EDITABLE(pulse_entry)));
     gint agitation = gtk_combo_box_get_active(GTK_COMBO_BOX(agitation_combo));
     gint occ = gtk_combo_box_get_active(GTK_COMBO_BOX(occ_combo));
-    gint temp = gtk_adjustment_get_value(gtk_range_get_adjustment(GTK_RANGE(temp_slider)));
+    gfloat temp = gtk_adjustment_get_value(gtk_range_get_adjustment(GTK_RANGE(temp_slider)));
+
+    Diagnosis patient_diagnosis;
+    patient_diagnosis.setAirwayLevel(++airway);
+    patient_diagnosis.setBreathingLevel(spo2);
+    patient_diagnosis.setPulseLevel(pulse);
+    patient_diagnosis.setDisabilityLevel(++agitation);
+    patient_diagnosis.setExposureLevel(occ,temp);
+    patient_diagnosis.setTriageLevel();
+
+
+
+
 
     g_print("ID: %s\n", id);
     g_print("Name: %s\n", name);
@@ -600,10 +620,10 @@ void save_patient_data(GtkWidget *widget, gpointer data) {
     g_print("Condition: %s\n", condition);
     g_print("Airway: %d\n", airway);
     g_print("SPO2: %d\n", spo2);
-    g_print("Pulse: %s\n", pulse);
+    g_print("Pulse: %d\n", pulse);
     g_print("Agitation: %d\n", agitation);
     g_print("Chemical Contamination: %d\n", occ);
-    g_print("Temperature: %d\n", temp);
+    g_print("Temperature: %f\n", temp);
 
     g_free(condition);
     gtk_window_destroy(GTK_WINDOW(window));

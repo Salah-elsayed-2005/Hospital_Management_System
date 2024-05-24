@@ -8,8 +8,11 @@
 
 #include <gtk/gtk.h>
 #include <vector>
-#include "CityGraph.h"
 #include <string>
+#include "CityGraph.h"
+#include "utility"
+#include "CityGraph.h"
+#include "Patient.h"
 
 // Function to activate the GTK application and set up the main window
 void activate(GtkApplication *app, gpointer user_data);
