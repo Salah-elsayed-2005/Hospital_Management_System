@@ -109,18 +109,18 @@ int main() {
         Doctor*toinsert=new Doctor(it.getName(),it.getAvailableDays(),it.getClinicType(),it.getID());
         doctorsids.insert(toinsert->getID(),toinsert);
     }
-    Clinic pediatrics;
-    pediatrics.setDoctor(doctors[0]);
-    hospitalClinics.push_back(pediatrics);
-    clinictypes.insert(doctors[0].getClinicType(),&pediatrics);
+    Clinic General;
+    General.setDoctor(doctors[0]);
+    clinictypes.insert(doctors[0].getClinicType(),&General);
+    hospitalClinics.push_back(General);
     Clinic Surgery;
     Surgery.setDoctor(doctors[2]);
-    hospitalClinics.push_back(Surgery);
     clinictypes.insert(doctors[2].getClinicType(),&Surgery);
+    hospitalClinics.push_back(Surgery);
     Clinic Dentistry;
-    Surgery.setDoctor(doctors[3]);
-    hospitalClinics.push_back(Dentistry);
+    Dentistry.setDoctor(doctors[3]);
     clinictypes.insert(doctors[3].getClinicType(),&Dentistry);
+    hospitalClinics.push_back(Dentistry);
 
 
 
