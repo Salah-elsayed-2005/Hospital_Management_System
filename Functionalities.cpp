@@ -558,20 +558,25 @@ int checkinput(int choice,int first,int last){
 void reserveClinic() {
     string type;
     cout<<"Enter Type of the Clinic : "<<endl;
-    cin>>type;
+    cin.ignore();
+    getline(cin,type);
     if (searchClinic(type)) {
             bool isavailable= false;
             vector<Doctor> temp = searchClinic(type)->getDoctor();
-            for (auto it2 = 0;it2< temp.size(); it2++){
+            for (auto it2 = 0 ;it2 < temp.size(); it2++){
             for (auto it: temp[it2].getAvailableDays()) {
                 if (it==today.getcurrentday())
                 isavailable= true;
+                else {
+                    cout <<"ghaby"<<endl;
+                }
             }
                 }
             if (isavailable) {
             string input;
             cout << "Enter the id or name of the Patient : ";
-            cin >> input;
+            cin.ignore();
+            getline(cin,input);
                 if (searchPatient_byid(input) || searchPatient_byName(input)) {
                 searchPatient_byName(input) ? searchClinic(type)->addtoWaiting(*searchPatient_byName(input))
                                             : searchClinic(type)->addtoWaiting(*searchPatient_byid(input));

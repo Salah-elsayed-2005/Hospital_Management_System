@@ -133,7 +133,7 @@ int main() {
     temp.clear();
 
     temp.push_back(doctors[3]);
-    Clinic Dentistry("dentist",pq,temp);
+    Clinic Dentistry("Dentist",pq,temp);
     //Surgery.setDoctor(temp);
     hospitalClinics.push_back(Dentistry);
     clinictypes.insert(doctors[3].getClinicType(),&Dentistry);
