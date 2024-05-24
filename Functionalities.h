@@ -34,7 +34,6 @@ void editmenu();
 void displaymenu();
 void clinicmenu();
 void creditsmenu();
-
-int checkinput(int,int,int);
+void emergencymenu();
 
 #endif //UNTITLED1_FUNCTIONALITIES_H

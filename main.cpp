@@ -91,22 +91,22 @@ int main() {
     vector<string> days5 = {"Friday", "Sunday"};
 
     Doctor doctors[5] = {
-            {"Salah", days1, 100, "General", "D001"},
-            {"Hussein", days2, 150, "Specialist", "D002"},
-            {"Abo Guendia", days3, 200, "Surgeon", "D003"},
-            {"Behiry", days4, 250, "Dentist", "D004"},
-            {"Atta Tany 3shan Bhebo", days5, 300, "Pediatrician", "D005"}
+            {"Salah", days1,   "General", "D001"},
+            {"Hussein", days2,  "Specialist", "D002"},
+            {"Abo Guendia", days3,  "Surgeon", "D003"},
+            {"Behiry", days4,   "Dentist", "D004"},
+            {"Atta Tany 3shan Bhebo", days5,   "Pediatrician", "D005"}
     };
 
     for (auto & it :doctors) {
         hospitalDoctors.push_back(it);
     }
     for (auto it:hospitalDoctors) {
-        Doctor*toinsert=new Doctor(it.getName(),it.getAvailableDays(),it.getPrice(),it.getClinicType(),it.getID());
+        Doctor*toinsert=new Doctor(it.getName(),it.getAvailableDays() ,it.getClinicType(),it.getID());
         doctorsnames.insert(toinsert->getName(),toinsert);
     }
     for (auto it:hospitalDoctors) {
-        Doctor*toinsert=new Doctor(it.getName(),it.getAvailableDays(),it.getPrice(),it.getClinicType(),it.getID());
+        Doctor*toinsert=new Doctor(it.getName(),it.getAvailableDays(),it.getClinicType(),it.getID());
         doctorsids.insert(toinsert->getID(),toinsert);
     }
     Clinic pediatrics;

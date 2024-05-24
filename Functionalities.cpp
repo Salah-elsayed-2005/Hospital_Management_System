@@ -11,6 +11,7 @@
 #include "PriorityQueue.h"
 #include "Doctor.h"
 #include "Clinics.h"
+#include "CityGraph.h"
 using namespace std;
 extern vector<Patient>hospitalPatients;
 extern vector<Doctor>hospitalDoctors;
@@ -78,7 +79,7 @@ void mainmenu(){
     system(CLEAR_COMMAND.c_str()); //clear screen
     short choice=1;
     do{
-        cout<<"1-Edit Database\n2-Display Info\n3-Reserve a clinic\n4-Close The program"<<endl;
+        cout<<"1-Edit Database\n2-Display Info\n3-Reserve a clinic\n4-Emergency Request\n5-Close The program"<<endl;
         cout<<"\nPlease enter your choice : ";
         cin>>choice;
         if (choice==1)
@@ -87,6 +88,8 @@ void mainmenu(){
             displaymenu();
         if (choice==3)
             clinicmenu();
+        if (choice==4)
+            emergencymenu();
         system(CLEAR_COMMAND.c_str()); //clear screen
         if(backToTheMainMenu) { //check if the user want to back to the main menu
             choice = 1;
@@ -94,7 +97,7 @@ void mainmenu(){
         }
         if(endOfProgram)    //if the user want to end the program
             break;
-    }while(choice!=4);
+    }while(choice!=5);
     creditsmenu();
     system("pause>0");
 
@@ -434,13 +437,12 @@ void addDoctor(){
     while(line>>day){ //days separated by spaces not commas
         availableDays.push_back(day);
     }
-    cout << "\nAppointment price : ";
-    cin >> appointmentPrice;
+
     cout << "\nClinic type : ";
     cin >> clinicType;
     cout << "\nDoctor id : ";
     cin >> id;
-    Doctor doc(name,availableDays,appointmentPrice,clinicType,id);
+    Doctor doc(name,availableDays,clinicType,id);
     hospitalDoctors.push_back(doc);
     doctorsnames.insert(name,&doc);
     doctorsids.insert(id,&doc);
@@ -466,7 +468,7 @@ void editDoctor(string id_tobe_edited){
     for(int i = 0; i < hospitalDoctors.size() ; i++ ){ //loop over the whole vector
         if( id_tobe_edited == hospitalDoctors[i].getID() ){ //if condition to get the doctor with the id to be edited
             cout << "What do you want to edit in the doctor with id "<<id_tobe_edited <<endl;
-            cout << "1-Doctor's name\n2-Doctor's available days\n3-appointment price\n4-clinic type\n5-Doctor's id : ";
+            cout << "1-Doctor's name\n2-Doctor's available days \n3-clinic type\n4-Doctor's id : ";
             cin >> choice;
              if (choice == 1){
                 string name;
@@ -492,19 +494,13 @@ void editDoctor(string id_tobe_edited){
                 hospitalDoctors[i].setAvailableDays(avd); //edit the available days to the inserted one
             }
             if (choice == 3){
-                int apprice;
-                cout << "Enter the appointment price: ";
-                cin >> apprice; //take the price as input from the user
-                hospitalDoctors[i].setPrice(apprice); //edit the price to the entered one
-            }
-            if (choice == 4){
                 string clinic;
                 cout <<"Enter the clinic type : ";
                 cin.ignore(); //clear the buffer to ensure that getline works correctly
                 getline(cin,clinic); //function to obtain the whole line and store it in inputline
                 hospitalDoctors[i].setClinicType(clinic);
             }
-            if (choice == 5){
+            if (choice == 4){
                 string id;
                 cout << "Enter the Doctor's new id : ";
                 cin >> id; //take the id as input to give it to the setter
@@ -512,6 +508,7 @@ void editDoctor(string id_tobe_edited){
                 doctorsnames.insert(id,doctorsids.search(id_tobe_edited));
                 hospitalDoctors[i].setID(id); //set the id to the inserted idfrom the user
             }
+
             cout << "Patient is edited successfully"<<endl;
             return;
         }
@@ -573,4 +570,68 @@ void displayClinicSchedule() {
         }
     } else
         cout<<"Clinic Not found "<<endl;
+}
+void emergencymenu(){
+    system(CLEAR_COMMAND.c_str()); //clear screen
+    short choice;
+    do{
+        CityGraph Metropolis;
+        cout << "Choose Emergency address: \n\n";
+
+        cout << "1. Maple Grove Residences" << endl;
+        cout << "2. Willow Heights" << endl;
+        cout << "3. Sunset Pines Apartments" << endl;
+        cout << "4. Cedar Ridge Villas" << endl;
+        cout << "5. Lakeside Manor" << endl;
+        cout << "6. Harbor View Estates" << endl;
+        cout << "7. Oakwood Park Residences" << endl;
+        cout << "8. Riverstone Apartments" << endl;
+        cout << "9. Meadowlark Homes" << endl << endl;
+
+        cout << "Your Choice: ";
+        string address;
+
+        cin >> choice;
+        if (choice<1 || choice > 9) {
+            system(CLEAR_COMMAND.c_str());
+            continue;
+        }
+        switch (choice) {
+            case 1:
+                address = "Maple Grove Residences";
+                break;
+            case 2:
+                address = "Willow Heights";
+                break;
+            case 3:
+                address = "Sunset Pines Apartments";
+                break;
+            case 4:
+                address = "Cedar Ridge Villas";
+                break;
+            case 5:
+                address = "Lakeside Manor";
+                break;
+            case 6:
+                address = "Harbor View Estates";
+                break;
+            case 7:
+                address = "Oakwood Park Residences";
+                break;
+            case 8:
+                address = "Riverstone Apartments";
+                break;
+            case 9:
+                address = "Meadowlark Homes";
+                break;
+
+        }
+        pair<int, string> route = Metropolis.shortestPath(address);
+
+        cout << "ETA : " << route.first << " mins" << endl;
+        cout << "Shortest route for Ambulance : " << route.second << endl;
+        if(choice>0 && choice<10)
+            checkBack();    //check if the user want to back to the last menu
+
+    }while(!backToTheMainMenu); //check if the user want to back to the main menu
 }
