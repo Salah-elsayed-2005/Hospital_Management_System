@@ -76,7 +76,8 @@ int main() {
     }
     for (auto &it:hospitalPatients) {
         Patient*toinsert=new Patient(it.getName(), it.getID(), it.getAge(), it.getGender(), it.getConditionDescription(), it.getDiagnosis());
-        patientsnames.insert(toinsert->getID(), toinsert);    }
+        patientsids.insert(toinsert->getID(), toinsert);
+    }
 
 
 

@@ -25,6 +25,7 @@ void displaydoctors();
 
 void reserveClinic(); //needs to be implemented
 void displayClinicSchedule(); //needs to be implemented
+void displayclinics();
 
 void startingmenu();
 void mainmenu();

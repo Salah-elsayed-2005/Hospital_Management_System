@@ -94,7 +94,7 @@ void editmenu(){
         cin>> input;
 
         if (searchPatient_byName(input)|| searchPatient_byid(input)){
-            input= searchPatient_byName(input) ? searchPatient_byName(input)->getID() : searchDoctor_byid(input)->getID();
+            input= searchPatient_byName(input) ? searchPatient_byName(input)->getID() : searchPatient_byid(input)->getID();
             editPatient(input);
         } else
             cout<<"ID not found"<<endl;
@@ -108,7 +108,7 @@ void editmenu(){
         cin>> input;
 
         if (searchPatient_byName(input)|| searchPatient_byid(input)){
-            input= searchPatient_byName(input) ? searchPatient_byName(input)->getID() : searchDoctor_byid(input)->getID();
+            input= searchPatient_byName(input) ? searchPatient_byName(input)->getID() : searchPatient_byid(input)->getID();
             removePatient(input);
         } else
             cout<<"ID not found"<<endl;
@@ -117,17 +117,42 @@ void editmenu(){
 
 void displaymenu(){
     int choice;
-    cout<<"1-Display clinic info"<<endl
-        <<"2-Display Doctor info"<<endl
-        <<"3-Display Patient info"<<endl;
+    cout<<"1-Display All clinics info"<<endl
+        <<"2-Display All Doctors info"<<endl
+        <<"3-Display All Patients info"<<endl
+        <<"4-Display a clinic info"<<endl
+        <<"5-Display a Doctor info"<<endl
+        <<"6-Display a Patient info"<<endl;
     cout<<"Please Enter Your choice : ";
     cin>>choice;
     if (choice==1)
         cout<<"A7a"<<endl;
+//        displayclinics();// NOT yet implemented
     if (choice==2)
         displaydoctors();
     if(choice==3)
         displaypatients();
+    if(choice==4)
+        cout<<"A7a"<<endl;
+    if(choice==5){
+        string input;
+        cout << "Enter the id or name of the Doctor you want to View : ";
+        cin>> input;
+        if (searchDoctor_byname(input) || searchDoctor_byid(input)){
+             searchDoctor_byname(input)? searchDoctor_byname(input)->displayinfo(): searchDoctor_byid(input)->displayinfo();
+        }
+        else
+            cout<<"ID not found"<<endl;
+    }
+    if(choice==6) {
+        string input;
+        cout << "Enter the id or name of the patient you want to View : ";
+        cin>> input;
+        if (searchPatient_byName(input)|| searchPatient_byid(input)){
+            searchPatient_byName(input) ? searchPatient_byName(input)->displayinfo()  : searchPatient_byid(input)->displayinfo()  ;
+        } else
+            cout<<"ID not found"<<endl;
+    }
  }
 void clinicmenu(){
     int choice;
@@ -137,7 +162,7 @@ void clinicmenu(){
     cout << "3- Return to Main Menu\n";
     cout << "Enter your choice: ";
     cin >> choice;
-    choice = checkinput(choice, 1, 3);
+    choice = checkinput(choice, 1, 2);
 
     switch (choice) {
         case 1:
@@ -145,9 +170,6 @@ void clinicmenu(){
             break;
         case 2:
             //displayClinicSchedule(); // lesa htt3mel
-            break;
-        case 3:
-            mainmenu(); //return to main menu
             break;
     }
 }
@@ -159,9 +181,8 @@ Patient* searchPatient_byid(string id){
     if (patientsids.search(id)){
         return patientsnames.search(id);
     }
-    else {
-        cout << "patient with ID " << id << " not found." << endl;
-    }
+    else
+        return nullptr;
 
 }
 
@@ -169,10 +190,9 @@ Patient* searchPatient_byName(string name){
     if(patientsnames.search(name)) {
         return patientsnames.search(name);
     }
-    else {
-        cout << "patient with name " << name << " not found." << endl;
+    else
+        return nullptr;
 
-    }
 }
 
 void addPatient() {
@@ -304,10 +324,7 @@ void editPatient(string id_tobe_edited){
 
 void displaypatients(){
     cout << "printing all patients details..."<<endl;
-    for (int i = 0;i<hospitalPatients.size();i++){
-        hospitalPatients[i].displayinfo();
-        cout<<endl<<endl;
-    }
+    patientsnames.print();
     cout << "This is the end of the patients list "<<endl;
 }
 
@@ -318,16 +335,16 @@ Doctor* searchDoctor_byid(string id){
     if (doctorsids.search(id))
         return doctorsnames.search(id);
     else
-        cout << "Doctor with ID " << id << " not found." << endl;
+        return nullptr;
 }
 
 Doctor* searchDoctor_byname(string name){
     if (doctorsnames.search(name)) {
         return doctorsnames.search(name);
     }
-    else {
-        cout << "Doctor with name " << name << " not found." << endl;
-    }
+    else
+        return nullptr;
+
 }
 
 
@@ -437,10 +454,7 @@ void editDoctor(string id_tobe_edited){
 
 void displaydoctors(){
     cout << "printing all doctors details..."<<endl;
-    for (int i = 0 ; i<hospitalDoctors.size();i++){ // iterate over the whole vector
-        hospitalDoctors[i].displayinfo(); //display the info of each doctor in the vector
-        cout<<endl<<endl; // user-friendly interface
-    }
+    doctorsnames.print();
     cout << "This is the end of the doctors list "<<endl;
 
 }
