@@ -12,14 +12,17 @@ class Clinic{
     PriorityQueue waitingList;
     vector<Doctor>doctor;
 public:
+    Clinic();
+    Clinic(string, PriorityQueue,vector<Doctor>);
+
     void setType(string);
-    void setDoctor(Doctor &);
+    void setDoctor(vector<Doctor> d);
     void addtoWaiting(Patient);
     void removefromWaiting();
     void printInfo();
 
     string getType();
     PriorityQueue getWaitingList();
-    Doctor getDoctor();
+    vector<Doctor> getDoctor();
 };
 #endif //HOPSITAL_MANAGEMENT_SYSTEM_CLINICS_H

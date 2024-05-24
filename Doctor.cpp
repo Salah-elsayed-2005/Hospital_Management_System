@@ -24,7 +24,6 @@ void Doctor :: displayinfo(){
             cout << " ,";
         }
     }
-    cout << "\b\b\b\b\b"<<endl;
-    cout << "Clinic Type : " << clinicType << endl;
+    cout << "\nClinic Type : " << clinicType << endl;
     cout<< "Doctor's id : "<<id<<endl;
 }

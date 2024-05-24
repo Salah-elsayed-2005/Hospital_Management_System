@@ -60,15 +60,19 @@ int main() {
     d[4].setTriageLevel();
 
 
-    Patient p[7] = {
+    Patient p[] = {
             {"Mohamed Atta", "8621562",20 , true, "zy elfol", d[0]},
             {"Ali Ayman ", "8512616",19 , false, "negro", d[1]},
             {"nabarawy FTW", "54124522",34 , true, "el3tba 3alnazr", d[2]},
             {"shafey Elzoz", "8985564",17 , true, "t3ban ya capten", d[3]},
-            {"se7s2", "1",988 , true, "whar", d[4]},
-            {"se7", "2",988 , true, "whar", d[4]},
-            {"se7s", "3",988 , true, "whar", d[4]},
+            {"se7s2", "1",988 , true, "whar", d[4]}
+       //     {"se7", "2",988 , true, "whar", d[4]},
+         //   {"se7s", "3",988 , true, "whar", d[4]},
     };
+    PriorityQueue pq;
+    for (auto & i : p) {
+        pq.enqueue(i);
+    }
     for (auto & it :p) {
         hospitalPatients.push_back(it);
     }
@@ -104,24 +108,36 @@ int main() {
     for (auto it:hospitalDoctors) {
         Doctor*toinsert=new Doctor(it.getName(),it.getAvailableDays() ,it.getClinicType(),it.getID());
         doctorsnames.insert(toinsert->getName(),toinsert);
-    }
-    for (auto it:hospitalDoctors) {
-        Doctor*toinsert=new Doctor(it.getName(),it.getAvailableDays(),it.getClinicType(),it.getID());
         doctorsids.insert(toinsert->getID(),toinsert);
     }
-    Clinic pediatrics;
-    pediatrics.setDoctor(doctors[0]);
+    //for (auto it:hospitalDoctors) {
+      //  Doctor*toinsert=new Doctor(it.getName(),it.getAvailableDays(),it.getClinicType(),it.getID());
+
+    //}
+
+    vector<Doctor> temp;
+    temp.push_back(doctors[0]);
+    Clinic pediatrics("Pediatrician",pq,temp) ;
+
+    //pediatrics.setDoctor(temp);
     hospitalClinics.push_back(pediatrics);
     clinictypes.insert(doctors[0].getClinicType(),&pediatrics);
-    Clinic Surgery;
-    Surgery.setDoctor(doctors[2]);
+    temp.clear();
+
+    temp.push_back(doctors[2]);
+    Clinic Surgery("Surgeon",pq,temp);
+
+    //Surgery.setDoctor(temp);
     hospitalClinics.push_back(Surgery);
     clinictypes.insert(doctors[2].getClinicType(),&Surgery);
-    Clinic Dentistry;
-    Surgery.setDoctor(doctors[3]);
+    temp.clear();
+
+    temp.push_back(doctors[3]);
+    Clinic Dentistry("dentist",pq,temp);
+    //Surgery.setDoctor(temp);
     hospitalClinics.push_back(Dentistry);
     clinictypes.insert(doctors[3].getClinicType(),&Dentistry);
-
+    temp.clear();
 
 
 

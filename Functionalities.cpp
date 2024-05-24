@@ -30,7 +30,7 @@ const std::string CLEAR_COMMAND = "clear";
 bool endOfProgram= false;
 bool backToTheMainMenu=false;
 Date today;//global variable for today's date
-Clinic*searchCLinic(string clinictype) {
+Clinic*searchClinic(string clinictype) {
     if (clinictypes.search(clinictype))
         return clinictypes.search(clinictype);
     else
@@ -188,36 +188,46 @@ void displaymenu(){
             continue;
         }
         if (choice == 1) {  //add member
-            cout<<"A7a"<<endl;
-//        displayclinics();// NOT yet implemented
+            displayclinics();
         }
         else if (choice == 2) {     //remove member
-           displaydoctors();
+            displaydoctors();
         }
         else if (choice==3){
             displaypatients();
         }
         else if (choice==4){
-            cout<<"A7a"<<endl;
+            cout << "Enter clinic type : ";
+            string input;
+            cin.ignore();
+            getline(cin,input);
+            if (searchClinic(input)){
+                searchClinic(input)->printInfo();
+            }
+            else{
+                cout<< "Invalid Clinic type"<<endl;
+            }
         }
         else if (choice==5){
             string input;
             cout << "Enter the id or name of the Doctor you want to View : ";
-            cin>> input;
+            cin.ignore();
+            getline(cin,input);
             if (searchDoctor_byname(input) || searchDoctor_byid(input)){
                 searchDoctor_byname(input)? searchDoctor_byname(input)->displayinfo(): searchDoctor_byid(input)->displayinfo();
             }
             else
-                cout<<"ID not found"<<endl;
+                cout<<"Doctor not found"<<endl;
         }
         else if (choice==6){
             string input;
             cout << "Enter the id or name of the patient you want to View : ";
-            cin>> input;
-            if (searchPatient_byName(input)|| searchPatient_byid(input)){
+            cin.ignore();
+            getline(cin,input);
+            if (searchPatient_byName(input) || searchPatient_byid(input)){
                 searchPatient_byName(input) ? searchPatient_byName(input)->displayinfo()  : searchPatient_byid(input)->displayinfo()  ;
             } else
-                cout<<"ID not found"<<endl;
+                cout<<"Patient not found"<<endl;
         }
         if(choice>0 && choice<7)
             checkBack();    //check if the user want to back to the last menu
@@ -255,7 +265,7 @@ void clinicmenu(){
 Patient* searchPatient_byid(string id){
 
     if (patientsids.search(id)){
-        return patientsnames.search(id);
+        return patientsids.search(id);
     }
     else
         return nullptr;
@@ -396,8 +406,11 @@ void editPatient(string id_tobe_edited){
 }
 
 void displaypatients(){
-    cout << "printing all patients details..."<<endl;
-    patientsnames.print();
+    cout << "printing all patients details..."<<endl<<endl;
+    for (auto it: hospitalPatients){
+        it.displayinfo() ;
+        cout << endl<<endl;
+    }
     cout << "This is the end of the patients list "<<endl;
 }
 
@@ -406,7 +419,7 @@ void displaypatients(){
 
 Doctor* searchDoctor_byid(string id){
     if (doctorsids.search(id))
-        return doctorsnames.search(id);
+        return doctorsids.search(id);
     else
         return nullptr;
 }
@@ -518,8 +531,12 @@ void editDoctor(string id_tobe_edited){
 }
 
 void displaydoctors(){
-    cout << "printing all doctors details..."<<endl;
-    doctorsnames.print();
+    cout << "printing all doctors details..."<<endl << endl;
+    for (auto it: hospitalDoctors){
+         it.displayinfo() ;
+         cout << endl<<endl;
+    }
+
     cout << "This is the end of the doctors list "<<endl;
 
 }
@@ -535,26 +552,32 @@ int checkinput(int choice,int first,int last){
     return choice; // return the value after exiting the while loop with the right value that's within the range
 }
 #endif
+
+
+
 void reserveClinic() {
     string type;
     cout<<"Enter Type of the Clinic : "<<endl;
     cin>>type;
-    if (searchCLinic(type)) {
+    if (searchClinic(type)) {
             bool isavailable= false;
-        for (auto it: searchCLinic(type)->getDoctor().getAvailableDays()) {
-            if (it==today.getcurrentday())
+            vector<Doctor> temp = searchClinic(type)->getDoctor();
+            for (auto it2 = 0;it2< temp.size(); it2++){
+            for (auto it: temp[it2].getAvailableDays()) {
+                if (it==today.getcurrentday())
                 isavailable= true;
-        }
-        if (isavailable) {
+            }
+                }
+            if (isavailable) {
             string input;
             cout << "Enter the id or name of the Patient : ";
             cin >> input;
-            if (searchPatient_byid(input) || searchPatient_byName(input)) {
-                searchPatient_byName(input) ? searchCLinic(type)->addtoWaiting(*searchPatient_byName(input))
-                                            : searchCLinic(type)->addtoWaiting(*searchPatient_byid(input));
+                if (searchPatient_byid(input) || searchPatient_byName(input)) {
+                searchPatient_byName(input) ? searchClinic(type)->addtoWaiting(*searchPatient_byName(input))
+                                            : searchClinic(type)->addtoWaiting(*searchPatient_byid(input));
              } else
                 cout << "ID not found" << endl;
-        } else
+            } else
             cout<<"Clinic isn't Available for Reserving Today "<<endl;
     }
     else cout<<"Clinic is not found "<<endl;
@@ -564,12 +587,31 @@ void displayClinicSchedule() {
     cout<<"Enter The type of Clinic : ";
     cin>>t;
     if (clinictypes.search(t)) {
-        for (auto it: clinictypes.search(t)->getDoctor().getAvailableDays()) {
-            cout << it << " " << endl;
+        vector<Doctor> temp = searchClinic(t)->getDoctor();
+        for (auto it2 = 0;it2< temp.size(); it2++){ //iterate over every doctor with this clinic
+            for (auto it: temp[it2].getAvailableDays()) { //iterate over the available days of the doctors
+                cout << it << " " << endl;
+            }
         }
+        /*for (auto it: clinictypes.search(t)->getDoctor().getAvailableDays()) {
+            //cout << it << " " << endl;
+        }*/
     } else
         cout<<"Clinic Not found "<<endl;
 }
+
+
+void displayclinics(){
+    cout << "printing all Clinics details..."<<endl << endl;
+    for (auto it: hospitalClinics){
+        it.printInfo() ;
+        cout << endl<<endl;
+    }
+
+    cout << "This is the end of the Clinics list "<<endl;
+}
+
+
 void emergencymenu(){
     system(CLEAR_COMMAND.c_str()); //clear screen
     short choice;

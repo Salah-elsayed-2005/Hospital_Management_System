@@ -16,20 +16,23 @@ void addPatient();
 void removePatient(string);
 void editPatient(string);
 void displaypatients();
+
 Doctor* searchDoctor_byid(string );
 Doctor* searchDoctor_byname(string );
-
 void addDoctor();
 void removeDoctor(string);
 void editDoctor(string);
 void displaydoctors();
 
+Clinic* searchClinic(string);
 void reserveClinic(); //needs to be implemented
 void displayClinicSchedule(); //needs to be implemented
 void displayclinics();
-Clinic*searchCLinic(string);
+
+
 bool checkBack();
 bool checkClose();
+
 void mainmenu();
 void editmenu();
 void displaymenu();
