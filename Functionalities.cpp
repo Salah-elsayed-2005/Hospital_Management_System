@@ -64,36 +64,57 @@ void editmenu(){
     cin >> choice;
     choice = checkinput(choice,1,6);
     if (choice==1){
-        string id;
-        cout << "Enter the id of the Doctor you want to edit : ";
-        cin>> id;
-        editDoctor(id);
+        string input;
+        cout << "Enter the id or name of the Doctor you want to edit : ";
+        cin>> input;
+
+        if (searchDoctor_byname(input)|| searchDoctor_byid(input)){
+           input= searchDoctor_byname(input)? searchDoctor_byname(input)->getID(): searchDoctor_byid(input)->getID();
+            editDoctor(input);
+        } else
+            cout<<"ID not found"<<endl;
     }
     else if (choice==2){
         addDoctor();
     }
     else if (choice==3){
-        string id;
-        cout << "Enter the id of the Doctor you want to remove : ";
-        cin>> id;
-        removeDoctor( id);
+        string input;
+        cout << "Enter the id or name of the Doctor you want to remove : ";
+        cin>> input;
+
+        if (searchDoctor_byname(input)|| searchDoctor_byid(input)){
+            input= searchDoctor_byname(input)? searchDoctor_byname(input)->getID(): searchDoctor_byid(input)->getID();
+            removeDoctor(input);
+        } else
+            cout<<"ID not found"<<endl;
     }
     else if (choice==4){
-        string id;
-        cout << "Enter the id of the patient you want to edit : ";
-        cin>> id;
-        editPatient(id);
+        string input;
+        cout << "Enter the id or name of the patient you want to edit : ";
+        cin>> input;
+
+        if (searchPatient_byName(input)|| searchPatient_byid(input)){
+            input= searchPatient_byName(input) ? searchPatient_byName(input)->getID() : searchDoctor_byid(input)->getID();
+            editPatient(input);
+        } else
+            cout<<"ID not found"<<endl;
     }
     else if (choice==5) {
         addPatient();
     }
     else if (choice==6) {
-        string id;
-        cout << "Enter the id of the patient you want to remove : ";
-        cin>> id;
-        removePatient( id);
+        string input;
+        cout << "Enter the id or name of the patient you want to remove : ";
+        cin>> input;
+
+        if (searchPatient_byName(input)|| searchPatient_byid(input)){
+            input= searchPatient_byName(input) ? searchPatient_byName(input)->getID() : searchDoctor_byid(input)->getID();
+            removePatient(input);
+        } else
+            cout<<"ID not found"<<endl;
     }
 }
+
 void displaymenu(){
     int choice;
     cout<<"1-Display clinic info"<<endl
@@ -102,7 +123,7 @@ void displaymenu(){
     cout<<"Please Enter Your choice : ";
     cin>>choice;
     if (choice==1)
-        cout<<"Not Yet";
+        cout<<"A7a"<<endl;
     if (choice==2)
         displaydoctors();
     if(choice==3)
@@ -132,16 +153,8 @@ void clinicmenu(){
 }
 //Patients' funcions
 
-
-/*for (int i = 0; i < hospitalPatients.size() ; i++ ){ //iterate over the whole vector
-        if (id == hospitalPatients[i].getId() ){//if condition to get the patientwith the id
-            cout << "id "<< id << " found..."<<endl;
-            //hospitalPatients[i].displayinfo();
-            return ;
-        }
-    }*/
 //function to search patient by id
-Patient* searchPatient(string id){
+Patient* searchPatient_byid(string id){
 
     if (patientsids.search(id)){
         return patientsnames.search(id);
@@ -198,17 +211,17 @@ void addPatient() {
     Patient patient(name,id,age,gender,condition,d1);
     hospitalPatients.push_back(patient); // push(store) patient object(with all the info collected from the user ) in the vector
     patientsnames.insert(patient.getName(),&patient);
-    patientsnames.insert(patient.getId(),&patient);
+    patientsnames.insert(patient.getID(), &patient);
 }
 
 //function to remove the patient from the vector
 void removePatient(string id_toberemoved){
     for (int i = 0; i < hospitalPatients.size() ; i++ ){ //iterate over the whole vector
-        if (id_toberemoved == hospitalPatients[i].getId() ){  //if condition to get the patient
+        if (id_toberemoved == hospitalPatients[i].getID() ){  //if condition to get the patient
             // with the id to be removed
             cout << "The patient is being removed... "<< endl;
             patientsnames.deleteWord(hospitalPatients[i].getName());
-            patientsids.deleteWord(hospitalPatients[i].getId());
+            patientsids.deleteWord(hospitalPatients[i].getID());
             hospitalPatients.erase(hospitalPatients.begin() + i); //remove the patient wanted to remove
             // from the vector
             cout << "Patient with id "<<id_toberemoved << " is removed successfully "<< endl;
@@ -223,7 +236,7 @@ void removePatient(string id_toberemoved){
 void editPatient(string id_tobe_edited){
     for (int i = 0; i < hospitalPatients.size() ; i++ ){
         int choice;
-        if(id_tobe_edited == hospitalPatients[i].getId()){
+        if(id_tobe_edited == hospitalPatients[i].getID()){
             cout << "===Edit menu===\n";
             cout << "what do you want to edit in the patient with id : "<< id_tobe_edited<<endl;
             cout << "1- Patient's name\n2- Patient's id\n3- Patient's age\n4- Patient's gender\n";
@@ -244,7 +257,7 @@ void editPatient(string id_tobe_edited){
                 string id;
                 cout << "Enter the new id of the patient : ";
                 cin >> id;
-                patientsnames.deleteWord(patientsids.search(id_tobe_edited)->getId());
+                patientsnames.deleteWord(patientsids.search(id_tobe_edited)->getID());
                 patientsnames.insert(id,patientsids.search(id_tobe_edited));
                 hospitalPatients[i].setId(id);
             }
@@ -301,7 +314,7 @@ void displaypatients(){
 
 //Doctors' functions
 
-Doctor* searchDoctor(string id){
+Doctor* searchDoctor_byid(string id){
     if (doctorsids.search(id))
         return doctorsnames.search(id);
     else
@@ -309,7 +322,7 @@ Doctor* searchDoctor(string id){
 }
 
 Doctor* searchDoctor_byname(string name){
-    if (doctorsids.search(name)) {
+    if (doctorsnames.search(name)) {
         return doctorsnames.search(name);
     }
     else {
@@ -442,3 +455,4 @@ int checkinput(int choice,int first,int last){
     }
     return choice; // return the value after exiting the while loop with the right value that's within the range
 }
+

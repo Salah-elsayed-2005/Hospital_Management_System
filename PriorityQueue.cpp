@@ -14,4 +14,10 @@ Patient PriorityQueue::peek() {
 bool PriorityQueue::isEmpty() {
     return empty();
 }
+void PriorityQueue::print() {
+    PriorityQueue temp= *this;
+    while (!temp.isEmpty()){
+        cout<<temp.dequeue().getName()<<"  ";
+    }
+}
 

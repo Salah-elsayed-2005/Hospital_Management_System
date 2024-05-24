@@ -20,7 +20,7 @@ public:
     Patient();
     Patient(string, string, int, bool, string, Diagnosis);
     string getName();
-    string getId();
+    string getID();
     int getAge();
     bool getGender();
     string getConditionDescription();

@@ -18,7 +18,7 @@ string Patient::getName() {
     return name;
 }
 
-string Patient::getId() {
+string Patient::getID() {
     return id;
 }
 

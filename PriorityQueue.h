@@ -12,6 +12,7 @@ public:
     Patient dequeue();
     Patient peek();
     bool isEmpty();
+    void print();
 };
 
 #endif

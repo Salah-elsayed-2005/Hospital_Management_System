@@ -7,16 +7,17 @@
 #include <iostream>
 #include "Patient.h"
 #include "Doctor.h"
+#include "Clinics.h"
 using namespace std;
-Patient* searchPatient(string );
+Patient* searchPatient_byid(string );
 Patient* searchPatient_byName(string );
 void addPatient();
 void removePatient(string);
 void editPatient(string);
 void displaypatients();
-
-Doctor* searchDoctor(string );
+Doctor* searchDoctor_byid(string );
 Doctor* searchDoctor_byname(string );
+
 void addDoctor();
 void removeDoctor(string);
 void editDoctor(string);
