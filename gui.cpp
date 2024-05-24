@@ -45,45 +45,38 @@ std::vector<std::string> emergency_names = {
 
 };
 
-std::vector<std::string> destinations = {
-        "Destination 1",
-        "Destination 2",
-        "Destination 3"
+std::vector<std::string> airway_level = {
+        "No Free airway",
+        "Changed voice",
+        "Irritated throat",
+        "Free airway"
 };
 
-std::vector<std::string> eta_data = {
-        "5 mins",
-        "10 mins",
-        "15 mins"
+std::vector<std::string> agitation_level = {
+        "Observed pupil dilation",
+        "Very agitated",
+        "Moderately agitated",
+        "Normal pupils"
 };
 
-std::vector<std::string> route_data = {
-        "Route 1",
-        "Route 2",
-        "Route 3"
+std::vector<std::string> occ = {
+        "Yes",
+        "No"
 };
 
-// Utility functions
-std::string get_eta(int index) {
-    return eta_data[index];
-}
 
-std::string get_route(int index) {
-    return route_data[index];
-}
+std::vector<std::string> gender = {
+        "ENGINEER",
+        "Male",
+        "Female",
+        "Optimus prime"
+};
 
-// Callback functions
-void on_destination_changed(GtkComboBox *combo, gpointer data) {
-    GtkWidget **labels = (GtkWidget **)data;
-    GtkWidget *eta_label = labels[0];
-    GtkWidget *route_label = labels[1];
 
-    int index = gtk_combo_box_get_active(combo);
-    if (index >= 0 && index < (int)destinations.size()) {
-        gtk_label_set_text(GTK_LABEL(eta_label), get_eta(index).c_str());
-        gtk_label_set_text(GTK_LABEL(route_label), get_route(index).c_str());
-    }
-}
+
+
+
+
 
 void show_credits(GtkWidget *widget, gpointer data) {
     GtkWidget *parent_window = GTK_WIDGET(data);
@@ -230,6 +223,10 @@ void populate_patient_dropdown(GtkWidget *combo, const std::vector<std::string>&
     }
 }
 
+
+
+
+
 void on_patient_selected(GtkComboBox *combo, gpointer data) {
     GtkWidget *text_view = GTK_WIDGET(data);
     GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
@@ -239,13 +236,33 @@ void on_patient_selected(GtkComboBox *combo, gpointer data) {
     }
 }
 
-void populate_emergency_dropdown(GtkWidget *combo) {
+void populate_airway_dropdown(GtkWidget *combo) {
     gtk_combo_box_text_remove_all(GTK_COMBO_BOX_TEXT(combo));
-    for (const std::string &name : emergency_names) {
+    for (const std::string &name : airway_level) {
         gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), name.c_str());
     }
 }
 
+void populate_gender_dropdown(GtkWidget *combo) {
+    gtk_combo_box_text_remove_all(GTK_COMBO_BOX_TEXT(combo));
+    for (const std::string &name : gender) {
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), name.c_str());
+    }
+}
+
+void populate_agitation_dropdown(GtkWidget *combo) {
+    gtk_combo_box_text_remove_all(GTK_COMBO_BOX_TEXT(combo));
+    for (const std::string &name : agitation_level) {
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), name.c_str());
+    }
+}
+
+void populate_occ_dropdown(GtkWidget *combo) {
+    gtk_combo_box_text_remove_all(GTK_COMBO_BOX_TEXT(combo));
+    for (const std::string &name : occ) {
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), name.c_str());
+    }
+}
 
 void populate_doctor_dropdown(GtkWidget *combo) {
     gtk_combo_box_text_remove_all(GTK_COMBO_BOX_TEXT(combo));
@@ -436,7 +453,7 @@ void open_add_patient_window(GtkWidget *widget, gpointer data) {
     GtkApplication *app = GTK_APPLICATION(data);
     GtkWidget *window = gtk_application_window_new(app);
     gtk_window_set_title(GTK_WINDOW(window), "Add Patient");
-    gtk_window_set_default_size(GTK_WINDOW(window), 350, 400);
+    gtk_window_set_default_size(GTK_WINDOW(window), 400, 400);
 
     GtkWidget *grid = gtk_grid_new();
     gtk_grid_set_row_spacing(GTK_GRID(grid), 10);
@@ -450,13 +467,13 @@ void open_add_patient_window(GtkWidget *widget, gpointer data) {
     GtkWidget *label = gtk_label_new("ID:");
     gtk_grid_attach(GTK_GRID(grid), label, 0, 0, 1, 1);
     GtkWidget *entry = gtk_entry_new();
-    gtk_grid_attach(GTK_GRID(grid), entry, 1, 0, 2, 1);
+    gtk_grid_attach(GTK_GRID(grid), entry, 1, 0, 3, 1);
     g_object_set_data(G_OBJECT(window), "id_entry", entry);
 
     label = gtk_label_new("Name:");
     gtk_grid_attach(GTK_GRID(grid), label, 0, 1, 1, 1);
     entry = gtk_entry_new();
-    gtk_grid_attach(GTK_GRID(grid), entry, 1, 1, 2, 1);
+    gtk_grid_attach(GTK_GRID(grid), entry, 1, 1, 3, 1);
     g_object_set_data(G_OBJECT(window), "name_entry", entry);
 
     label = gtk_label_new("Age:");
@@ -464,17 +481,16 @@ void open_add_patient_window(GtkWidget *widget, gpointer data) {
     GtkAdjustment *adjustment = gtk_adjustment_new(30, 0, 100, 1, 10, 0);
     GtkWidget *slider = gtk_scale_new(GTK_ORIENTATION_HORIZONTAL, adjustment);
     gtk_scale_set_draw_value(GTK_SCALE(slider), TRUE);
-    gtk_grid_attach(GTK_GRID(grid), slider, 1, 2, 2, 1);
+    gtk_grid_attach(GTK_GRID(grid), slider, 1, 2, 3, 1);
     g_object_set_data(G_OBJECT(window), "age_slider", slider);
 
     label = gtk_label_new("Gender:");
     gtk_grid_attach(GTK_GRID(grid), label, 0, 3, 1, 1);
-    GtkWidget *radio1 = gtk_check_button_new_with_label("Male");
-    GtkWidget *radio2 = gtk_check_button_new_with_label("Female");
-    gtk_grid_attach(GTK_GRID(grid), radio1, 1, 3, 1, 1);
-    gtk_grid_attach(GTK_GRID(grid), radio2, 2, 3, 1, 1);
-    g_object_set_data(G_OBJECT(window), "male_radio", radio1);
-    g_object_set_data(G_OBJECT(window), "female_radio", radio2);
+    GtkWidget *combo0 = gtk_combo_box_text_new();
+    gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combo0), "0", "Female");
+    gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combo0), "1", "Male");
+    gtk_grid_attach(GTK_GRID(grid), combo0, 1, 3, 3, 1);
+    g_object_set_data(G_OBJECT(window), "gender_combo", combo0);
 
     label = gtk_label_new("Condition Description:");
     gtk_grid_attach(GTK_GRID(grid), label, 0, 4, 1, 1);
@@ -483,30 +499,65 @@ void open_add_patient_window(GtkWidget *widget, gpointer data) {
     GtkWidget *scroll_win = gtk_scrolled_window_new();
     gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scroll_win), text_view);
     gtk_widget_set_size_request(scroll_win, 200, 100);
-    gtk_grid_attach(GTK_GRID(grid), scroll_win, 1, 4, 2, 2);
+    gtk_grid_attach(GTK_GRID(grid), scroll_win, 1, 4, 3, 1);
     g_object_set_data(G_OBJECT(window), "condition_text", text_view);
 
-    label = gtk_label_new("Example:");
-    gtk_grid_attach(GTK_GRID(grid), label, 0, 6, 1, 1);
-    GtkWidget *exampleRadio1 = gtk_check_button_new_with_label("01");
-    gtk_grid_attach(GTK_GRID(grid), exampleRadio1, 1, 6, 1, 1);
-    GtkWidget *exampleRadio2 = gtk_check_button_new_with_label("02");
-    gtk_grid_attach(GTK_GRID(grid), exampleRadio2, 2, 6, 1, 1);
-    GtkWidget *exampleRadio3 = gtk_check_button_new_with_label("03");
-    gtk_grid_attach(GTK_GRID(grid), exampleRadio3, 1, 7, 1, 1);
-    GtkWidget *exampleRadio4 = gtk_check_button_new_with_label("04");
-    gtk_grid_attach(GTK_GRID(grid), exampleRadio4, 2, 7, 1, 1);
+    label = gtk_label_new("Diagnosis: ");
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 5, 1, 1);
 
-    GList *example_radios = NULL;
-    example_radios = g_list_append(example_radios, exampleRadio1);
-    example_radios = g_list_append(example_radios, exampleRadio2);
-    example_radios = g_list_append(example_radios, exampleRadio3);
-    example_radios = g_list_append(example_radios, exampleRadio4);
-    g_object_set_data(G_OBJECT(window), "example_radios", example_radios);
+    label = gtk_label_new("Observed airway: ");
+    gtk_grid_attach(GTK_GRID(grid), label, 1, 6, 1, 1);
+    GtkWidget *combo = gtk_combo_box_text_new();
+    gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combo), "0", "Free airway");
+    gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combo), "2", "Irritated throat");
+    gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combo), "1", "Changed voice");
+    gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combo), "3", "No Free airway");
+    gtk_grid_attach(GTK_GRID(grid), combo, 2, 6, 2, 1);
+    g_object_set_data(G_OBJECT(window), "airway_combo", combo);
 
-    GtkWidget *button;
-    button = gtk_button_new_with_label("Back to main menu");
-    gtk_grid_attach(GTK_GRID(grid), button, 1, 8, 2, 1);
+    label = gtk_label_new("SPO2 measured: ");
+    gtk_grid_attach(GTK_GRID(grid), label, 1, 7, 1, 1);
+    GtkAdjustment *adjustment2 = gtk_adjustment_new(30, 0, 100, 1, 10, 0);
+    GtkWidget *slider2 = gtk_scale_new(GTK_ORIENTATION_HORIZONTAL, adjustment2);
+    gtk_scale_set_draw_value(GTK_SCALE(slider2), TRUE);
+    gtk_grid_attach(GTK_GRID(grid), slider2, 2, 7, 2, 1);
+    g_object_set_data(G_OBJECT(window), "spo2_slider", slider2);
+
+    label = gtk_label_new("Pulse measured: ");
+    gtk_grid_attach(GTK_GRID(grid), label, 1, 8, 1, 1);
+    entry = gtk_entry_new();
+    gtk_grid_attach(GTK_GRID(grid), entry, 2, 8, 2, 1);
+    g_object_set_data(G_OBJECT(window), "pulse_entry", entry);
+
+    label = gtk_label_new("Agitation observed: ");
+    gtk_grid_attach(GTK_GRID(grid), label, 1, 9, 1, 1);
+    GtkWidget *combo2 = gtk_combo_box_text_new();
+    gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combo2), "0", "Normal pupils");
+    gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combo2), "1", "Moderately agitated");
+    gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combo2), "2", "Very agitated");
+    gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combo2), "3", "Observed pupil dilation");
+    gtk_grid_attach(GTK_GRID(grid), combo2, 2, 9, 2, 1);
+    g_object_set_data(G_OBJECT(window), "agitation_combo", combo2);
+
+    label = gtk_label_new("Observed chemical contamination: ");
+    gtk_grid_attach(GTK_GRID(grid), label, 1, 10, 1, 1);
+    GtkWidget *combo3 = gtk_combo_box_text_new();
+    gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combo3), "0", "No");
+    gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combo3), "1", "Yes");
+
+    gtk_grid_attach(GTK_GRID(grid), combo3, 2, 10, 2, 1);
+    g_object_set_data(G_OBJECT(window), "occ_combo", combo3);
+
+    label = gtk_label_new("Temperature measured: ");
+    gtk_grid_attach(GTK_GRID(grid), label, 1, 11, 1, 1);
+    GtkAdjustment *adjustment3 = gtk_adjustment_new(37, 30, 45, 2, 1, 0);
+    GtkWidget *slider3 = gtk_scale_new(GTK_ORIENTATION_HORIZONTAL, adjustment3);
+    gtk_scale_set_draw_value(GTK_SCALE(slider3), TRUE);
+    gtk_grid_attach(GTK_GRID(grid), slider3, 2, 11, 2, 1);
+    g_object_set_data(G_OBJECT(window), "temp_slider", slider3);
+
+    GtkWidget *button = gtk_button_new_with_label("Save");
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 12, 5, 1);
     g_signal_connect(button, "clicked", G_CALLBACK(save_patient_data), window);
 
     gtk_widget_show(window);
@@ -518,40 +569,43 @@ void save_patient_data(GtkWidget *widget, gpointer data) {
     GtkWidget *id_entry = (GtkWidget *)g_object_get_data(G_OBJECT(window), "id_entry");
     GtkWidget *name_entry = (GtkWidget *)g_object_get_data(G_OBJECT(window), "name_entry");
     GtkWidget *age_slider = (GtkWidget *)g_object_get_data(G_OBJECT(window), "age_slider");
-    GtkWidget *male_radio = (GtkWidget *)g_object_get_data(G_OBJECT(window), "male_radio");
-    GtkWidget *female_radio = (GtkWidget *)g_object_get_data(G_OBJECT(window), "female_radio");
+    GtkWidget *gender_combo = (GtkWidget *)g_object_get_data(G_OBJECT(window), "gender_combo");
     GtkWidget *condition_text = (GtkWidget *)g_object_get_data(G_OBJECT(window), "condition_text");
+    GtkWidget *airway_combo = (GtkWidget *)g_object_get_data(G_OBJECT(window), "airway_combo");
+    GtkWidget *spo2_slider = (GtkWidget *)g_object_get_data(G_OBJECT(window), "spo2_slider");
+    GtkWidget *pulse_entry = (GtkWidget *)g_object_get_data(G_OBJECT(window), "pulse_entry");
+    GtkWidget *agitation_combo = (GtkWidget *)g_object_get_data(G_OBJECT(window), "agitation_combo");
+    GtkWidget *occ_combo = (GtkWidget *)g_object_get_data(G_OBJECT(window), "occ_combo");
+    GtkWidget *temp_slider = (GtkWidget *)g_object_get_data(G_OBJECT(window), "temp_slider");
 
     const gchar *id = gtk_editable_get_text(GTK_EDITABLE(id_entry));
     const gchar *name = gtk_editable_get_text(GTK_EDITABLE(name_entry));
     gint age = gtk_adjustment_get_value(gtk_range_get_adjustment(GTK_RANGE(age_slider)));
-    gboolean is_male = gtk_check_button_get_active(GTK_CHECK_BUTTON(male_radio));
-    gboolean is_female = gtk_check_button_get_active(GTK_CHECK_BUTTON(female_radio));
-
+    gint gender = gtk_combo_box_get_active(GTK_COMBO_BOX(gender_combo));
     GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(condition_text));
     GtkTextIter start, end;
     gtk_text_buffer_get_bounds(buffer, &start, &end);
     gchar *condition = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+    gint airway = gtk_combo_box_get_active(GTK_COMBO_BOX(airway_combo));
+    gint spo2 = gtk_adjustment_get_value(gtk_range_get_adjustment(GTK_RANGE(spo2_slider)));
+    const gchar *pulse = gtk_editable_get_text(GTK_EDITABLE(pulse_entry));
+    gint agitation = gtk_combo_box_get_active(GTK_COMBO_BOX(agitation_combo));
+    gint occ = gtk_combo_box_get_active(GTK_COMBO_BOX(occ_combo));
+    gint temp = gtk_adjustment_get_value(gtk_range_get_adjustment(GTK_RANGE(temp_slider)));
 
     g_print("ID: %s\n", id);
     g_print("Name: %s\n", name);
     g_print("Age: %d\n", age);
-    g_print("Gender: %s\n", is_male ? "Male" : is_female ? "Female" : "Unspecified");
+    g_print("Gender: %d\n", gender);
     g_print("Condition: %s\n", condition);
+    g_print("Airway: %d\n", airway);
+    g_print("SPO2: %d\n", spo2);
+    g_print("Pulse: %s\n", pulse);
+    g_print("Agitation: %d\n", agitation);
+    g_print("Chemical Contamination: %d\n", occ);
+    g_print("Temperature: %d\n", temp);
 
     g_free(condition);
-
-    GList *example_radios = (GList *)g_object_get_data(G_OBJECT(window), "example_radios");
-    const char *examples[] = {"01", "02", "03", "04"};
-    int i = 0;
-    for (GList *l = example_radios; l != NULL; l = l->next) {
-        GtkWidget *radio = GTK_WIDGET(l->data);
-        gboolean is_active = gtk_check_button_get_active(GTK_CHECK_BUTTON(radio));
-        g_print("Example %s: %s\n", examples[i], is_active ? "Selected" : "Not Selected");
-        i++;
-    }
-
-    g_list_free(example_radios);
     gtk_window_destroy(GTK_WINDOW(window));
 }
 
