@@ -192,10 +192,10 @@ void displaymenu(){
 //        displayclinics();// NOT yet implemented
         }
         else if (choice == 2) {     //remove member
-            addDoctor();
+           displaydoctors();
         }
         else if (choice==3){
-            displaydoctors();
+            displaypatients();
         }
         else if (choice==4){
             cout<<"A7a"<<endl;
