@@ -10,7 +10,7 @@ using namespace std;
 class Clinic{
     string type;
     PriorityQueue waitingList;
-    Doctor doctor;
+    vector<Doctor>doctor;
 public:
     void setType(string);
     void setDoctor(Doctor &);

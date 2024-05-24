@@ -28,7 +28,8 @@ void reserveClinic(); //needs to be implemented
 void displayClinicSchedule(); //needs to be implemented
 void displayclinics();
 Clinic*searchCLinic(string);
-
+bool checkBack();
+bool checkClose();
 void mainmenu();
 void editmenu();
 void displaymenu();
