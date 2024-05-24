@@ -19,159 +19,232 @@ extern Trie<Patient>patientsnames;
 extern Trie<Patient>patientsids;
 extern Trie<Doctor>doctorsnames;
 extern Trie<Doctor>doctorsids;
+extern Trie<Clinic>clinictypes;
 
-
-
-
-void startingmenu(){
-    cout<<"Welcome to Our Hospital Management System"<<endl;
-    cout<<"Please choose the desired option "<<endl;
-    cout<<"1-Main menu\n2-credits :";
-    int choice;
-    cin >> choice;
-    choice = checkinput(choice ,1,2);
-    if (choice==1)
-        mainmenu();
-    if (choice==2)
-        creditsmenu();
+#if defined(_WIN32) || defined(_WIN64)
+const std::string CLEAR_COMMAND = "cls";
+#else
+const std::string CLEAR_COMMAND = "clear";
+#endif
+bool endOfProgram= false;
+bool backToTheMainMenu=false;
+Date today;//global variable for today's date
+Clinic*searchCLinic(string clinictype) {
+    if (clinictypes.search(clinictype))
+        return clinictypes.search(clinictype);
+    else
+        return nullptr;
 }
+
+bool checkBack(){       //check if the user want to back to the last page
+    short back=1;
+    do {
+        cout << "\n\n[1] Back to the last page" << endl << "[2] Back to the main menu\n\n";
+        cout << "Please enter your choice : ";
+        cin >> back;
+        if (back == 2)
+            backToTheMainMenu = true;
+    }while(back!=1 && back!=2); //validate input
+    return (back==2);
+}
+
+/*
+ Checkback() function is used all over the other options to check if the user wants to either go back to the previous menu or to go back to the main menu
+ It's only used of there exists a previous menu not the main menu
+ */
+bool checkClose(){  //check if the user want to close the program
+    short back=1;
+    do {
+        cout << "\n\n[1] Back to the last page" << endl << "[2] Close the program\n\n";
+        cout << "Please enter your choice : ";
+        cin >> back;
+        if (back == 2)
+            endOfProgram = true;
+    }while(back!=1 && back!=2); //validate input
+    return (back==2);
+}
+
 void creditsmenu(){
-    cout<<"*******  Salah Eldin Elsayed *******"<<endl
-        <<"*******  Abdulrahman Abougendia  *******"<<endl
-        <<"*******  Omar Nabarawy   *******"<<endl
-        <<"*******  Fouad Hasheesh  *******"<<endl
-        <<"*******  Mohamed Farouk  *******"<<endl;
+    cout<<"--------------------------------------------Thanks for using our program---------------------------------------------\n\n";
+    cout<<"-------------------------------------------------------Credits-------------------------------------------------------\n\n";
+    cout<<"--------------------------------------------------Salah eldin Elsayed------------------------------------------------\n\n";
+    cout<<"-----------------------------------------------------Omar Nabarawy---------------------------------------------------\n\n";
+    cout<<"--------------------------------------------------Abdulrahman Abogendia----------------------------------------------\n\n";
+    cout<<"-----------------------------------------------------Fouad Hashesh---------------------------------------------------\n\n";
+    cout<<"----------------------------------------------------Mohamed Farouk---------------------------------------------------\n\n";
+    cout<<"-------------------------------------Under the Supervision of Dr. Fatma Elshehaby------------------------------------\n\n";
 }
 void mainmenu(){
-    cout<<"Please choose the desired option "<<endl;
-    cout<<"1-Edit Database\n2-Display Info\n3-Reserve a clinic :";
-    int choice;
-    cin >> choice;
-    choice = checkinput(choice,1,3);
-    if (choice==1)
-        editmenu();
-    if (choice==2)
-        displaymenu();
-    if (choice==3)
-        clinicmenu();
+    system(CLEAR_COMMAND.c_str()); //clear screen
+    short choice=1;
+    do{
+        cout<<"1-Edit Database\n2-Display Info\n3-Reserve a clinic\n4-Close The program"<<endl;
+        cout<<"\nPlease enter your choice : ";
+        cin>>choice;
+        if (choice==1)
+            editmenu();
+        if (choice==2)
+            displaymenu();
+        if (choice==3)
+            clinicmenu();
+        system(CLEAR_COMMAND.c_str()); //clear screen
+        if(backToTheMainMenu) { //check if the user want to back to the main menu
+            choice = 1;
+            backToTheMainMenu=false;
+        }
+        if(endOfProgram)    //if the user want to end the program
+            break;
+    }while(choice!=4);
+    creditsmenu();
+    system("pause>0");
+
 }
 
 void editmenu(){
-    cout<<"===Edit menu=== "<<endl;
-    cout<<"1-Edit Doctor Info\n2-Add Doctor\n3-Remove Doctor\n4-Edit Patient Info\n5-Add Patient\n6-Remove Patient\n ";
-    cout<<"Enter your choice : ";
-    int choice;
-    cin >> choice;
-    choice = checkinput(choice,1,6);
-    if (choice==1){
-        string input;
-        cout << "Enter the id or name of the Doctor you want to edit : ";
-        cin>> input;
+    system(CLEAR_COMMAND.c_str()); //clear screen
+    short choice;
+    do{
+        cout<<"===Edit menu=== "<<endl;
+        cout<<"1-Edit Doctor Info\n2-Add Doctor\n3-Remove Doctor\n4-Edit Patient Info\n5-Add Patient\n6-Remove Patient\n ";
+        cout<<"Enter your choice : ";
+        cin>>choice;
+        if (choice<1 || choice > 6) {
+            system(CLEAR_COMMAND.c_str());
+            continue;
+        }
+        if (choice == 1) {
+            string input;
+            cout << "Enter the id or name of the Doctor you want to edit : ";
+            cin>> input;
 
-        if (searchDoctor_byname(input)|| searchDoctor_byid(input)){
-           input= searchDoctor_byname(input)? searchDoctor_byname(input)->getID(): searchDoctor_byid(input)->getID();
-            editDoctor(input);
-        } else
-            cout<<"ID not found"<<endl;
-    }
-    else if (choice==2){
-        addDoctor();
-    }
-    else if (choice==3){
-        string input;
-        cout << "Enter the id or name of the Doctor you want to remove : ";
-        cin>> input;
+            if (searchDoctor_byname(input)|| searchDoctor_byid(input)){
+                input= searchDoctor_byname(input)? searchDoctor_byname(input)->getID(): searchDoctor_byid(input)->getID();
+                editDoctor(input);
+            } else
+                cout<<"ID not found"<<endl;
+        }
+        else if (choice == 2) {
+            addDoctor();
+        }
+        else if (choice==3){
+            string input;
+            cout << "Enter the id or name of the Doctor you want to remove : ";
+            cin>> input;
 
-        if (searchDoctor_byname(input)|| searchDoctor_byid(input)){
-            input= searchDoctor_byname(input)? searchDoctor_byname(input)->getID(): searchDoctor_byid(input)->getID();
-            removeDoctor(input);
-        } else
-            cout<<"ID not found"<<endl;
-    }
-    else if (choice==4){
-        string input;
-        cout << "Enter the id or name of the patient you want to edit : ";
-        cin>> input;
+            if (searchDoctor_byname(input)|| searchDoctor_byid(input)){
+                input= searchDoctor_byname(input)? searchDoctor_byname(input)->getID(): searchDoctor_byid(input)->getID();
+                removeDoctor(input);
+            } else
+                cout<<"ID not found"<<endl;
+        }
+        else if (choice==4){
+            string input;
+            cout << "Enter the id or name of the patient you want to edit : ";
+            cin>> input;
 
-        if (searchPatient_byName(input)|| searchPatient_byid(input)){
-            input= searchPatient_byName(input) ? searchPatient_byName(input)->getID() : searchPatient_byid(input)->getID();
-            editPatient(input);
-        } else
-            cout<<"ID not found"<<endl;
-    }
-    else if (choice==5) {
-        addPatient();
-    }
-    else if (choice==6) {
-        string input;
-        cout << "Enter the id or name of the patient you want to remove : ";
-        cin>> input;
+            if (searchPatient_byName(input)|| searchPatient_byid(input)){
+                input= searchPatient_byName(input) ? searchPatient_byName(input)->getID() : searchPatient_byid(input)->getID();
+                editPatient(input);
+            } else
+                cout<<"ID not found"<<endl;
+        }
+        else if (choice==5){
+            addPatient();
+        }
+        else if (choice==6){
+            string input;
+            cout << "Enter the id or name of the patient you want to remove : ";
+            cin>> input;
 
-        if (searchPatient_byName(input)|| searchPatient_byid(input)){
-            input= searchPatient_byName(input) ? searchPatient_byName(input)->getID() : searchPatient_byid(input)->getID();
-            removePatient(input);
-        } else
-            cout<<"ID not found"<<endl;
-    }
+            if (searchPatient_byName(input)|| searchPatient_byid(input)){
+                input= searchPatient_byName(input) ? searchPatient_byName(input)->getID() : searchPatient_byid(input)->getID();
+                removePatient(input);
+            } else
+                cout<<"ID not found"<<endl;
+        }
+        if(choice>0 && choice<7)
+            checkBack();    //check if the user want to back to the last menu
+
+    }while(!backToTheMainMenu); //check if the user want to back to the main menu
 }
 
 void displaymenu(){
-    int choice;
-    cout<<"1-Display All clinics info"<<endl
-        <<"2-Display All Doctors info"<<endl
-        <<"3-Display All Patients info"<<endl
-        <<"4-Display a clinic info"<<endl
-        <<"5-Display a Doctor info"<<endl
-        <<"6-Display a Patient info"<<endl;
-    cout<<"Please Enter Your choice : ";
-    cin>>choice;
-    if (choice==1)
-        cout<<"A7a"<<endl;
-//        displayclinics();// NOT yet implemented
-    if (choice==2)
-        displaydoctors();
-    if(choice==3)
-        displaypatients();
-    if(choice==4)
-        cout<<"A7a"<<endl;
-    if(choice==5){
-        string input;
-        cout << "Enter the id or name of the Doctor you want to View : ";
-        cin>> input;
-        if (searchDoctor_byname(input) || searchDoctor_byid(input)){
-             searchDoctor_byname(input)? searchDoctor_byname(input)->displayinfo(): searchDoctor_byid(input)->displayinfo();
+    system(CLEAR_COMMAND.c_str()); //clear screen
+    short choice;
+    do{
+        cout<<"1-Display All clinics info"<<endl
+            <<"2-Display All Doctors info"<<endl
+            <<"3-Display All Patients info"<<endl
+            <<"4-Display a clinic info"<<endl
+            <<"5-Display a Doctor info"<<endl
+            <<"6-Display a Patient info"<<endl;
+        cout<<"Please Enter Your choice : ";
+        cin>>choice;
+        if (choice<1 || choice > 6) {
+            system(CLEAR_COMMAND.c_str());
+            continue;
         }
-        else
-            cout<<"ID not found"<<endl;
-    }
-    if(choice==6) {
-        string input;
-        cout << "Enter the id or name of the patient you want to View : ";
-        cin>> input;
-        if (searchPatient_byName(input)|| searchPatient_byid(input)){
-            searchPatient_byName(input) ? searchPatient_byName(input)->displayinfo()  : searchPatient_byid(input)->displayinfo()  ;
-        } else
-            cout<<"ID not found"<<endl;
-    }
+        if (choice == 1) {  //add member
+            cout<<"A7a"<<endl;
+//        displayclinics();// NOT yet implemented
+        }
+        else if (choice == 2) {     //remove member
+            addDoctor();
+        }
+        else if (choice==3){
+            displaydoctors();
+        }
+        else if (choice==4){
+            cout<<"A7a"<<endl;
+        }
+        else if (choice==5){
+            string input;
+            cout << "Enter the id or name of the Doctor you want to View : ";
+            cin>> input;
+            if (searchDoctor_byname(input) || searchDoctor_byid(input)){
+                searchDoctor_byname(input)? searchDoctor_byname(input)->displayinfo(): searchDoctor_byid(input)->displayinfo();
+            }
+            else
+                cout<<"ID not found"<<endl;
+        }
+        else if (choice==6){
+            string input;
+            cout << "Enter the id or name of the patient you want to View : ";
+            cin>> input;
+            if (searchPatient_byName(input)|| searchPatient_byid(input)){
+                searchPatient_byName(input) ? searchPatient_byName(input)->displayinfo()  : searchPatient_byid(input)->displayinfo()  ;
+            } else
+                cout<<"ID not found"<<endl;
+        }
+        if(choice>0 && choice<7)
+            checkBack();    //check if the user want to back to the last menu
+
+    }while(!backToTheMainMenu); //check if the user want to back to the main menu
  }
 void clinicmenu(){
-    int choice;
-    cout << "===Clinic Menu===\n";
-    cout << "1- Reserve a Clinic\n";
-    cout << "2- Display Clinic Schedule\n";
-    cout << "3- Return to Main Menu\n";
-    cout << "Enter your choice: ";
-    cin >> choice;
-    choice = checkinput(choice, 1, 2);
+    system(CLEAR_COMMAND.c_str()); //clear screen
+    short choice;
+    do{
+        cout << "===Clinic Menu===\n";
+        cout << "1- Reserve a Clinic\n";
+        cout << "2- Display Clinic Schedule\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+        if (choice<1 || choice > 2) {
+            system(CLEAR_COMMAND.c_str());
+            continue;
+        }
+        if (choice == 1) {
+            reserveClinic();
+        }
+        else if (choice == 2) {
+            displayClinicSchedule(); // lesa htt3mel
+        }
+        if(choice>0 && choice<3)
+            checkBack();    //check if the user want to back to the last menu
 
-    switch (choice) {
-        case 1:
-            //reserveClinic(); lesa htt3mel
-            break;
-        case 2:
-            //displayClinicSchedule(); // lesa htt3mel
-            break;
-    }
+    }while(!backToTheMainMenu); //check if the user want to back to the main menu
+
 }
 //Patients' funcions
 
@@ -192,7 +265,6 @@ Patient* searchPatient_byName(string name){
     }
     else
         return nullptr;
-
 }
 
 void addPatient() {
@@ -249,7 +321,6 @@ void removePatient(string id_toberemoved){
         }
     }
     cout << "patient with ID " << id_toberemoved << " not found." << endl;
-
 }
 
 
@@ -263,8 +334,7 @@ void editPatient(string id_tobe_edited){
             cout << "5- Condition description\n";
             cout <<"6- Diagnosis level\nEnter your choice : ";
             cin >> choice;
-            choice = checkinput(choice,1,6);
-            if (choice == 1){
+             if (choice == 1){
                 string name;
                 cout << "Enter the new name of the patient : ";
                 cin.ignore(); //clear the buffer to ensure that getline works correctly
@@ -344,7 +414,6 @@ Doctor* searchDoctor_byname(string name){
     }
     else
         return nullptr;
-
 }
 
 
@@ -399,8 +468,7 @@ void editDoctor(string id_tobe_edited){
             cout << "What do you want to edit in the doctor with id "<<id_tobe_edited <<endl;
             cout << "1-Doctor's name\n2-Doctor's available days\n3-appointment price\n4-clinic type\n5-Doctor's id : ";
             cin >> choice;
-            choice = checkinput(choice,1,5); // make sure that the user entered a number from 1 to 5
-            if (choice == 1){
+             if (choice == 1){
                 string name;
                 cout <<"Enter the Doctor's right name: ";
                 cin.ignore(); //clear the buffer to ensure that getline works correctly
@@ -459,7 +527,7 @@ void displaydoctors(){
 
 }
 
-
+# if 0
 //function that will be used multiple times to check the input
 int checkinput(int choice,int first,int last){
     //The while loop is to check if the choice is within the range of the list
@@ -469,4 +537,40 @@ int checkinput(int choice,int first,int last){
     }
     return choice; // return the value after exiting the while loop with the right value that's within the range
 }
-
+#endif
+void reserveClinic() {
+    string type;
+    cout<<"Enter Type of the Clinic : "<<endl;
+    cin>>type;
+    if (searchCLinic(type)) {
+            bool isavailable= false;
+        for (auto it: searchCLinic(type)->getDoctor().getAvailableDays()) {
+            if (it==today.getcurrentday())
+                isavailable= true;
+        }
+        if (isavailable) {
+            string input;
+            cout << "Enter the id or name of the Patient : ";
+            cin >> input;
+            if (searchPatient_byid(input) || searchPatient_byName(input)) {
+                searchPatient_byName(input) ? searchCLinic(type)->addtoWaiting(*searchPatient_byName(input))
+                                            : searchCLinic(type)->addtoWaiting(*searchPatient_byid(input));
+                editDoctor(input);
+            } else
+                cout << "ID not found" << endl;
+        } else
+            cout<<"Clinic isn't Available for Reserving Today "<<endl;
+    }
+    else cout<<"Clinic is not found "<<endl;
+}
+void displayClinicSchedule() {
+    string t;
+    cout<<"Enter The type of Clinic : ";
+    cin>>t;
+    if (clinictypes.search(t)) {
+        for (auto it: clinictypes.search(t)->getDoctor().getAvailableDays()) {
+            cout << it << " " << endl;
+        }
+    } else
+        cout<<"Clinic Not found "<<endl;
+}

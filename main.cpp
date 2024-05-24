@@ -7,6 +7,7 @@
 #include "Doctor.h"
 #include "Clinics.h"
 #include "Functionalities.h"
+#include "Doctor.h"
 
 using namespace std;
 
@@ -18,6 +19,7 @@ Trie<Patient>patientsnames;
 Trie<Patient>patientsids;
 Trie<Doctor>doctorsnames;
 Trie<Doctor>doctorsids;
+Trie<Clinic>clinictypes;
 
 int main() {
 
@@ -88,7 +90,6 @@ int main() {
     vector<string> days4 = {"Wednesday", "Saturday"};
     vector<string> days5 = {"Friday", "Sunday"};
 
-
     Doctor doctors[5] = {
             {"Salah", days1, 100, "General", "D001"},
             {"Hussein", days2, 150, "Specialist", "D002"},
@@ -108,14 +109,24 @@ int main() {
         Doctor*toinsert=new Doctor(it.getName(),it.getAvailableDays(),it.getPrice(),it.getClinicType(),it.getID());
         doctorsids.insert(toinsert->getID(),toinsert);
     }
-
     Clinic pediatrics;
-    for (auto it:hospitalPatients) {
-        pediatrics.addtoWaiting(it);
-    }
     pediatrics.setDoctor(doctors[0]);
     hospitalClinics.push_back(pediatrics);
-    startingmenu();
+    clinictypes.insert(doctors[0].getClinicType(),&pediatrics);
+    Clinic Surgery;
+    Surgery.setDoctor(doctors[2]);
+    hospitalClinics.push_back(Surgery);
+    clinictypes.insert(doctors[2].getClinicType(),&Surgery);
+    Clinic Dentistry;
+    Surgery.setDoctor(doctors[3]);
+    hospitalClinics.push_back(Dentistry);
+    clinictypes.insert(doctors[3].getClinicType(),&Dentistry);
+
+
+
+
+
+    mainmenu();
 
 
 } // end of main function

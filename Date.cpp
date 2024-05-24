@@ -83,3 +83,35 @@ void Date::operator= (const Date& obj){
 string Date::getDateString(){
     return stringDate;
 }
+string Date::getcurrentday() {
+        int k = day;
+        int m;
+        if (month == 1) {
+            m = 11;
+            year--;
+        } else if (month == 2) {
+            m = 12;
+            year--;
+        } else {
+            m = month - 2;
+        }
+
+        int D = year % 100;
+        int C = year / 100;
+
+        int F = k + ((13 * m - 1) / 5) + D + (D / 4) + (C / 4) - 2 * C;
+        if (F==0)
+            return "Sunday";
+        if (F==1)
+            return "Monday";
+        if (F==2)
+            return "Tuesday";
+        if (F==3)
+            return "Wednesday";
+        if (F==4)
+            return "Thursday";
+        if (F==5)
+            return "Friday";
+        if (F==6)
+            return "Saturday";
+}

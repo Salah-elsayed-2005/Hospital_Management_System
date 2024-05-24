@@ -2,7 +2,8 @@
 #ifndef UNTITLED1_DATE_H
 #define UNTITLED1_DATE_H
 #include <iostream>
-class Date {
+#include <vector>
+ class Date {
 private:
     const short monthDays[12] = { 31, 59, 90, 120, 151, 181,
                                   212, 243, 273, 304, 334,365 }; //days from the beginning of the year until the month
@@ -17,7 +18,7 @@ public:
     short getDifference(short D, short M, short Y);
     Date addDate(Date D, short daysToAdd);
     std::string getDateString();
-
+    std::string getcurrentday();
 
     void operator= (const Date&);
 

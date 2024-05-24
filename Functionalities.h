@@ -8,6 +8,7 @@
 #include "Patient.h"
 #include "Doctor.h"
 #include "Clinics.h"
+#include "Date.h"
 using namespace std;
 Patient* searchPatient_byid(string );
 Patient* searchPatient_byName(string );
@@ -26,8 +27,8 @@ void displaydoctors();
 void reserveClinic(); //needs to be implemented
 void displayClinicSchedule(); //needs to be implemented
 void displayclinics();
+Clinic*searchCLinic(string);
 
-void startingmenu();
 void mainmenu();
 void editmenu();
 void displaymenu();
