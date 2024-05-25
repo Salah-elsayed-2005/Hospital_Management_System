@@ -1,5 +1,4 @@
 #include "Clinics.h"
-//#include "PriorityQueue.h"
 using namespace std;
 
 Clinic :: Clinic(){}

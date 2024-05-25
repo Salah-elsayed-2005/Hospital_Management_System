@@ -1,14 +1,10 @@
-//
-// Created by salah elsayed on 5/23/2024.
-//
-
+#include <ctime>
 #include "Functionalities.h"
 #include <iostream>
 #include <vector>
 #include <sstream> //for the vector of strings available days
 #include "Trie.h"
 #include "Patient.h"
-#include "PriorityQueue.h"
 #include "Doctor.h"
 #include "Clinics.h"
 #include "CityGraph.h"
@@ -29,14 +25,26 @@ const std::string CLEAR_COMMAND = "clear";
 #endif
 bool endOfProgram= false;
 bool backToTheMainMenu=false;
-Date today;//global variable for today's date
 Clinic*searchClinic(string clinictype) {
     if (clinictypes.search(clinictype))
         return clinictypes.search(clinictype);
     else
         return nullptr;
 }
+string getcurrentday() {
+    string daysOfWeek[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
+    // Get the current time
+    time_t t = std::time(nullptr);
+    tm* now = std::localtime(&t);
+
+    // Get the day of the week (0-6, where 0 is Sunday)
+    int dayOfWeek = now->tm_wday;
+
+    // Return the day of the week with the first letter capitalized
+    return daysOfWeek[dayOfWeek];
+
+}
 bool checkBack(){       //check if the user want to back to the last page
     short back=1;
     do {
@@ -45,22 +53,6 @@ bool checkBack(){       //check if the user want to back to the last page
         cin >> back;
         if (back == 2)
             backToTheMainMenu = true;
-    }while(back!=1 && back!=2); //validate input
-    return (back==2);
-}
-
-/*
- Checkback() function is used all over the other options to check if the user wants to either go back to the previous menu or to go back to the main menu
- It's only used of there exists a previous menu not the main menu
- */
-bool checkClose(){  //check if the user want to close the program
-    short back=1;
-    do {
-        cout << "\n\n[1] Back to the last page" << endl << "[2] Close the program\n\n";
-        cout << "Please enter your choice : ";
-        cin >> back;
-        if (back == 2)
-            endOfProgram = true;
     }while(back!=1 && back!=2); //validate input
     return (back==2);
 }
@@ -81,11 +73,11 @@ void creditsmenu(){
     cout<<"--------------------------------------------Thanks for using our program---------------------------------------------\n\n";
     cout<<"-------------------------------------------------------Credits-------------------------------------------------------\n\n";
     cout<<"--------------------------------------------------Salah eldin Elsayed------------------------------------------------\n\n";
-    cout<<"-----------------------------------------------------Omar El Nabarawy---------------------------------------------------\n\n";
+    cout<<"----------------------------------------------------Omar El Nabarawy-------------------------------------------------\n\n";
     cout<<"--------------------------------------------------Abdulrahman Abogendia----------------------------------------------\n\n";
     cout<<"-----------------------------------------------------Fouad Hashesh---------------------------------------------------\n\n";
     cout<<"----------------------------------------------------Mohamed Farouk---------------------------------------------------\n\n";
-    cout<<"-------------------------------------Under the Supervision of Dr. Fatma Elshehaby------------------------------------\n\n";
+    cout<<"----------------------------Under the Supervision of Dr. Hala Zayed & Eng. Rameez Barakat----------------------------\n\n";
 }
 
 
@@ -202,10 +194,10 @@ void displaymenu(){
         if (choice<1 || choice > 6) {
             continue;
         }
-        if (choice == 1) {  //add member
+        if (choice == 1) {
             displayclinics();
         }
-        else if (choice == 2) {     //remove member
+        else if (choice == 2) {
             displaydoctors();
         }
         else if (choice==3){
@@ -570,24 +562,22 @@ void displaydoctors(){
 
 void reserveClinic() {
     string type;
-    cout << "Today's day : "<<today.getcurrentday()<<endl;
+    cout << "Today's day : "<<getcurrentday()<<endl;
     cout<<"Enter Type of the Clinic : ";
     cin.ignore();
     getline(cin,type);
-   // if (searchClinic(type)) { // eh el far2 m been searchclinic w clinictypes.search ya salah ya 3rsssss aaaahhhhhh
     if(clinictypes.search(type)){
             bool isavailable= false;
             for (auto it2 = 0 ; it2 < searchClinic(type)->getDoctor().size(); it2++){
             for (auto it:searchClinic(type)->getDoctor()[it2].getAvailableDays()) {
-                if (it==today.getcurrentday())
+                if (it==getcurrentday())
                 isavailable= true;
             }
                 }
             if (isavailable) {
             string input;
             cout << "Enter the id or name of the Patient : ";
-            //cin.ignore(); mbwaza elgetline w msh 3aref leh
-            getline(cin,input);
+             getline(cin,input);
                 if (searchPatient_byid(input) || searchPatient_byName(input)) {
                 searchPatient_byName(input) ? searchClinic(type)->addtoWaiting(*searchPatient_byName(input))
                                             : searchClinic(type)->addtoWaiting(*searchPatient_byid(input));
