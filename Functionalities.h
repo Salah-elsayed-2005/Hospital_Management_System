@@ -28,6 +28,7 @@ Clinic* searchClinic(string);
 void reserveClinic(); //needs to be implemented
 void displayClinicSchedule(); //needs to be implemented
 void displayclinics();
+void RemovePatientFromQueue();
 
 
 bool checkBack();

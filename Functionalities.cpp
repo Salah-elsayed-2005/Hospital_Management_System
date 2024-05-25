@@ -76,9 +76,9 @@ void creditsmenu(){
     cout<<"-------------------------------------Under the Supervision of Dr. Fatma Elshehaby------------------------------------\n\n";
 }
 void mainmenu(){
-    system(CLEAR_COMMAND.c_str()); //clear screen
     short choice=1;
     do{
+        system(CLEAR_COMMAND.c_str()); //clear screen
         cout<<"1-Edit Database\n2-Display Info\n3-Reserve a clinic\n4-Emergency Request\n5-Close The program"<<endl;
         cout<<"\nPlease enter your choice : ";
         cin>>choice;
@@ -104,15 +104,14 @@ void mainmenu(){
 }
 
 void editmenu(){
-    system(CLEAR_COMMAND.c_str()); //clear screen
     short choice;
     do{
+        system(CLEAR_COMMAND.c_str()); //clear screen
         cout<<"===Edit menu=== "<<endl;
         cout<<"1-Edit Doctor Info\n2-Add Doctor\n3-Remove Doctor\n4-Edit Patient Info\n5-Add Patient\n6-Remove Patient\n";
         cout<<"Enter your choice : ";
         cin>>choice;
         if (choice<1 || choice > 6) {
-            system(CLEAR_COMMAND.c_str());
             continue;
         }
         if (choice == 1) {
@@ -133,7 +132,8 @@ void editmenu(){
         else if (choice==3){
             string input;
             cout << "Enter the id or name of the Doctor you want to remove : ";
-            cin>> input;
+            cin.ignore();
+            getline(cin,input);
 
             if (searchDoctor_byname(input)|| searchDoctor_byid(input)){
                 input= searchDoctor_byname(input)? searchDoctor_byname(input)->getID(): searchDoctor_byid(input)->getID();
@@ -144,7 +144,8 @@ void editmenu(){
         else if (choice==4){
             string input;
             cout << "Enter the id or name of the patient you want to edit : ";
-            cin>> input;
+            cin.ignore();
+            getline(cin,input);
 
             if (searchPatient_byName(input)|| searchPatient_byid(input)){
                 input= searchPatient_byName(input) ? searchPatient_byName(input)->getID() : searchPatient_byid(input)->getID();
@@ -173,9 +174,9 @@ void editmenu(){
 }
 
 void displaymenu(){
-    system(CLEAR_COMMAND.c_str()); //clear screen
     short choice;
     do{
+        system(CLEAR_COMMAND.c_str()); //clear screen
         cout<<"1-Display All clinics info"<<endl
             <<"2-Display All Doctors info"<<endl
             <<"3-Display All Patients info"<<endl
@@ -185,7 +186,6 @@ void displaymenu(){
         cout<<"Please Enter Your choice : ";
         cin>>choice;
         if (choice<1 || choice > 6) {
-            system(CLEAR_COMMAND.c_str());
             continue;
         }
         if (choice == 1) {  //add member
@@ -236,16 +236,16 @@ void displaymenu(){
     }while(!backToTheMainMenu); //check if the user want to back to the main menu
  }
 void clinicmenu(){
-    system(CLEAR_COMMAND.c_str()); //clear screen
     short choice;
     do{
+        system(CLEAR_COMMAND.c_str()); //clear screen
         cout << "===Clinic Menu===\n";
         cout << "1- Reserve a Clinic\n";
         cout << "2- Display Clinic Schedule\n";
+        cout << "3- Remove patient\n";
         cout << "Enter your choice: ";
         cin >> choice;
-        if (choice<1 || choice > 2) {
-            system(CLEAR_COMMAND.c_str());
+        if (choice<1 || choice > 3) {
             continue;
         }
         if (choice == 1) {
@@ -254,7 +254,10 @@ void clinicmenu(){
         else if (choice == 2) {
             displayClinicSchedule(); // lesa htt3mel
         }
-        if(choice>0 && choice<3)
+        else if (choice == 3){
+            RemovePatientFromQueue();
+        }
+        if(choice>0 && choice<4)
             checkBack();    //check if the user want to back to the last menu
 
     }while(!backToTheMainMenu); //check if the user want to back to the main menu
@@ -289,7 +292,8 @@ void addPatient() {
     string condition;
     cout<<"Enter Patient Data"<<endl;
     cout<<"\nName : ";
-    cin>>name; //takes the name of the patient from the user
+    cin.ignore();
+    getline(cin,name); //takes the name of the patient from the user
     cout<<"\nID : ";
     cin>>id; //takes the id of the patient from the user
     cout<<"\nage: ";
@@ -347,6 +351,7 @@ void editPatient(string id_tobe_edited){
             cout << "1- Patient's name\n2- Patient's id\n3- Patient's age\n4- Patient's gender\n";
             cout << "5- Condition description\n";
             cout <<"6- Diagnosis level\nEnter your choice : ";
+            cin.ignore();
             cin >> choice;
              if (choice == 1){
                 string name;
@@ -442,7 +447,8 @@ void addDoctor(){
     string id;
     cout<<"Enter Doctor Data"<<endl;
     cout<<"Name : ";
-    cin>>name; //takes the name of the doctor from the user
+    cin.ignore();
+    getline(cin,name); //takes the name of the doctor from the user
     cout<<"\nAvailable Days : ";
     cin.ignore(); //clear the buffer to ensure that getline works correctly
     getline(cin, inputline);//get the whole line as inputline becausecin can't take more than one word
@@ -453,7 +459,8 @@ void addDoctor(){
     }
 
     cout << "\nClinic type : ";
-    cin >> clinicType;
+    cin.ignore();
+    getline(cin,clinicType);
     cout << "\nDoctor id : ";
     cin >> id;
     Doctor doc(name,availableDays,clinicType,id);
@@ -591,7 +598,8 @@ void reserveClinic() {
 void displayClinicSchedule() {
     string t;
     cout<<"Enter The type of Clinic : ";
-    cin>>t;
+    cin.ignore();
+    getline(cin,t);
     if (clinictypes.search(t)) {
         for (auto it2 = 0;it2< searchClinic(t)->getDoctor().size(); it2++){ //iterate over every doctor with this clinic
             cout << "Doctor's name : "<<searchClinic(t)->getDoctor()[it2].getName()<<endl;
@@ -617,6 +625,26 @@ void displayclinics(){
     }
 
     cout << "This is the end of the Clinics list "<<endl;
+}
+
+void RemovePatientFromQueue(){
+    string t;
+    cout<<"Enter The type of Clinic : ";
+    cin.ignore();
+    getline(cin,t);
+    if(clinictypes.search(t)){
+        searchClinic(t)->removefromWaiting();
+        for (auto it=0; it < hospitalClinics.size() ; it++){
+            if (hospitalClinics[it].getType() == t){
+                hospitalClinics[it].removefromWaiting();
+                cout << "Patient removed successfully"<<endl;
+            }
+        }
+    }
+    else {
+        cout << "Clinic not found "<<endl;
+    }
+
 }
 
 
