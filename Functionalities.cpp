@@ -108,7 +108,7 @@ void editmenu(){
     short choice;
     do{
         cout<<"===Edit menu=== "<<endl;
-        cout<<"1-Edit Doctor Info\n2-Add Doctor\n3-Remove Doctor\n4-Edit Patient Info\n5-Add Patient\n6-Remove Patient\n ";
+        cout<<"1-Edit Doctor Info\n2-Add Doctor\n3-Remove Doctor\n4-Edit Patient Info\n5-Add Patient\n6-Remove Patient\n";
         cout<<"Enter your choice : ";
         cin>>choice;
         if (choice<1 || choice > 6) {
@@ -118,7 +118,8 @@ void editmenu(){
         if (choice == 1) {
             string input;
             cout << "Enter the id or name of the Doctor you want to edit : ";
-            cin>> input;
+            cin.ignore();
+            getline(cin,input);
 
             if (searchDoctor_byname(input)|| searchDoctor_byid(input)){
                 input= searchDoctor_byname(input)? searchDoctor_byname(input)->getID(): searchDoctor_byid(input)->getID();
@@ -516,13 +517,14 @@ void editDoctor(string id_tobe_edited){
             if (choice == 4){
                 string id;
                 cout << "Enter the Doctor's new id : ";
-                cin >> id; //take the id as input to give it to the setter
+                cin.ignore(); //take the id as input to give it to the setter
+                getline(cin,id);
                 doctorsnames.deleteWord(doctorsids.search(id_tobe_edited)->getID());
                 doctorsnames.insert(id,doctorsids.search(id_tobe_edited));
                 hospitalDoctors[i].setID(id); //set the id to the inserted idfrom the user
             }
 
-            cout << "Patient is edited successfully"<<endl;
+            cout << "Doctor  is edited successfully"<<endl;
             return;
         }
 
@@ -557,29 +559,28 @@ int checkinput(int choice,int first,int last){
 
 void reserveClinic() {
     string type;
-    cout<<"Enter Type of the Clinic : "<<endl;
+    cout << "Today's day : "<<today.getcurrentday()<<endl;
+    cout<<"Enter Type of the Clinic : ";
     cin.ignore();
     getline(cin,type);
-    if (searchClinic(type)) {
+   // if (searchClinic(type)) { // eh el far2 m been searchclinic w clinictypes.search ya salah ya 3rsssss aaaahhhhhh
+    if(clinictypes.search(type)){
             bool isavailable= false;
-            vector<Doctor> temp = searchClinic(type)->getDoctor();
-            for (auto it2 = 0 ;it2 < temp.size(); it2++){
-            for (auto it: temp[it2].getAvailableDays()) {
+            for (auto it2 = 0 ; it2 < searchClinic(type)->getDoctor().size(); it2++){
+            for (auto it:searchClinic(type)->getDoctor()[it2].getAvailableDays()) {
                 if (it==today.getcurrentday())
                 isavailable= true;
-                else {
-                    cout <<"ghaby"<<endl;
-                }
             }
                 }
             if (isavailable) {
             string input;
             cout << "Enter the id or name of the Patient : ";
-            cin.ignore();
+            //cin.ignore(); mbwaza elgetline w msh 3aref leh
             getline(cin,input);
                 if (searchPatient_byid(input) || searchPatient_byName(input)) {
                 searchPatient_byName(input) ? searchClinic(type)->addtoWaiting(*searchPatient_byName(input))
                                             : searchClinic(type)->addtoWaiting(*searchPatient_byid(input));
+                cout << "CLinic reserved successfully" <<endl;//test
              } else
                 cout << "ID not found" << endl;
             } else
@@ -592,11 +593,13 @@ void displayClinicSchedule() {
     cout<<"Enter The type of Clinic : ";
     cin>>t;
     if (clinictypes.search(t)) {
-        vector<Doctor> temp = searchClinic(t)->getDoctor();
-        for (auto it2 = 0;it2< temp.size(); it2++){ //iterate over every doctor with this clinic
-            for (auto it: temp[it2].getAvailableDays()) { //iterate over the available days of the doctors
-                cout << it << " " << endl;
+        for (auto it2 = 0;it2< searchClinic(t)->getDoctor().size(); it2++){ //iterate over every doctor with this clinic
+            cout << "Doctor's name : "<<searchClinic(t)->getDoctor()[it2].getName()<<endl;
+            cout << "Doctor's available days : ";
+            for (auto it: searchClinic(t)->getDoctor()[it2].getAvailableDays()) { //iterate over the available days of the doctors
+                cout << it << " " ;
             }
+            cout<<endl;
         }
         /*for (auto it: clinictypes.search(t)->getDoctor().getAvailableDays()) {
             //cout << it << " " << endl;

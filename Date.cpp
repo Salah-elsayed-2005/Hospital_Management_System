@@ -84,7 +84,19 @@ string Date::getDateString(){
     return stringDate;
 }
 string Date::getcurrentday() {
-        int k = day;
+    string daysOfWeek[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
+    // Get the current time
+    time_t t = std::time(nullptr);
+    tm* now = std::localtime(&t);
+
+    // Get the day of the week (0-6, where 0 is Sunday)
+    int dayOfWeek = now->tm_wday;
+
+    // Return the day of the week with the first letter capitalized
+    return daysOfWeek[dayOfWeek];
+
+       /* int k = day;
         int m;
         if (month == 1) {
             m = 11;
@@ -113,5 +125,5 @@ string Date::getcurrentday() {
         if (F==5)
             return "Friday";
         if (F==6)
-            return "Saturday";
+            return "Saturday";*/
 }
