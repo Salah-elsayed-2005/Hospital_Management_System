@@ -33,6 +33,7 @@ void RemovePatientFromQueue();
 
 bool checkBack();
 bool checkClose();
+int checkinput(int choice,int first,int last);
 
 void mainmenu();
 void editmenu();

@@ -65,16 +65,30 @@ bool checkClose(){  //check if the user want to close the program
     return (back==2);
 }
 
+//function that will be used multiple times to check the input
+int checkinput(int choice,int first,int last){
+    //The while loop is to check if the choice is within the range of the list
+    while (choice < first || choice > last ){
+        cin.ignore();
+        cout << "Please enter a number between "<<first<< " and " <<last <<" inclusively : ";
+        cin >> choice;
+    }
+    return choice; // return the value after exiting the while loop with the right value that's within the range
+}
+
+
 void creditsmenu(){
     cout<<"--------------------------------------------Thanks for using our program---------------------------------------------\n\n";
     cout<<"-------------------------------------------------------Credits-------------------------------------------------------\n\n";
     cout<<"--------------------------------------------------Salah eldin Elsayed------------------------------------------------\n\n";
-    cout<<"-----------------------------------------------------Omar Nabarawy---------------------------------------------------\n\n";
+    cout<<"-----------------------------------------------------Omar El Nabarawy---------------------------------------------------\n\n";
     cout<<"--------------------------------------------------Abdulrahman Abogendia----------------------------------------------\n\n";
     cout<<"-----------------------------------------------------Fouad Hashesh---------------------------------------------------\n\n";
     cout<<"----------------------------------------------------Mohamed Farouk---------------------------------------------------\n\n";
     cout<<"-------------------------------------Under the Supervision of Dr. Fatma Elshehaby------------------------------------\n\n";
 }
+
+
 void mainmenu(){
     short choice=1;
     do{
@@ -351,8 +365,8 @@ void editPatient(string id_tobe_edited){
             cout << "1- Patient's name\n2- Patient's id\n3- Patient's age\n4- Patient's gender\n";
             cout << "5- Condition description\n";
             cout <<"6- Diagnosis level\nEnter your choice : ";
-            cin.ignore();
             cin >> choice;
+            choice = checkinput(choice,1,6);
              if (choice == 1){
                 string name;
                 cout << "Enter the new name of the patient : ";
@@ -488,9 +502,11 @@ void editDoctor(string id_tobe_edited){
     int choice;
     for(int i = 0; i < hospitalDoctors.size() ; i++ ){ //loop over the whole vector
         if( id_tobe_edited == hospitalDoctors[i].getID() ){ //if condition to get the doctor with the id to be edited
-            cout << "What do you want to edit in the doctor with id "<<id_tobe_edited <<endl;
-            cout << "1-Doctor's name\n2-Doctor's available days \n3-clinic type\n4-Doctor's id : ";
+            cout << "What do you want to edit in the doctor with id : "<<id_tobe_edited <<endl;
+            cout << "1-Doctor's name\n2-Doctor's available days \n3-clinic type\n4-Doctor's id\n"
+                    "Enter your choice : ";
             cin >> choice;
+            choice = checkinput(choice,1,4);
              if (choice == 1){
                 string name;
                 cout <<"Enter the Doctor's right name: ";
@@ -502,7 +518,7 @@ void editDoctor(string id_tobe_edited){
             }
             if (choice == 2){
                 vector<string> avd;
-                cout <<"Enter Doctor's available days: ";
+                cout <<"Enter Doctor's available days (separated by spaces) : ";
                 string inputline; //string that'll be used to obtain the whole line
                 cin.ignore(); //clear the buffer to ensure that getline works correctly
                 getline(cin, inputline); //function to obtain the whole line and store it in inputline
@@ -549,18 +565,6 @@ void displaydoctors(){
     cout << "This is the end of the doctors list "<<endl;
 
 }
-
-# if 0
-//function that will be used multiple times to check the input
-int checkinput(int choice,int first,int last){
-    //The while loop is to check if the choice is within the range of the list
-    while (choice < first || choice > last ){
-        cout << "Please enter a number between "<<first<< " and " <<last <<" inclusively : ";
-        cin >> choice;
-    }
-    return choice; // return the value after exiting the while loop with the right value that's within the range
-}
-#endif
 
 
 
@@ -609,9 +613,6 @@ void displayClinicSchedule() {
             }
             cout<<endl;
         }
-        /*for (auto it: clinictypes.search(t)->getDoctor().getAvailableDays()) {
-            //cout << it << " " << endl;
-        }*/
     } else
         cout<<"Clinic Not found "<<endl;
 }
