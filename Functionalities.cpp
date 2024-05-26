@@ -358,29 +358,34 @@ void editPatient(string id_tobe_edited){
                 cout << "Enter the new name of the patient : ";
                 cin.ignore(); //clear the buffer to ensure that getline works correctly
                 getline(cin,name);
+                patientsids.search(id_tobe_edited)->setName(name);
                 patientsnames.deleteWord(patientsids.search(id_tobe_edited)->getName());
-                patientsnames.insert(name,patientsids.search(id_tobe_edited));
                 hospitalPatients[i].setName(name);
-            }
+                patientsnames.insert(name,&hospitalPatients[i]);
+             }
             else if (choice == 2){
                 string id;
                 cout << "Enter the new id of the patient : ";
-                cin >> id;
-                patientsnames.deleteWord(patientsids.search(id_tobe_edited)->getID());
-                patientsnames.insert(id,patientsids.search(id_tobe_edited));
+                cin >> id;//hospital[i] patient hussien id 2
                 hospitalPatients[i].setId(id);
+                patientsids.insert(id,&hospitalPatients[i]);
+                patientsids.deleteWord(id_tobe_edited);
             }
             else if (choice == 3){
                 int age;
                 cout << "Enter the new age of the patient : ";
                 cin >> age;
                 hospitalPatients[i].setAge(age);
-            }
+                patientsids.search(id_tobe_edited)->setAge(age);
+                patientsnames.search(id_tobe_edited)->setAge(age);
+             }
             else if (choice == 4){
                 bool gen;
                 cout << "Enter the right gender of the patient (1 for male and 0 for female)  : ";
                 cin >> gen;
                 hospitalPatients[i].setGender(gen);
+                 patientsids.search(id_tobe_edited)->setGender(gen);
+                 patientsnames.search(id_tobe_edited)->setGender(gen);
             }
             else if (choice == 5){
                 string condition;
@@ -388,6 +393,8 @@ void editPatient(string id_tobe_edited){
                 cin.ignore(); //clear the buffer to ensure that getline works correctly
                 getline(cin,condition);
                 hospitalPatients[i].setConditionDescription(condition);
+                 patientsids.search(id_tobe_edited)->setConditionDescription(condition);
+                 patientsnames.search(id_tobe_edited)->setConditionDescription(condition);
             }
             else if(choice == 6){
                 int airwaylevel,breathinglevel,pulselevel,disabilitylevel,exposurelevel;
@@ -403,6 +410,8 @@ void editPatient(string id_tobe_edited){
                 cin >> exposurelevel;
                 Diagnosis d1(airwaylevel,breathinglevel,pulselevel,disabilitylevel,exposurelevel);
                 hospitalPatients[i].setDiagnosis(d1);
+                patientsids.search(id_tobe_edited)->setDiagnosis(d1);
+                patientsnames.search(id_tobe_edited)->setDiagnosis(d1);
             }
             cout << "Patient is edited successfully"<<endl;
             return;
@@ -499,9 +508,10 @@ void editDoctor(string id_tobe_edited){
                 cout <<"Enter the Doctor's right name: ";
                 cin.ignore(); //clear the buffer to ensure that getline works correctly
                 getline(cin,name); //get the whole line as the name as cin gets only the first word
+                doctorsids.search(id_tobe_edited)->setName(name);
                 doctorsnames.deleteWord(doctorsids.search(id_tobe_edited)->getName());
-                doctorsnames.insert(name,doctorsids.search(id_tobe_edited));
                 hospitalDoctors[i].setName(name); //set the name to the edited name
+                doctorsnames.insert(name,& hospitalDoctors[i]);
             }
             if (choice == 2){
                 vector<string> avd;
@@ -516,6 +526,8 @@ void editDoctor(string id_tobe_edited){
                     avd.push_back(day);
                 }
                 hospitalDoctors[i].setAvailableDays(avd); //edit the available days to the inserted one
+                doctorsids.search(id_tobe_edited)->setAvailableDays(avd);
+                doctorsnames.search(id_tobe_edited)->setAvailableDays(avd);
             }
             if (choice == 3){
                 string clinic;
@@ -523,15 +535,17 @@ void editDoctor(string id_tobe_edited){
                 cin.ignore(); //clear the buffer to ensure that getline works correctly
                 getline(cin,clinic); //function to obtain the whole line and store it in inputline
                 hospitalDoctors[i].setClinicType(clinic);
+                doctorsids.search(id_tobe_edited)->setClinicType(clinic);
+                doctorsnames.search(id_tobe_edited)->setClinicType(clinic);
             }
             if (choice == 4){
                 string id;
                 cout << "Enter the Doctor's new id : ";
                 cin.ignore(); //take the id as input to give it to the setter
                 getline(cin,id);
-                doctorsnames.deleteWord(doctorsids.search(id_tobe_edited)->getID());
-                doctorsnames.insert(id,doctorsids.search(id_tobe_edited));
                 hospitalDoctors[i].setID(id); //set the id to the inserted idfrom the user
+                doctorsids.insert(id,&hospitalDoctors[i]);
+                doctorsids.deleteWord(doctorsids.search(id_tobe_edited)->getID());
             }
 
             cout << "Doctor  is edited successfully"<<endl;

@@ -62,7 +62,7 @@ int main() {
 
     Patient p[] = {
             {"Mohamed Atta", "8621562",20 , true, "MVP", d[0]},
-            {"Ali Ayman ", "1049",19 , false, "Not white enough", d[1]},
+            {"Ali Ayman", "1049",19 , false, "Not white enough", d[1]},
             {"Omar Nabarawy", "46209",34 , true, "Man of the team", d[2]},
             {"Ziad Elsahafey", "242004",17 , true, "Else7a yadoobk", d[3]},
             {"Hussein Sayed", "1",988 , true, "whar", d[4]}
