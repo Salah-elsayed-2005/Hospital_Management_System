@@ -8,7 +8,6 @@
 #include "Patient.h"
 #include "Doctor.h"
 #include "Clinics.h"
-#include "Date.h"
 using namespace std;
 Patient* searchPatient_byid(string );
 Patient* searchPatient_byName(string );
@@ -31,7 +30,6 @@ void displayclinics();
 void RemovePatientFromQueue();
 
 bool checkBack();
-bool checkClose();
 int checkinput(int choice,int first,int last);
 
 void mainmenu();

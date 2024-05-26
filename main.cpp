@@ -140,8 +140,6 @@ int main() {
     clinictypes.insert(doctors[3].getClinicType(),&Dentistry);
     temp.clear();
 
-
-
     mainmenu();
 
 

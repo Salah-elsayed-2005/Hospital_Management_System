@@ -29,7 +29,6 @@ const std::string CLEAR_COMMAND = "clear";
 #endif
 bool endOfProgram= false;
 bool backToTheMainMenu=false;
-string today; //global variable for today's day
 Clinic*searchClinic(string clinictype) {
     if (clinictypes.search(clinictype))
         return clinictypes.search(clinictype);
@@ -53,17 +52,6 @@ bool checkBack(){       //check if the user want to back to the last page
  Checkback() function is used all over the other options to check if the user wants to either go back to the previous menu or to go back to the main menu
  It's only used of there exists a previous menu not the main menu
  */
-bool checkClose(){  //check if the user want to close the program
-    short back=1;
-    do {
-        cout << "\n\n[1] Back to the last page" << endl << "[2] Close the program\n\n";
-        cout << "Please enter your choice : ";
-        cin >> back;
-        if (back == 2)
-            endOfProgram = true;
-    }while(back!=1 && back!=2); //validate input
-    return (back==2);
-}
 
 //function that will be used multiple times to check the input
 int checkinput(int choice,int first,int last){
@@ -80,11 +68,11 @@ void creditsmenu(){
     cout<<"--------------------------------------------Thanks for using our program---------------------------------------------\n\n";
     cout<<"-------------------------------------------------------Credits-------------------------------------------------------\n\n";
     cout<<"--------------------------------------------------Salah eldin Elsayed------------------------------------------------\n\n";
-    cout<<"-----------------------------------------------------Omar El Nabarawy---------------------------------------------------\n\n";
+    cout<<"----------------------------------------------------Omar El Nabarawy-------------------------------------------------\n\n";
     cout<<"--------------------------------------------------Abdulrahman Abogendia----------------------------------------------\n\n";
     cout<<"-----------------------------------------------------Fouad Hashesh---------------------------------------------------\n\n";
     cout<<"----------------------------------------------------Mohamed Farouk---------------------------------------------------\n\n";
-    cout<<"-------------------------------------Under the Supervision of Dr. Hala Zayed------------------------------------\n\n";
+    cout<<"-----------------------------Under the Supervision of Dr. Hala Zayed & Eng.Rameez Barakat----------------------------\n\n";
 }
 
 
@@ -308,8 +296,7 @@ void addPatient() {
     cin.ignore();
     getline(cin,name); //takes the name of the patient from the user
     cout<<"\nID : ";
-    cin.ignore();
-    getline(cin,id); //takes the id of the patient from the user
+    cin>>id;
     cout<<"\nage: ";
     cin>>age; //takes the age of the patient from the user
     cout<<"\ngender (1 male 0 female ) : ";
@@ -333,10 +320,10 @@ void addPatient() {
     //given info from the user to put it in the patient class
     Diagnosis d1(airwaylevel,breathinglevel,pulselevel,disabilitylevel,exposurelevel);
     //The following line initializes an object of class patient with all the members collected from the user
-    Patient patient(name,id,age,gender,condition,d1);
-    hospitalPatients.push_back(patient); // push(store) patient object(with all the info collected from the user ) in the vector
-    patientsnames.insert(patient.getName(),&patient);
-    patientsnames.insert(patient.getID(), &patient);
+    Patient* patient=new Patient(name,id,age,gender,condition,d1);
+    hospitalPatients.push_back(*patient); // push(store) patient object(with all the info collected from the user ) in the vector
+    patientsnames.insert(name,patient);
+    patientsids.insert(id, patient);
 }
 
 //function to remove the patient from the vector
@@ -457,7 +444,8 @@ Doctor* searchDoctor_byname(string name){
 
 void addDoctor(){
     string name;
-    vector<string>availableDays; string inputline;
+    vector<string>availableDays;
+    string inputline;
     string clinicType;
     string id;
     cout<<"Enter Doctor Data"<<endl;
@@ -479,10 +467,10 @@ void addDoctor(){
     cout << "\nDoctor id : ";
     cin.ignore();
     getline(cin,id);
-    Doctor doc(name,availableDays,clinicType,id);
-    hospitalDoctors.push_back(doc);
-    doctorsnames.insert(name,&doc);
-    doctorsids.insert(id,&doc);
+    Doctor *doc=new Doctor(name,availableDays,clinicType,id);
+    hospitalDoctors.push_back(*doc);
+    doctorsnames.insert(name,doc);
+    doctorsids.insert(id,doc);
 }
 
 

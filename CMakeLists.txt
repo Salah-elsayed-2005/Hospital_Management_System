@@ -19,8 +19,6 @@ add_executable(Hospital_Management_System
         DatabaseManager.h
         Doctor.cpp
         Doctor.h
-        Date.cpp
-        Date.h
         Trie.h
         Functionalities.cpp
         Functionalities.h
