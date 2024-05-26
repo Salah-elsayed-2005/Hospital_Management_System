@@ -30,7 +30,6 @@ void displayClinicSchedule(); //needs to be implemented
 void displayclinics();
 void RemovePatientFromQueue();
 
-
 bool checkBack();
 bool checkClose();
 int checkinput(int choice,int first,int last);

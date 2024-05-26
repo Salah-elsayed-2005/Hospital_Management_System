@@ -357,6 +357,7 @@ void removePatient(string id_toberemoved){
 }
 
 
+
 void editPatient(string id_tobe_edited){
     for (int i = 0; i < hospitalPatients.size() ; i++ ){
         int choice;

@@ -115,6 +115,7 @@ int main() {
 
     //}
 
+
     vector<Doctor> temp;
     temp.push_back(doctors[4]);
     Clinic pediatrics("Pediatrician",pq,temp) ;
