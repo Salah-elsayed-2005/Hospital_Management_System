@@ -29,7 +29,7 @@ const std::string CLEAR_COMMAND = "clear";
 #endif
 bool endOfProgram= false;
 bool backToTheMainMenu=false;
-Date today;//global variable for today's date
+string today; //global variable for today's day
 Clinic*searchClinic(string clinictype) {
     if (clinictypes.search(clinictype))
         return clinictypes.search(clinictype);
@@ -69,7 +69,6 @@ bool checkClose(){  //check if the user want to close the program
 int checkinput(int choice,int first,int last){
     //The while loop is to check if the choice is within the range of the list
     while (choice < first || choice > last ){
-        cin.ignore();
         cout << "Please enter a number between "<<first<< " and " <<last <<" inclusively : ";
         cin >> choice;
     }
@@ -85,7 +84,7 @@ void creditsmenu(){
     cout<<"--------------------------------------------------Abdulrahman Abogendia----------------------------------------------\n\n";
     cout<<"-----------------------------------------------------Fouad Hashesh---------------------------------------------------\n\n";
     cout<<"----------------------------------------------------Mohamed Farouk---------------------------------------------------\n\n";
-    cout<<"-------------------------------------Under the Supervision of Dr. Fatma Elshehaby------------------------------------\n\n";
+    cout<<"-------------------------------------Under the Supervision of Dr. Hala Zayed------------------------------------\n\n";
 }
 
 
@@ -309,24 +308,26 @@ void addPatient() {
     cin.ignore();
     getline(cin,name); //takes the name of the patient from the user
     cout<<"\nID : ";
-    cin>>id; //takes the id of the patient from the user
+    cin.ignore();
+    getline(cin,id); //takes the id of the patient from the user
     cout<<"\nage: ";
     cin>>age; //takes the age of the patient from the user
     cout<<"\ngender (1 male 0 female ) : ";
     cin>>gender; //takes the gender of the patient from the user
     cout<<"\ncondition description : ";
-    cin >>condition; //takes the condition of the patient from the user
+    cin.ignore();
+    getline(cin,condition); //takes the condition of the patient from the user
 
     int airwaylevel,breathinglevel,pulselevel,disabilitylevel,exposurelevel;
-    cout << "please enter the airway level : ";
+    cout << "\nplease enter the airway level : ";
     cin >> airwaylevel; //takes the airway level of the patient from the user
-    cout << "please enter the breathing level : ";
+    cout << "\nplease enter the breathing level : ";
     cin >> breathinglevel; //takes the breathing level of the patient from the user
-    cout << "please enter the pulse level : ";
+    cout << "\nplease enter the pulse level : ";
     cin >> pulselevel; //takes the pulse level of the patient from the user
-    cout << "please enter the disbaility level : ";
+    cout << "\nplease enter the disbaility level : ";
     cin >> disabilitylevel; //takes the disability level of the patient from the user
-    cout << "please enter the exposure level : ";
+    cout << "\nplease enter the exposure level : ";
     cin >> exposurelevel; //takes the exposure level of the patient from the user
     //The following line initializes an object of class diagnosis and calls its constructor with the
     //given info from the user to put it in the patient class
@@ -456,7 +457,6 @@ Doctor* searchDoctor_byname(string name){
 void addDoctor(){
     string name;
     vector<string>availableDays; string inputline;
-    int appointmentPrice;
     string clinicType;
     string id;
     cout<<"Enter Doctor Data"<<endl;
@@ -476,7 +476,8 @@ void addDoctor(){
     cin.ignore();
     getline(cin,clinicType);
     cout << "\nDoctor id : ";
-    cin >> id;
+    cin.ignore();
+    getline(cin,id);
     Doctor doc(name,availableDays,clinicType,id);
     hospitalDoctors.push_back(doc);
     doctorsnames.insert(name,&doc);
@@ -570,23 +571,21 @@ void displaydoctors(){
 
 void reserveClinic() {
     string type;
-    cout << "Today's day : "<<today.getcurrentday()<<endl;
+    cout << "Today's day : "<<getcurrentday()<<endl;
     cout<<"Enter Type of the Clinic : ";
     cin.ignore();
     getline(cin,type);
-   // if (searchClinic(type)) { // eh el far2 m been searchclinic w clinictypes.search ya salah ya 3rsssss aaaahhhhhh
     if(clinictypes.search(type)){
             bool isavailable= false;
             for (auto it2 = 0 ; it2 < searchClinic(type)->getDoctor().size(); it2++){
             for (auto it:searchClinic(type)->getDoctor()[it2].getAvailableDays()) {
-                if (it==today.getcurrentday())
+                if (it==getcurrentday())
                 isavailable= true;
             }
                 }
             if (isavailable) {
             string input;
             cout << "Enter the id or name of the Patient : ";
-            //cin.ignore(); mbwaza elgetline w msh 3aref leh
             getline(cin,input);
                 if (searchPatient_byid(input) || searchPatient_byName(input)) {
                 searchPatient_byName(input) ? searchClinic(type)->addtoWaiting(*searchPatient_byName(input))
@@ -712,4 +711,17 @@ void emergencymenu(){
             checkBack();    //check if the user want to back to the last menu
 
     }while(!backToTheMainMenu); //check if the user want to back to the main menu
+}
+
+
+string getcurrentday() {
+    string daysOfWeek[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
+    time_t t = time(nullptr);
+    tm *now = localtime(&t); // Get the current time
+    int dayOfWeek = now->tm_wday; // Get the day of the week as tm have an attribute called
+    //wday that gives the day of the week in integers (0-6, where 0 is Sunday)
+
+    // Return the day of the week
+    return daysOfWeek[dayOfWeek];
 }

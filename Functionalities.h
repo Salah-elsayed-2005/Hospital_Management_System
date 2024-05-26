@@ -42,4 +42,6 @@ void clinicmenu();
 void creditsmenu();
 void emergencymenu();
 
+string getcurrentday();
+
 #endif //UNTITLED1_FUNCTIONALITIES_H
