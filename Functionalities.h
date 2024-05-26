@@ -25,13 +25,13 @@ void editDoctor(string);
 void displaydoctors();
 
 Clinic* searchClinic(string);
-void reserveClinic();
-void displayClinicSchedule();
+void reserveClinic(); //needs to be implemented
+void displayClinicSchedule(); //needs to be implemented
 void displayclinics();
 void RemovePatientFromQueue();
 
-
 bool checkBack();
+bool checkClose();
 int checkinput(int choice,int first,int last);
 
 void mainmenu();
@@ -40,5 +40,7 @@ void displaymenu();
 void clinicmenu();
 void creditsmenu();
 void emergencymenu();
+
 string getcurrentday();
+
 #endif //UNTITLED1_FUNCTIONALITIES_H

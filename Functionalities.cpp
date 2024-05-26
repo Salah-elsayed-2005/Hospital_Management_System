@@ -1,10 +1,14 @@
-#include <ctime>
+//
+// Created by salah elsayed on 5/23/2024.
+//
+
 #include "Functionalities.h"
 #include <iostream>
 #include <vector>
 #include <sstream> //for the vector of strings available days
 #include "Trie.h"
 #include "Patient.h"
+#include "PriorityQueue.h"
 #include "Doctor.h"
 #include "Clinics.h"
 #include "CityGraph.h"
@@ -25,26 +29,14 @@ const std::string CLEAR_COMMAND = "clear";
 #endif
 bool endOfProgram= false;
 bool backToTheMainMenu=false;
+string today; //global variable for today's day
 Clinic*searchClinic(string clinictype) {
     if (clinictypes.search(clinictype))
         return clinictypes.search(clinictype);
     else
         return nullptr;
 }
-string getcurrentday() {
-    string daysOfWeek[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
-    // Get the current time
-    time_t t = std::time(nullptr);
-    tm* now = std::localtime(&t);
-
-    // Get the day of the week (0-6, where 0 is Sunday)
-    int dayOfWeek = now->tm_wday;
-
-    // Return the day of the week with the first letter capitalized
-    return daysOfWeek[dayOfWeek];
-
-}
 bool checkBack(){       //check if the user want to back to the last page
     short back=1;
     do {
@@ -57,11 +49,26 @@ bool checkBack(){       //check if the user want to back to the last page
     return (back==2);
 }
 
+/*
+ Checkback() function is used all over the other options to check if the user wants to either go back to the previous menu or to go back to the main menu
+ It's only used of there exists a previous menu not the main menu
+ */
+bool checkClose(){  //check if the user want to close the program
+    short back=1;
+    do {
+        cout << "\n\n[1] Back to the last page" << endl << "[2] Close the program\n\n";
+        cout << "Please enter your choice : ";
+        cin >> back;
+        if (back == 2)
+            endOfProgram = true;
+    }while(back!=1 && back!=2); //validate input
+    return (back==2);
+}
+
 //function that will be used multiple times to check the input
 int checkinput(int choice,int first,int last){
     //The while loop is to check if the choice is within the range of the list
     while (choice < first || choice > last ){
-        cin.ignore();
         cout << "Please enter a number between "<<first<< " and " <<last <<" inclusively : ";
         cin >> choice;
     }
@@ -73,11 +80,11 @@ void creditsmenu(){
     cout<<"--------------------------------------------Thanks for using our program---------------------------------------------\n\n";
     cout<<"-------------------------------------------------------Credits-------------------------------------------------------\n\n";
     cout<<"--------------------------------------------------Salah eldin Elsayed------------------------------------------------\n\n";
-    cout<<"----------------------------------------------------Omar El Nabarawy-------------------------------------------------\n\n";
+    cout<<"-----------------------------------------------------Omar El Nabarawy---------------------------------------------------\n\n";
     cout<<"--------------------------------------------------Abdulrahman Abogendia----------------------------------------------\n\n";
     cout<<"-----------------------------------------------------Fouad Hashesh---------------------------------------------------\n\n";
     cout<<"----------------------------------------------------Mohamed Farouk---------------------------------------------------\n\n";
-    cout<<"----------------------------Under the Supervision of Dr. Hala Zayed & Eng. Rameez Barakat----------------------------\n\n";
+    cout<<"-------------------------------------Under the Supervision of Dr. Hala Zayed------------------------------------\n\n";
 }
 
 
@@ -194,10 +201,10 @@ void displaymenu(){
         if (choice<1 || choice > 6) {
             continue;
         }
-        if (choice == 1) {
+        if (choice == 1) {  //add member
             displayclinics();
         }
-        else if (choice == 2) {
+        else if (choice == 2) {     //remove member
             displaydoctors();
         }
         else if (choice==3){
@@ -301,24 +308,26 @@ void addPatient() {
     cin.ignore();
     getline(cin,name); //takes the name of the patient from the user
     cout<<"\nID : ";
-    cin>>id; //takes the id of the patient from the user
+    cin.ignore();
+    getline(cin,id); //takes the id of the patient from the user
     cout<<"\nage: ";
     cin>>age; //takes the age of the patient from the user
     cout<<"\ngender (1 male 0 female ) : ";
     cin>>gender; //takes the gender of the patient from the user
     cout<<"\ncondition description : ";
-    cin >>condition; //takes the condition of the patient from the user
+    cin.ignore();
+    getline(cin,condition); //takes the condition of the patient from the user
 
     int airwaylevel,breathinglevel,pulselevel,disabilitylevel,exposurelevel;
-    cout << "please enter the airway level : ";
+    cout << "\nplease enter the airway level : ";
     cin >> airwaylevel; //takes the airway level of the patient from the user
-    cout << "please enter the breathing level : ";
+    cout << "\nplease enter the breathing level : ";
     cin >> breathinglevel; //takes the breathing level of the patient from the user
-    cout << "please enter the pulse level : ";
+    cout << "\nplease enter the pulse level : ";
     cin >> pulselevel; //takes the pulse level of the patient from the user
-    cout << "please enter the disbaility level : ";
+    cout << "\nplease enter the disbaility level : ";
     cin >> disabilitylevel; //takes the disability level of the patient from the user
-    cout << "please enter the exposure level : ";
+    cout << "\nplease enter the exposure level : ";
     cin >> exposurelevel; //takes the exposure level of the patient from the user
     //The following line initializes an object of class diagnosis and calls its constructor with the
     //given info from the user to put it in the patient class
@@ -346,6 +355,7 @@ void removePatient(string id_toberemoved){
     }
     cout << "patient with ID " << id_toberemoved << " not found." << endl;
 }
+
 
 
 void editPatient(string id_tobe_edited){
@@ -448,7 +458,6 @@ Doctor* searchDoctor_byname(string name){
 void addDoctor(){
     string name;
     vector<string>availableDays; string inputline;
-    int appointmentPrice;
     string clinicType;
     string id;
     cout<<"Enter Doctor Data"<<endl;
@@ -468,7 +477,8 @@ void addDoctor(){
     cin.ignore();
     getline(cin,clinicType);
     cout << "\nDoctor id : ";
-    cin >> id;
+    cin.ignore();
+    getline(cin,id);
     Doctor doc(name,availableDays,clinicType,id);
     hospitalDoctors.push_back(doc);
     doctorsnames.insert(name,&doc);
@@ -577,7 +587,7 @@ void reserveClinic() {
             if (isavailable) {
             string input;
             cout << "Enter the id or name of the Patient : ";
-             getline(cin,input);
+            getline(cin,input);
                 if (searchPatient_byid(input) || searchPatient_byName(input)) {
                 searchPatient_byName(input) ? searchClinic(type)->addtoWaiting(*searchPatient_byName(input))
                                             : searchClinic(type)->addtoWaiting(*searchPatient_byid(input));
@@ -702,4 +712,17 @@ void emergencymenu(){
             checkBack();    //check if the user want to back to the last menu
 
     }while(!backToTheMainMenu); //check if the user want to back to the main menu
+}
+
+
+string getcurrentday() {
+    string daysOfWeek[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
+    time_t t = time(nullptr);
+    tm *now = localtime(&t); // Get the current time
+    int dayOfWeek = now->tm_wday; // Get the day of the week as tm have an attribute called
+    //wday that gives the day of the week in integers (0-6, where 0 is Sunday)
+
+    // Return the day of the week
+    return daysOfWeek[dayOfWeek];
 }

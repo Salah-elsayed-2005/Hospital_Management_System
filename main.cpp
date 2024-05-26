@@ -115,13 +115,14 @@ int main() {
 
     //}
 
+
     vector<Doctor> temp;
-    temp.push_back(doctors[0]);
+    temp.push_back(doctors[4]);
     Clinic pediatrics("Pediatrician",pq,temp) ;
 
     //pediatrics.setDoctor(temp);
     hospitalClinics.push_back(pediatrics);
-    clinictypes.insert(doctors[0].getClinicType(),&pediatrics);
+    clinictypes.insert(doctors[4].getClinicType(),&pediatrics);
     temp.clear();
 
     temp.push_back(doctors[2]);
