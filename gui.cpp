@@ -39,7 +39,14 @@ std::vector<std::string> emergency_names = {
 
 };
 
+Clinic* searchByType( const string& type){
 
+    for (int i = 0; i < clinics_vector.size(); ++i) {
+        if (clinics_vector[i].getType()==type)
+            return &clinics_vector[i];
+    }
+    return nullptr;
+}
 
 void create_clinic_objects(){
     static std::string clinics[] = {"IM", "Cardio", "Surgery", "Ophthalmology", "Gynecology", "ENT", "Dermatology", "Ortho", "Dental", "Radiology"};
@@ -162,7 +169,7 @@ void activate(GtkApplication *app, gpointer user_data) {
     gtk_widget_set_margin_bottom(grid, 10);
     gtk_window_set_child(GTK_WINDOW(window), grid);
 
-    GtkWidget *label = gtk_label_new("Date: 23-05-2024");
+    GtkWidget *label = gtk_label_new("Date: 25-05-2024");
     gtk_grid_attach(GTK_GRID(grid), label, 0, 0, 2, 1);
     gtk_widget_set_halign(label, GTK_ALIGN_START);
     gtk_widget_set_valign(label, GTK_ALIGN_START);
@@ -732,8 +739,10 @@ void save_doctor_data(GtkWidget *widget, gpointer data) {
 
     doctors_vector.push_back(doc);
     doctor_names.push_back(name);
+    searchByType(  specialization)->addDoctor(doc);
 
-    searchByType(clinics_vector, specialization).addDoctor(doc);
+
+
 
 
 
@@ -901,7 +910,7 @@ void on_add_button_clicked(GtkWidget *widget, gpointer data) {
     std::string selected_clinic = gtk_combo_box_text_get_active_text(clinic_combo);
     std::string selected_patient = gtk_combo_box_text_get_active_text(patient_combo);
 
-    searchByType(clinics_vector, selected_clinic).addtoWaiting(searchByName(patients_vector, selected_patient));
+    searchByType(  selected_clinic)->addtoWaiting(searchByName(patients_vector, selected_patient));
 
 
 }
@@ -963,7 +972,7 @@ void on_clinic_selected(GtkComboBox *combo, gpointer data) {
 
     if (index >= 0 && index < static_cast<int>(sizeof(clinics) / sizeof(clinics[0]))) {
         std::string clinic_type = clinics[index];
-        std::vector<Doctor> clinic_docs = (searchByType(clinics_vector, clinic_type).getDoctor());
+        std::vector<Doctor> clinic_docs = searchByType(clinic_type)->getDoctor();
         std::stringstream ss;
 
         ss << "Clinic Type: " << clinic_type;
@@ -995,4 +1004,12 @@ void populate_patient_dropdown(GtkComboBoxText *combo) {
 
 void display_clinic_schedule(GtkWidget *widget, gpointer data) {
     g_print("Clinic Schedule button clicked\n");
+}
+
+
+Patient searchByName(const std::vector<Patient>& patient, string pat_name){
+    for(auto it : patient) {
+        if (it.getName() == pat_name)
+            return it;
+    }
 }
