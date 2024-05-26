@@ -1,14 +1,10 @@
-//
-// Created by salah elsayed on 5/23/2024.
-//
-
 #include "Functionalities.h"
 #include <iostream>
 #include <vector>
 #include <sstream> //for the vector of strings available days
 #include "Trie.h"
 #include "Patient.h"
-#include "PriorityQueue.h"
+#include <cstdlib>  // Required for system()
 #include "Doctor.h"
 #include "Clinics.h"
 #include "CityGraph.h"
@@ -332,6 +328,7 @@ void removePatient(string id_toberemoved){
         if (id_toberemoved == hospitalPatients[i].getID() ){  //if condition to get the patient
             // with the id to be removed
             cout << "The patient is being removed... "<< endl;
+            system("timeout /t 1 >nul");
             patientsnames.deleteWord(hospitalPatients[i].getName());
             patientsids.deleteWord(hospitalPatients[i].getID());
             hospitalPatients.erase(hospitalPatients.begin() + i); //remove the patient wanted to remove
@@ -416,6 +413,7 @@ void editPatient(string id_tobe_edited){
 
 void displaypatients(){
     cout << "printing all patients details..."<<endl<<endl;
+    system("timeout /t 1 >nul");
     for (auto it: hospitalPatients){
         it.displayinfo() ;
         cout << endl<<endl;
@@ -476,6 +474,7 @@ void removeDoctor(string id_toberemoved){ //to be tested
     for (auto i = 0; i < hospitalDoctors.size() ; i++ ){ // iterate over the whole vector of Doctors
         if (id_toberemoved == hospitalDoctors[i].getID() ){  //if condition to get the doctor with the id to be removed
             cout << "The Doctor is being removed... "<< endl;
+            system("timeout /t 1 >nul");
             doctorsnames.deleteWord(hospitalDoctors[i].getName());
             doctorsids.deleteWord(hospitalDoctors[i].getID());
             hospitalDoctors.erase( hospitalDoctors.begin() + i ); //remove the doctor from the vector
@@ -545,6 +544,7 @@ void editDoctor(string id_tobe_edited){
 
 void displaydoctors(){
     cout << "printing all doctors details..."<<endl << endl;
+    system("timeout /t 1 >nul");
     for (auto it: hospitalDoctors){
          it.displayinfo() ;
          cout << endl<<endl;
@@ -606,6 +606,7 @@ void displayClinicSchedule() {
 
 void displayclinics(){
     cout << "printing all Clinics details..."<<endl << endl;
+    system("timeout /t 1 >nul");
     for (auto it: hospitalClinics){
         it.printInfo() ;
         cout << endl<<endl;
