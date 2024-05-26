@@ -1,4 +1,8 @@
 #include "PriorityQueue.h"
+
+
+
+
 void PriorityQueue::enqueue(Patient &p) {
     insert(p);
 }
@@ -21,3 +25,11 @@ void PriorityQueue::print() {
     }
 }
 
+string PriorityQueue::printStr(){
+    PriorityQueue temp= *this;
+    stringstream ss2;
+    while (!temp.isEmpty()){
+        ss2 <<temp.dequeue().getName()<<"  ";
+    }
+     return ss2.str();
+}

@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "MaxHeap.h"
+#include <sstream>
 using namespace std;
 
 class PriorityQueue : public MaxHeap{
@@ -13,6 +14,7 @@ public:
     Patient peek();
     bool isEmpty();
     void print();
+    string printStr();
 };
 
 #endif

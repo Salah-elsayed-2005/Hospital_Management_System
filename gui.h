@@ -9,6 +9,7 @@
 #include <gtk/gtk.h>
 #include <vector>
 #include <string>
+#include "Functionalities.h"
 #include "CityGraph.h"
 #include "utility"
 #include "CityGraph.h"
@@ -46,6 +47,8 @@ void open_delete_patient_window(GtkWidget *widget, gpointer data);
 void delete_patient(GtkWidget *widget, gpointer data);
 void delete_doctor(GtkWidget *widget, gpointer data);
 void populate_patient_dropdown(GtkWidget *combo, const std::vector<std::string>& patient_names);
+void display_clinics_layout(GtkApplication *app);
+void display_clinics(GtkWidget *widget, gpointer data);
 
 // Function to populate the dropdown with patient/doctor names
 void populate_patient_dropdown(GtkWidget *combo, const std::vector<std::string>& patient_names);
@@ -57,6 +60,7 @@ void on_doctor_selected(GtkComboBox *combo, gpointer data);
 void on_emergency_selected(GtkComboBox *combo, gpointer data);
 
 void create_clinic_objects();
+void on_clinic_selected_pat(GtkComboBox *combo, gpointer data);
 
 void open_reserve_clinic_window(GtkWidget *widget, gpointer data);
 void on_add_button_clicked(GtkWidget *widget, gpointer data);
