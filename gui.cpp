@@ -13,31 +13,20 @@
 #include "Patient.h"
 
 
+std::vector<Patient> patients_vector ={};
+std::vector<Doctor> doctors_vector ={};
+std::vector<Clinic> clinics_vector ={};
+
+
 
 // Dummy data
-std::vector<std::string> patient_names = {
-        "Patient 1",
-        "Patient 2",
-        "Patient 3"
-};
+std::vector<std::string> patient_names = {};
 
-std::vector<std::string> patient_data = {
-        "Name: Patient 1\nAge: 30\nCondition: Stable",
-        "Name: Patient 2\nAge: 45\nCondition: Critical",
-        "Name: Patient 3\nAge: 29\nCondition: Recovering"
-};
+std::vector<std::string> patient_data = {};
 
-std::vector<std::string> doctor_names = {
-        "Doctor 1",
-        "Doctor 2",
-        "Doctor 3"
-};
+std::vector<std::string> doctor_names = {};
 
-std::vector<std::string> doctor_data = {
-        "Name: Doctor 1\nSpecialization: Cardiology\nYears of Experience: 15",
-        "Name: Doctor 2\nSpecialization: Neurology\nYears of Experience: 20",
-        "Name: Doctor 3\nSpecialization: Orthopedics\nYears of Experience: 12"
-};
+std::vector<std::string> doctor_data ={};
 
 std::vector<std::string> emergency_names = {
         "Maple Grove Residences",
@@ -66,23 +55,17 @@ std::vector<std::string> agitation_level = {
         "Normal pupils"
 };
 
-std::vector<std::string> occ = {
-        "Yes",
-        "No"
-};
+void create_clinic_objects(){
+    static std::string clinics[] = {"IM", "Cardio", "Surgery", "Ophthalmology", "Gynecology", "ENT", "Dermatology", "Ortho", "Dental", "Radiology"};
+    int num_clinics = sizeof(clinics) / sizeof(clinics[0]);
 
+    for (int i = 0; i < num_clinics; ++i) {
+        Clinic clinic_obj;
+        clinic_obj.setType(clinics[i]);
+        clinics_vector.push_back(clinic_obj);
+    }
 
-std::vector<std::string> gender = {
-        "ENGINEER",
-        "Male",
-        "Female",
-        "Optimus prime"
-};
-
-
-
-
-
+}
 
 
 void show_credits(GtkWidget *widget, gpointer data) {
@@ -133,29 +116,37 @@ void create_main_menu(GtkApplication *app) {
     g_signal_connect(button, "clicked", G_CALLBACK(edit_doctors), NULL);
     gtk_grid_attach(GTK_GRID(grid), button, 0, 3, 2, 1);
 
+    button = gtk_button_new_with_label("Delete Patient");
+    g_signal_connect(button, "clicked", G_CALLBACK(open_delete_patient_window), app);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 4, 2, 1);
+
+    button = gtk_button_new_with_label("Delete Doctor");
+    g_signal_connect(button, "clicked", G_CALLBACK(open_delete_doctor_window), app);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 5, 2, 1);
+
     button = gtk_button_new_with_label("Display Patients");
     g_signal_connect(button, "clicked", G_CALLBACK(display_patients), app);
-    gtk_grid_attach(GTK_GRID(grid), button, 0, 4, 2, 1);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 6, 2, 1);
 
     button = gtk_button_new_with_label("Display Doctors");
     g_signal_connect(button, "clicked", G_CALLBACK(display_doctors), app);
-    gtk_grid_attach(GTK_GRID(grid), button, 0, 5, 2, 1);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 7, 2, 1);
 
     button = gtk_button_new_with_label("Reserve Clinic");
     g_signal_connect(button, "clicked", G_CALLBACK(reserve_clinic), NULL);
-    gtk_grid_attach(GTK_GRID(grid), button, 0, 6, 2, 1);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 8, 2, 1);
 
     button = gtk_button_new_with_label("Clinic Schedule");
     g_signal_connect(button, "clicked", G_CALLBACK(display_clinic_schedule), NULL);
-    gtk_grid_attach(GTK_GRID(grid), button, 0, 7, 2, 1);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 9, 2, 1);
 
     button = gtk_button_new_with_label("Emergency requests");
     g_signal_connect(button, "clicked", G_CALLBACK(display_emergencies), app);
-    gtk_grid_attach(GTK_GRID(grid), button, 0, 8, 2, 1);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 10, 2, 1);
 
     button = gtk_button_new_with_label("Quit");
     g_signal_connect_swapped(button, "clicked", G_CALLBACK(g_application_quit), app);
-    gtk_grid_attach(GTK_GRID(grid), button, 0, 9, 2, 1);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 11, 2, 1);
 
     gtk_widget_show(window);
 }
@@ -213,9 +204,35 @@ void activate(GtkApplication *app, gpointer user_data) {
 void edit_patients(GtkWidget *widget, gpointer data) {
     g_print("Edit Patients button clicked\n");
 }
-
 void edit_doctors(GtkWidget *widget, gpointer data) {
-    g_print("Edit Doctors button clicked\n");
+    GtkWidget *window = gtk_application_window_new(GTK_APPLICATION(data));
+    gtk_window_set_title(GTK_WINDOW(window), "Edit Doctors");
+    gtk_window_set_default_size(GTK_WINDOW(window), 400, 300);
+
+    GtkWidget *grid = gtk_grid_new();
+    gtk_grid_set_column_homogeneous(GTK_GRID(grid), TRUE);
+    gtk_grid_set_row_spacing(GTK_GRID(grid), 10);
+    gtk_widget_set_margin_start(grid, 10);
+    gtk_widget_set_margin_end(grid, 10);
+    gtk_widget_set_margin_top(grid, 10);
+    gtk_widget_set_margin_bottom(grid, 10);
+    gtk_window_set_child(GTK_WINDOW(window), grid);
+
+    GtkWidget *label = gtk_label_new("Select Doctor to Edit");
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 0, 2, 1);
+    gtk_widget_set_halign(label, GTK_ALIGN_CENTER);
+
+    GtkWidget *combo = gtk_combo_box_text_new();
+    populate_doctor_dropdown(combo);
+    gtk_grid_attach(GTK_GRID(grid), combo, 0, 1, 2, 1);
+
+    g_signal_connect(combo, "changed", G_CALLBACK(on_doctor_selected), window);
+
+    GtkWidget *button = gtk_button_new_with_label("Main Menu");
+    g_signal_connect(button, "clicked", G_CALLBACK(go_back_to_main_menu), window);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 2, 2, 1);
+
+    gtk_widget_show(window);
 }
 
 void display_patients(GtkWidget *widget, gpointer data) {
@@ -243,33 +260,6 @@ void on_patient_selected(GtkComboBox *combo, gpointer data) {
     }
 }
 
-void populate_airway_dropdown(GtkWidget *combo) {
-    gtk_combo_box_text_remove_all(GTK_COMBO_BOX_TEXT(combo));
-    for (const std::string &name : airway_level) {
-        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), name.c_str());
-    }
-}
-
-void populate_gender_dropdown(GtkWidget *combo) {
-    gtk_combo_box_text_remove_all(GTK_COMBO_BOX_TEXT(combo));
-    for (const std::string &name : gender) {
-        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), name.c_str());
-    }
-}
-
-void populate_agitation_dropdown(GtkWidget *combo) {
-    gtk_combo_box_text_remove_all(GTK_COMBO_BOX_TEXT(combo));
-    for (const std::string &name : agitation_level) {
-        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), name.c_str());
-    }
-}
-
-void populate_occ_dropdown(GtkWidget *combo) {
-    gtk_combo_box_text_remove_all(GTK_COMBO_BOX_TEXT(combo));
-    for (const std::string &name : occ) {
-        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), name.c_str());
-    }
-}
 
 void populate_doctor_dropdown(GtkWidget *combo) {
     gtk_combo_box_text_remove_all(GTK_COMBO_BOX_TEXT(combo));
@@ -277,6 +267,9 @@ void populate_doctor_dropdown(GtkWidget *combo) {
         gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), name.c_str());
     }
 }
+
+
+
 
 void on_doctor_selected(GtkComboBox *combo, gpointer data) {
     GtkWidget *text_view = GTK_WIDGET(data);
@@ -524,7 +517,7 @@ void open_add_patient_window(GtkWidget *widget, gpointer data) {
 
     label = gtk_label_new("SPO2 measured: ");
     gtk_grid_attach(GTK_GRID(grid), label, 1, 7, 1, 1);
-    GtkAdjustment *adjustment2 = gtk_adjustment_new(30, 0, 100, 1, 10, 0);
+    GtkAdjustment *adjustment2 = gtk_adjustment_new(80, 50, 100, 1, 10, 0);
     GtkWidget *slider2 = gtk_scale_new(GTK_ORIENTATION_HORIZONTAL, adjustment2);
     gtk_scale_set_draw_value(GTK_SCALE(slider2), TRUE);
     gtk_grid_attach(GTK_GRID(grid), slider2, 2, 7, 2, 1);
@@ -586,14 +579,14 @@ void save_patient_data(GtkWidget *widget, gpointer data) {
     GtkWidget *occ_combo = (GtkWidget *)g_object_get_data(G_OBJECT(window), "occ_combo");
     GtkWidget *temp_slider = (GtkWidget *)g_object_get_data(G_OBJECT(window), "temp_slider");
 
-    const gchar *id = gtk_editable_get_text(GTK_EDITABLE(id_entry));
-    const gchar *name = gtk_editable_get_text(GTK_EDITABLE(name_entry));
+    std::string id = gtk_editable_get_text(GTK_EDITABLE(id_entry));
+    std::string name = gtk_editable_get_text(GTK_EDITABLE(name_entry));
     gint age = gtk_adjustment_get_value(gtk_range_get_adjustment(GTK_RANGE(age_slider)));
-    gint gender = gtk_combo_box_get_active(GTK_COMBO_BOX(gender_combo));
+    bool gender = gtk_combo_box_get_active(GTK_COMBO_BOX(gender_combo));
     GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(condition_text));
     GtkTextIter start, end;
     gtk_text_buffer_get_bounds(buffer, &start, &end);
-    gchar *condition = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+    std::string condition = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
     gint airway = gtk_combo_box_get_active(GTK_COMBO_BOX(airway_combo));
     gint spo2 = gtk_adjustment_get_value(gtk_range_get_adjustment(GTK_RANGE(spo2_slider)));
     gint pulse = atoi(gtk_editable_get_text(GTK_EDITABLE(pulse_entry)));
@@ -609,23 +602,38 @@ void save_patient_data(GtkWidget *widget, gpointer data) {
     patient_diagnosis.setExposureLevel(occ,temp);
     patient_diagnosis.setTriageLevel();
 
+    Patient pat;
+    pat.setId(id);
+    pat.setName(name);
+    pat.setAge(age);
+    pat.setGender(gender);
+    pat.setConditionDescription(condition);
+    pat.setDiagnosis(patient_diagnosis);
+
+    patients_vector.push_back(pat);
+    patient_names.push_back(name);
+    std::stringstream pat_ss;
+    pat_ss << "ID: " << id << "\nName: " << name << "\nAge: " << age << "\nGender: " << (gender ? "Yes" : "No") << "\nCondition: " << condition << "\nUrgency level: " << pat.getUrgencyLevel() << "\n\nDiagnosis:" << "\n\tAirway: " << airway << "\n\tSPO2: " << spo2 << "\n\tPulse: " << pulse << "\n\tAgitation: " << agitation << "\n\tChemical Contamination: " << (occ ? "Yes" : "No") << "\n\tTemperature: " << temp;
+    patient_data.push_back(pat_ss.str());
 
 
 
 
-    g_print("ID: %s\n", id);
-    g_print("Name: %s\n", name);
+    std::cout << "ID: " << id <<endl;
+    //g_print("ID: %s\n", id);
+    std::cout << "Name: " << name <<endl;
+    //g_print("Name: %s\n", name);
     g_print("Age: %d\n", age);
     g_print("Gender: %d\n", gender);
-    g_print("Condition: %s\n", condition);
+    std::cout << "Condition: " << condition <<endl;
+    //g_print("Condition: %s\n", condition);
     g_print("Airway: %d\n", airway);
     g_print("SPO2: %d\n", spo2);
     g_print("Pulse: %d\n", pulse);
     g_print("Agitation: %d\n", agitation);
     g_print("Chemical Contamination: %d\n", occ);
-    g_print("Temperature: %f\n", temp);
+    g_print("Temperature: %0.2f\n", temp);
 
-    g_free(condition);
     gtk_window_destroy(GTK_WINDOW(window));
 }
 
@@ -650,13 +658,15 @@ void open_add_doctor_window(GtkWidget *widget, gpointer data) {
     GtkApplication *app = GTK_APPLICATION(data);
     GtkWidget *window = gtk_application_window_new(app);
     gtk_window_set_title(GTK_WINDOW(window), "Add Doctor");
-    gtk_window_set_default_size(GTK_WINDOW(window), 350, 400);
+    gtk_window_set_default_size(GTK_WINDOW(window), 400, 400);
 
     GtkWidget *grid = gtk_grid_new();
-    gtk_widget_set_margin_start(grid, 15);
-    gtk_widget_set_margin_end(grid, 15);
-    gtk_widget_set_margin_top(grid, 15);
-    gtk_widget_set_margin_bottom(grid, 15);
+    gtk_grid_set_row_spacing(GTK_GRID(grid), 10);
+    gtk_grid_set_column_spacing(GTK_GRID(grid), 10);
+    gtk_widget_set_margin_start(grid, 10);
+    gtk_widget_set_margin_end(grid, 10);
+    gtk_widget_set_margin_top(grid, 10);
+    gtk_widget_set_margin_bottom(grid, 10);
     gtk_window_set_child(GTK_WINDOW(window), grid);
 
     GtkWidget *label = gtk_label_new("ID:");
@@ -671,19 +681,30 @@ void open_add_doctor_window(GtkWidget *widget, gpointer data) {
     gtk_grid_attach(GTK_GRID(grid), name_entry, 1, 1, 2, 1);
     g_object_set_data(G_OBJECT(window), "name_entry", name_entry);
 
-    GList *check_buttons = NULL;
-    gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Available days:"), 0, 2, 1, 1);
+    label = gtk_label_new("Specialization:");
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 2, 1, 1);
+    GtkWidget *specialization_combo = gtk_combo_box_text_new();
+    const char *specializations[] = {"IM", "Cardio", "Surgery", "Ophthalmology", "Gynecology", "ENT", "Dermatology", "Ortho", "Dental", "Radiology"};
+    for (int i = 0; i < 10; i++) {
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(specialization_combo), specializations[i]);
+    }
+    gtk_grid_attach(GTK_GRID(grid), specialization_combo, 1, 2, 2, 1);
+    g_object_set_data(G_OBJECT(window), "specialization_combo", specialization_combo);
+
+    label = gtk_label_new("Available Days:");
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 3, 1, 1);
 
     const char *days[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
     for (int i = 0; i < 7; i++) {
         GtkWidget *check_button = gtk_check_button_new_with_label(days[i]);
         gtk_grid_attach(GTK_GRID(grid), check_button, 1, 3 + i, 2, 1);
-        check_buttons = g_list_append(check_buttons, check_button);
+        gchar *button_name = g_strdup_printf("day_button_%d", i);
+        g_object_set_data(G_OBJECT(window), button_name, check_button);
+        g_free(button_name);
     }
-    g_object_set_data(G_OBJECT(window), "check_buttons", check_buttons);
 
     GtkWidget *save_button = gtk_button_new_with_label("Save");
-    gtk_grid_attach(GTK_GRID(grid), save_button, 1, 9, 2, 1);
+    gtk_grid_attach(GTK_GRID(grid), save_button, 1, 10, 2, 1);
     g_signal_connect(save_button, "clicked", G_CALLBACK(save_doctor_data), window);
 
     gtk_widget_show(window);
@@ -694,26 +715,146 @@ void save_doctor_data(GtkWidget *widget, gpointer data) {
 
     GtkWidget *id_entry = (GtkWidget *)g_object_get_data(G_OBJECT(window), "id_entry");
     GtkWidget *name_entry = (GtkWidget *)g_object_get_data(G_OBJECT(window), "name_entry");
-    const gchar *id = gtk_editable_get_text(GTK_EDITABLE(id_entry));
-    const gchar *name = gtk_editable_get_text(GTK_EDITABLE(name_entry));
+    GtkWidget *specialization_combo = (GtkWidget *)g_object_get_data(G_OBJECT(window), "specialization_combo");
 
-    g_print("ID: %s\n", id);
-    g_print("Name: %s\n", name);
+    std::string id = gtk_editable_get_text(GTK_EDITABLE(id_entry));
+    std::string name = gtk_editable_get_text(GTK_EDITABLE(name_entry));
+    std::string specialization = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(specialization_combo));
 
-    GList *check_buttons = (GList *)g_object_get_data(G_OBJECT(window), "check_buttons");
-    const char *days[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-
-    int i = 0;
-    for (GList *l = check_buttons; l != NULL; l = l->next) {
-        GtkWidget *check_button = GTK_WIDGET(l->data);
+    std::string days[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+    std::vector<std::string> available_days;
+    for (int i = 0; i < 7; i++) {
+        gchar *button_name = g_strdup_printf("day_button_%d", i);
+        GtkWidget *check_button = (GtkWidget *)g_object_get_data(G_OBJECT(window), button_name);
         gboolean is_active = gtk_check_button_get_active(GTK_CHECK_BUTTON(check_button));
-        g_print("Day %s: %s\n", days[i], is_active ? "Available" : "Not available");
-        i++;
+
+        if(is_active){
+            available_days.push_back(days[i]);
+        }
+
     }
 
-    g_list_free(check_buttons);
+    Doctor doc;
+    doc.setID(id);
+    doc.setName(name);
+    doc.setClinicType(specialization);
+    doc.setAvailableDays(available_days);
+
+    doctors_vector.push_back(doc);
+    doctor_names.push_back(name);
+
+
+
+
+// Create a stringstream and print the vector into it
+    std::stringstream doc_ss;
+    doc_ss << "ID: " << id << "\n";
+    doc_ss << "Name: " << name << "\n";
+    doc_ss << "Specialization: " << specialization << "\n";
+    doc_ss << "Available Days: ";
+    for (const std::string& day : available_days) {
+        doc_ss << "\n\t" << day ;
+    }
+    doc_ss << "\n";
+    doctor_data.push_back(doc_ss.str());
+
+
     gtk_window_destroy(GTK_WINDOW(window));
 }
+
+void open_delete_patient_window(GtkWidget *widget, gpointer data) {
+    GtkApplication *app = GTK_APPLICATION(data);
+    GtkWidget *window = gtk_application_window_new(app);
+    gtk_window_set_title(GTK_WINDOW(window), "Delete Patient");
+    gtk_window_set_default_size(GTK_WINDOW(window), 400, 300);
+
+    GtkWidget *grid = gtk_grid_new();
+    gtk_grid_set_column_homogeneous(GTK_GRID(grid), TRUE);
+    gtk_grid_set_row_spacing(GTK_GRID(grid), 10);
+    gtk_widget_set_margin_start(grid, 10);
+    gtk_widget_set_margin_end(grid, 10);
+    gtk_widget_set_margin_top(grid, 10);
+    gtk_widget_set_margin_bottom(grid, 10);
+    gtk_window_set_child(GTK_WINDOW(window), grid);
+
+    GtkWidget *label = gtk_label_new("Select Patient to Delete:");
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 0, 2, 1);
+    gtk_widget_set_halign(label, GTK_ALIGN_CENTER);
+
+    GtkWidget *combo = gtk_combo_box_text_new();
+    populate_patient_dropdown(combo, patient_names);
+    gtk_grid_attach(GTK_GRID(grid), combo, 0, 1, 2, 1);
+
+    GtkWidget *button = gtk_button_new_with_label("Delete");
+    g_signal_connect(button, "clicked", G_CALLBACK(delete_patient), combo);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 2, 2, 1);
+
+    button = gtk_button_new_with_label("Main Menu");
+    g_signal_connect(button, "clicked", G_CALLBACK(go_back_to_main_menu), window);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 3, 2, 1);
+
+
+    gtk_widget_show(window);
+}
+
+void delete_patient(GtkWidget *widget, gpointer data) {
+    GtkComboBox *combo = GTK_COMBO_BOX(data);
+    int index = gtk_combo_box_get_active(combo);
+    if (index >= 0 && index < static_cast<int>(patient_names.size())) {
+        patient_names.erase(patient_names.begin() + index);
+        patient_data.erase(patient_data.begin() + index);
+        patients_vector.erase(patients_vector.begin() + index);
+        populate_patient_dropdown(GTK_WIDGET(combo), patient_names);  // Ensure correct type
+    }
+}
+
+
+void open_delete_doctor_window(GtkWidget *widget, gpointer data) {
+    GtkApplication *app = GTK_APPLICATION(data);
+    GtkWidget *window = gtk_application_window_new(app);
+    gtk_window_set_title(GTK_WINDOW(window), "Delete Doctor");
+    gtk_window_set_default_size(GTK_WINDOW(window), 400, 300);
+
+    GtkWidget *grid = gtk_grid_new();
+    gtk_grid_set_column_homogeneous(GTK_GRID(grid), TRUE);
+    gtk_grid_set_row_spacing(GTK_GRID(grid), 10);
+    gtk_widget_set_margin_start(grid, 10);
+    gtk_widget_set_margin_end(grid, 10);
+    gtk_widget_set_margin_top(grid, 10);
+    gtk_widget_set_margin_bottom(grid, 10);
+    gtk_window_set_child(GTK_WINDOW(window), grid);
+
+    GtkWidget *label = gtk_label_new("Select Doctor to Delete:");
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 0, 2, 1);
+    gtk_widget_set_halign(label, GTK_ALIGN_CENTER);
+
+    GtkWidget *combo = gtk_combo_box_text_new();
+    populate_doctor_dropdown(combo);
+    gtk_grid_attach(GTK_GRID(grid), combo, 0, 1, 2, 1);
+
+    GtkWidget *button = gtk_button_new_with_label("Delete");
+    g_signal_connect(button, "clicked", G_CALLBACK(delete_doctor), combo);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 2, 2, 1);
+
+    button = gtk_button_new_with_label("Main Menu");
+    g_signal_connect(button, "clicked", G_CALLBACK(go_back_to_main_menu), window);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 3, 2, 1);
+
+    gtk_widget_show(window);
+}
+
+void delete_doctor(GtkWidget *widget, gpointer data) {
+    GtkComboBox *combo = GTK_COMBO_BOX(data);
+    int index = gtk_combo_box_get_active(combo);
+    if (index >= 0 && index < static_cast<int>(doctor_names.size())) {
+        doctor_names.erase(doctor_names.begin() + index);
+        doctor_data.erase(doctor_data.begin() + index);
+        doctors_vector.erase(doctors_vector.begin() + index);
+        populate_doctor_dropdown(GTK_WIDGET(combo));  // Ensure correct type
+    }
+}
+
+
 
 void reserve_clinic(GtkWidget *widget, gpointer data) {
     g_print("Reserve Clinic button clicked\n");

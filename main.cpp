@@ -22,6 +22,18 @@ Trie<Doctor>doctorsnames;
 Trie<Doctor>doctorsids;
 Trie<Clinic>clinictypes;
 
+void create_clinic_objects(){
+    static std::string clinics[] = {"IM", "Cardio", "Surgery", "Ophthalmology", "Gynecology", "ENT", "Dermatology", "Ortho", "Dental", "Radiology"};
+    int num_clinics = sizeof(clinics) / sizeof(clinics[0]);
+
+    for (int i = 0; i < num_clinics; ++i) {
+        Clinic clinic_obj;
+        clinic_obj.setType(clinics[i]);
+        clinic_obj.
+    }
+
+}
+
 int main(int argc, char **argv) {
     GtkApplication *app;
     int status;

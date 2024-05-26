@@ -39,10 +39,15 @@ void display_clinic_schedule(GtkWidget *widget, gpointer data);
 void go_back_to_main_menu(GtkWidget *widget, gpointer data);
 void save_doctor_data(GtkWidget *widget, gpointer data);
 void save_patient_data(GtkWidget *widget, gpointer data);
+void open_delete_doctor_window(GtkWidget *widget, gpointer data);
+void open_delete_patient_window(GtkWidget *widget, gpointer data);
+void delete_patient(GtkWidget *widget, gpointer data);
+void delete_doctor(GtkWidget *widget, gpointer data);
+void populate_patient_dropdown(GtkWidget *combo, const std::vector<std::string>& patient_names);
 
 // Function to populate the dropdown with patient/doctor names
 void populate_patient_dropdown(GtkWidget *combo, const std::vector<std::string>& patient_names);
-void populate_doctor_dropdown(GtkWidget *combo, const std::vector<std::string>& doctor_names);
+void populate_doctor_dropdown(GtkWidget *combo);
 
 // Callback function to display selected patient's/doctor's data
 void on_patient_selected(GtkComboBox *combo, gpointer data);
