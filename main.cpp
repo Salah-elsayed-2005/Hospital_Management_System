@@ -61,13 +61,11 @@ int main() {
 
 
     Patient p[] = {
-            {"Mohamed Atta", "8621562",20 , true, "zy elfol", d[0]},
-            {"Ali Ayman ", "8512616",19 , false, "negro", d[1]},
-            {"nabarawy FTW", "54124522",34 , true, "el3tba 3alnazr", d[2]},
-            {"shafey Elzoz", "8985564",17 , true, "t3ban ya capten", d[3]},
-            {"se7s2", "1",988 , true, "whar", d[4]}
-       //     {"se7", "2",988 , true, "whar", d[4]},
-         //   {"se7s", "3",988 , true, "whar", d[4]},
+            {"Mohamed Atta", "8621562",20 , true, "MVP", d[0]},
+            {"Ali Ayman ", "1049",19 , false, "Not white enough", d[1]},
+            {"Omar Nabarawy", "46209",34 , true, "Man of the team", d[2]},
+            {"Ziad Elsahafey", "242004",17 , true, "Else7a yadoobk", d[3]},
+            {"Hussein Sayed", "1",988 , true, "whar", d[4]}
     };
     PriorityQueue pq;
     for (auto & i : p) {
@@ -120,7 +118,6 @@ int main() {
     temp.push_back(doctors[4]);
     Clinic pediatrics("Pediatrician",pq,temp) ;
 
-    //pediatrics.setDoctor(temp);
     hospitalClinics.push_back(pediatrics);
     clinictypes.insert(doctors[4].getClinicType(),&pediatrics);
     temp.clear();
@@ -128,14 +125,12 @@ int main() {
     temp.push_back(doctors[2]);
     Clinic Surgery("Surgeon",pq,temp);
 
-    //Surgery.setDoctor(temp);
     hospitalClinics.push_back(Surgery);
     clinictypes.insert(doctors[2].getClinicType(),&Surgery);
     temp.clear();
 
     temp.push_back(doctors[3]);
     Clinic Dentistry("Dentist",pq,temp);
-    //Surgery.setDoctor(temp);
     hospitalClinics.push_back(Dentistry);
     clinictypes.insert(doctors[3].getClinicType(),&Dentistry);
     temp.clear();
