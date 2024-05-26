@@ -462,11 +462,9 @@ void addDoctor(){
     }
 
     cout << "\nClinic type : ";
-    cin.ignore();
-    getline(cin,clinicType);
+    cin>>clinicType;
     cout << "\nDoctor id : ";
-    cin.ignore();
-    getline(cin,id);
+    cin>>id;
     Doctor *doc=new Doctor(name,availableDays,clinicType,id);
     hospitalDoctors.push_back(*doc);
     doctorsnames.insert(name,doc);
