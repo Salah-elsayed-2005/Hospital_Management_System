@@ -156,7 +156,9 @@ void editmenu(){
         else if (choice==6){
             string input;
             cout << "Enter the id or name of the patient you want to remove : ";
-            cin>> input;
+            cin.ignore();
+            getline(cin,input);
+
 
             if (searchPatient_byName(input)|| searchPatient_byid(input)){
                 input= searchPatient_byName(input) ? searchPatient_byName(input)->getID() : searchPatient_byid(input)->getID();
@@ -320,6 +322,8 @@ void addPatient() {
     hospitalPatients.push_back(*patient); // push(store) patient object(with all the info collected from the user ) in the vector
     patientsnames.insert(name,patient);
     patientsids.insert(id, patient);
+    cout << "\n=== Patient added successfully ==="<<endl;
+
 }
 
 //function to remove the patient from the vector
@@ -346,7 +350,7 @@ void editPatient(string id_tobe_edited){
     for (int i = 0; i < hospitalPatients.size() ; i++ ){
         int choice;
         if(id_tobe_edited == hospitalPatients[i].getID()){
-            cout << "===Edit menu===\n";
+            hospitalPatients[i].displayinfo();
             cout << "what do you want to edit in the patient with id : "<< id_tobe_edited<<endl;
             cout << "1- Patient's name\n2- Patient's id\n3- Patient's age\n4- Patient's gender\n";
             cout << "5- Condition description\n";
@@ -358,15 +362,15 @@ void editPatient(string id_tobe_edited){
                 cout << "Enter the new name of the patient : ";
                 cin.ignore(); //clear the buffer to ensure that getline works correctly
                 getline(cin,name);
-                patientsids.search(id_tobe_edited)->setName(name);
                 patientsnames.deleteWord(patientsids.search(id_tobe_edited)->getName());
+                patientsids.search(id_tobe_edited)->setName(name);
                 hospitalPatients[i].setName(name);
                 patientsnames.insert(name,&hospitalPatients[i]);
              }
             else if (choice == 2){
                 string id;
                 cout << "Enter the new id of the patient : ";
-                cin >> id;//hospital[i] patient hussien id 2
+                cin >> id;
                 hospitalPatients[i].setId(id);
                 patientsids.insert(id,&hospitalPatients[i]);
                 patientsids.deleteWord(id_tobe_edited);
@@ -377,7 +381,6 @@ void editPatient(string id_tobe_edited){
                 cin >> age;
                 hospitalPatients[i].setAge(age);
                 patientsids.search(id_tobe_edited)->setAge(age);
-                patientsnames.search(id_tobe_edited)->setAge(age);
              }
             else if (choice == 4){
                 bool gen;
@@ -385,16 +388,14 @@ void editPatient(string id_tobe_edited){
                 cin >> gen;
                 hospitalPatients[i].setGender(gen);
                  patientsids.search(id_tobe_edited)->setGender(gen);
-                 patientsnames.search(id_tobe_edited)->setGender(gen);
             }
             else if (choice == 5){
                 string condition;
                 cout << "Enter the condition description of the patient : ";
-                cin.ignore(); //clear the buffer to ensure that getline works correctly
+                cin.ignore();
                 getline(cin,condition);
                 hospitalPatients[i].setConditionDescription(condition);
-                 patientsids.search(id_tobe_edited)->setConditionDescription(condition);
-                 patientsnames.search(id_tobe_edited)->setConditionDescription(condition);
+                patientsids.search(id_tobe_edited)->setConditionDescription(condition);
             }
             else if(choice == 6){
                 int airwaylevel,breathinglevel,pulselevel,disabilitylevel,exposurelevel;
@@ -411,9 +412,8 @@ void editPatient(string id_tobe_edited){
                 Diagnosis d1(airwaylevel,breathinglevel,pulselevel,disabilitylevel,exposurelevel);
                 hospitalPatients[i].setDiagnosis(d1);
                 patientsids.search(id_tobe_edited)->setDiagnosis(d1);
-                patientsnames.search(id_tobe_edited)->setDiagnosis(d1);
             }
-            cout << "Patient is edited successfully"<<endl;
+            cout << "\n=== Patient is edited successfully ==="<<endl;
             return;
         }
     }
@@ -460,22 +460,25 @@ void addDoctor(){
     cin.ignore();
     getline(cin,name); //takes the name of the doctor from the user
     cout<<"\nAvailable Days : ";
-    cin.ignore(); //clear the buffer to ensure that getline works correctly
+
     getline(cin, inputline);//get the whole line as inputline becausecin can't take more than one word
+
     stringstream line(inputline);
     string day;
     while(line>>day){ //days separated by spaces not commas
+        day = capitalizeFirstLetter(day);
         availableDays.push_back(day);
     }
 
     cout << "\nClinic type : ";
-    cin>>clinicType;
+    getline(cin,clinicType);
     cout << "\nDoctor id : ";
     cin>>id;
     Doctor *doc=new Doctor(name,availableDays,clinicType,id);
     hospitalDoctors.push_back(*doc);
     doctorsnames.insert(name,doc);
     doctorsids.insert(id,doc);
+    cout << "\n=== Doctor added successfully ==="<<endl;
 }
 
 
@@ -498,6 +501,7 @@ void editDoctor(string id_tobe_edited){
     int choice;
     for(int i = 0; i < hospitalDoctors.size() ; i++ ){ //loop over the whole vector
         if( id_tobe_edited == hospitalDoctors[i].getID() ){ //if condition to get the doctor with the id to be edited
+            hospitalDoctors[i].displayinfo();
             cout << "What do you want to edit in the doctor with id : "<<id_tobe_edited <<endl;
             cout << "1-Doctor's name\n2-Doctor's available days \n3-clinic type\n4-Doctor's id\n"
                     "Enter your choice : ";
@@ -508,8 +512,8 @@ void editDoctor(string id_tobe_edited){
                 cout <<"Enter the Doctor's right name: ";
                 cin.ignore(); //clear the buffer to ensure that getline works correctly
                 getline(cin,name); //get the whole line as the name as cin gets only the first word
-                doctorsids.search(id_tobe_edited)->setName(name);
                 doctorsnames.deleteWord(doctorsids.search(id_tobe_edited)->getName());
+                doctorsids.search(id_tobe_edited)->setName(name);
                 hospitalDoctors[i].setName(name); //set the name to the edited name
                 doctorsnames.insert(name,& hospitalDoctors[i]);
             }
@@ -523,11 +527,11 @@ void editDoctor(string id_tobe_edited){
                 string day;
                 //The following loop takes every whole word, store it in string day and push it in the vector
                 while(line>>day){ //days separated by spaces not commas
+                    day = capitalizeFirstLetter(day);
                     avd.push_back(day);
                 }
                 hospitalDoctors[i].setAvailableDays(avd); //edit the available days to the inserted one
                 doctorsids.search(id_tobe_edited)->setAvailableDays(avd);
-                doctorsnames.search(id_tobe_edited)->setAvailableDays(avd);
             }
             if (choice == 3){
                 string clinic;
@@ -536,7 +540,7 @@ void editDoctor(string id_tobe_edited){
                 getline(cin,clinic); //function to obtain the whole line and store it in inputline
                 hospitalDoctors[i].setClinicType(clinic);
                 doctorsids.search(id_tobe_edited)->setClinicType(clinic);
-                doctorsnames.search(id_tobe_edited)->setClinicType(clinic);
+                //doctorsnames.search(id_tobe_edited)->setClinicType(clinic);
             }
             if (choice == 4){
                 string id;
@@ -548,7 +552,7 @@ void editDoctor(string id_tobe_edited){
                 doctorsids.deleteWord(doctorsids.search(id_tobe_edited)->getID());
             }
 
-            cout << "Doctor  is edited successfully"<<endl;
+            cout << "\n=== Doctor  is edited successfully ==="<<endl;
             return;
         }
 
@@ -726,4 +730,15 @@ string getcurrentday() {
 
     // Return the day of the week
     return daysOfWeek[dayOfWeek];
+}
+
+// Function to capitalize ONLY the first letter of a string
+string capitalizeFirstLetter(const string& str) {
+    if (str.empty()) return str;
+    string capitalized = str;
+    capitalized[0] = toupper(capitalized[0]);
+    for (size_t i = 1; i < capitalized.size(); ++i) {
+        capitalized[i] = tolower(capitalized[i]);
+    }
+    return capitalized;
 }

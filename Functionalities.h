@@ -41,4 +41,8 @@ void emergencymenu();
 
 string getcurrentday();
 
+// Function to capitalize the first letter of a string
+string capitalizeFirstLetter(const string& str);
+
+
 #endif //UNTITLED1_FUNCTIONALITIES_H

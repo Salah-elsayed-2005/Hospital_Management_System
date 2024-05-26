@@ -108,10 +108,6 @@ int main() {
         doctorsnames.insert(toinsert->getName(),toinsert);
         doctorsids.insert(toinsert->getID(),toinsert);
     }
-    //for (auto it:hospitalDoctors) {
-      //  Doctor*toinsert=new Doctor(it.getName(),it.getAvailableDays(),it.getClinicType(),it.getID());
-
-    //}
 
 
     vector<Doctor> temp;
