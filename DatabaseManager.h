@@ -1,11 +1,9 @@
-//
-// Created by Fouad Hashesh on 5/11/2024.
-//
+# if 0
 
 #ifndef HOPSITAL_MANAGEMENT_SYSTEM_DATABASEMANAGER_H
 #define HOPSITAL_MANAGEMENT_SYSTEM_DATABASEMANAGER_H
 
-/*
+
 #include "sqlite3.h"
 #include <string>
 #include "Patient.h"
@@ -85,5 +83,6 @@ private:
     // Execute an SQL query with optional callback and user data
     int execute_sql(const std::string& sql, int (*callback)(void*,int,char**,char**) = nullptr, void* data = nullptr);
 };
-*/
+
  #endif //HOPSITAL_MANAGEMENT_SYSTEM_DATABASEMANAGER_H
+#endif

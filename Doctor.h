@@ -6,12 +6,11 @@ using namespace std;
 class Doctor{
     string name;
     vector<string>availableDays;
-    int appointmentPrice;
     string clinicType;
     string id;
 public:
     Doctor();
-    Doctor(string, vector<string> , int , string,string);
+    Doctor(string, vector<string> , string,string);
 
 
     void setName(string);
@@ -21,10 +20,10 @@ public:
     void setID(string);
 
     string getName();
-    int getPrice();
     vector<string>getAvailableDays();
     string getClinicType();
     string getID();
+    string getAvailableDaysTxt();
 
     void displayinfo();
 };

@@ -1,25 +1,38 @@
 #include "Clinics.h"
-//#include "PriorityQueue.h"
+
 using namespace std;
 
+Clinic :: Clinic(){}
+Clinic :: Clinic(string c, PriorityQueue p,vector<Doctor> d):type(c), waitingList(p),doctor(d) {}
+
+void Clinic::addDoctor(Doctor doc){
+    doctor.push_back(doc);
+}
+
+
 void Clinic ::setType(string s) {type = s;}
-void Clinic ::setDoctor(Doctor & d) {doctor = d;}
+void Clinic ::setDoctor(vector<Doctor> d) {doctor = d;}
 void Clinic ::addtoWaiting(Patient p) {waitingList.enqueue(p); }
 void Clinic ::removefromWaiting() {waitingList.dequeue();}
 void Clinic ::printInfo() {
-    cout << "Type is : " << type <<endl
-         << "Doctor is : "<<doctor.getName()<<endl
-         << "Current waiting List is : "<<endl;
+    cout << "Type is : " << type <<endl;
+    cout << "The list of doctors available : "<<endl;
+    for (auto i = 0 ; i<doctor.size() ; i++){
+        cout <<doctor[i].getName();
+        cout<<endl;
+    }
+    cout << "Current waiting List is : "<<endl;
     PriorityQueue toprint=waitingList;
     while(!toprint.isEmpty()){
         cout<<toprint.dequeue().getName()<<endl;
     }
-    cout<<"Avalaible days : ";
+    /*cout<<"Avalaible days : ";
     for (auto it :doctor.getAvailableDays()) {
         cout<<it<<"  ";
     }
-    cout<<endl;
+    cout<<endl;*/
 }
+
 string Clinic ::getType() {return type;}
-Doctor Clinic ::getDoctor() {return doctor;}
+vector<Doctor> Clinic ::getDoctor() {return doctor;}
 PriorityQueue Clinic :: getWaitingList(){return waitingList;}

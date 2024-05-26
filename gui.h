@@ -12,6 +12,7 @@
 #include "CityGraph.h"
 #include "utility"
 #include "CityGraph.h"
+#include "Clinics.h"
 #include "Patient.h"
 
 // Function to activate the GTK application and set up the main window
@@ -53,6 +54,17 @@ void populate_doctor_dropdown(GtkWidget *combo);
 void on_patient_selected(GtkComboBox *combo, gpointer data);
 void on_doctor_selected(GtkComboBox *combo, gpointer data);
 void on_emergency_selected(GtkComboBox *combo, gpointer data);
+
+void create_clinic_objects();
+Clinic searchByType(std::vector<Clinic> clinics, string type);
+
+void open_reserve_clinic_window(GtkWidget *widget, gpointer data);
+void on_add_button_clicked(GtkWidget *widget, gpointer data);
+void populate_clinic_dropdown(GtkComboBoxText *combo);
+void populate_patient_dropdown(GtkComboBoxText *combo);
+Patient searchByName(std::vector<Patient> patient, string pat_name);
+void on_clinic_selected(GtkComboBox *combo, gpointer data);
+void open_clinic_schedule_window(GtkWidget *widget, gpointer data);
 
 
 

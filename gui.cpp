@@ -13,10 +13,10 @@
 #include "Patient.h"
 
 
+
 std::vector<Patient> patients_vector ={};
 std::vector<Doctor> doctors_vector ={};
 std::vector<Clinic> clinics_vector ={};
-
 
 
 // Dummy data
@@ -41,19 +41,11 @@ std::vector<std::string> emergency_names = {
 
 };
 
-std::vector<std::string> airway_level = {
-        "No Free airway",
-        "Changed voice",
-        "Irritated throat",
-        "Free airway"
-};
 
-std::vector<std::string> agitation_level = {
-        "Observed pupil dilation",
-        "Very agitated",
-        "Moderately agitated",
-        "Normal pupils"
-};
+
+
+
+
 
 void create_clinic_objects(){
     static std::string clinics[] = {"IM", "Cardio", "Surgery", "Ophthalmology", "Gynecology", "ENT", "Dermatology", "Ortho", "Dental", "Radiology"};
@@ -108,45 +100,37 @@ void create_main_menu(GtkApplication *app) {
     g_signal_connect(button, "clicked", G_CALLBACK(open_add_patient_window), app);
     gtk_grid_attach(GTK_GRID(grid), button, 0, 1, 2, 1);
 
-    button = gtk_button_new_with_label("Edit Patients");
-    g_signal_connect(button, "clicked", G_CALLBACK(edit_patients), NULL);
-    gtk_grid_attach(GTK_GRID(grid), button, 0, 2, 2, 1);
-
-    button = gtk_button_new_with_label("Edit Doctors");
-    g_signal_connect(button, "clicked", G_CALLBACK(edit_doctors), NULL);
-    gtk_grid_attach(GTK_GRID(grid), button, 0, 3, 2, 1);
-
     button = gtk_button_new_with_label("Delete Patient");
     g_signal_connect(button, "clicked", G_CALLBACK(open_delete_patient_window), app);
-    gtk_grid_attach(GTK_GRID(grid), button, 0, 4, 2, 1);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 2, 2, 1);
 
     button = gtk_button_new_with_label("Delete Doctor");
     g_signal_connect(button, "clicked", G_CALLBACK(open_delete_doctor_window), app);
-    gtk_grid_attach(GTK_GRID(grid), button, 0, 5, 2, 1);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 3, 2, 1);
 
     button = gtk_button_new_with_label("Display Patients");
     g_signal_connect(button, "clicked", G_CALLBACK(display_patients), app);
-    gtk_grid_attach(GTK_GRID(grid), button, 0, 6, 2, 1);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 4, 2, 1);
 
     button = gtk_button_new_with_label("Display Doctors");
     g_signal_connect(button, "clicked", G_CALLBACK(display_doctors), app);
-    gtk_grid_attach(GTK_GRID(grid), button, 0, 7, 2, 1);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 5, 2, 1);
 
     button = gtk_button_new_with_label("Reserve Clinic");
-    g_signal_connect(button, "clicked", G_CALLBACK(reserve_clinic), NULL);
-    gtk_grid_attach(GTK_GRID(grid), button, 0, 8, 2, 1);
+    g_signal_connect(button, "clicked", G_CALLBACK(open_reserve_clinic_window), app);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 6, 2, 1);
 
     button = gtk_button_new_with_label("Clinic Schedule");
-    g_signal_connect(button, "clicked", G_CALLBACK(display_clinic_schedule), NULL);
-    gtk_grid_attach(GTK_GRID(grid), button, 0, 9, 2, 1);
+    g_signal_connect(button, "clicked", G_CALLBACK(open_clinic_schedule_window), app);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 7, 2, 1);
 
     button = gtk_button_new_with_label("Emergency requests");
     g_signal_connect(button, "clicked", G_CALLBACK(display_emergencies), app);
-    gtk_grid_attach(GTK_GRID(grid), button, 0, 10, 2, 1);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 8, 2, 1);
 
     button = gtk_button_new_with_label("Quit");
     g_signal_connect_swapped(button, "clicked", G_CALLBACK(g_application_quit), app);
-    gtk_grid_attach(GTK_GRID(grid), button, 0, 11, 2, 1);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 9, 2, 1);
 
     gtk_widget_show(window);
 }
@@ -610,6 +594,8 @@ void save_patient_data(GtkWidget *widget, gpointer data) {
     pat.setConditionDescription(condition);
     pat.setDiagnosis(patient_diagnosis);
 
+
+
     patients_vector.push_back(pat);
     patient_names.push_back(name);
     std::stringstream pat_ss;
@@ -743,6 +729,7 @@ void save_doctor_data(GtkWidget *widget, gpointer data) {
     doctors_vector.push_back(doc);
     doctor_names.push_back(name);
 
+    searchByType(clinics_vector, specialization).addDoctor(doc);
 
 
 
@@ -854,10 +841,148 @@ void delete_doctor(GtkWidget *widget, gpointer data) {
     }
 }
 
+void open_reserve_clinic_window(GtkWidget *widget, gpointer data) {
+    GtkApplication *app = GTK_APPLICATION(data);
+    GtkWidget *window = gtk_application_window_new(app);
+    gtk_window_set_title(GTK_WINDOW(window), "Reserve Clinic");
+    gtk_window_set_default_size(GTK_WINDOW(window), 400, 300);
+
+    GtkWidget *grid = gtk_grid_new();
+    gtk_grid_set_column_homogeneous(GTK_GRID(grid), TRUE);
+    gtk_grid_set_row_spacing(GTK_GRID(grid), 10);
+    gtk_widget_set_margin_start(grid, 10);
+    gtk_widget_set_margin_end(grid, 10);
+    gtk_widget_set_margin_top(grid, 10);
+    gtk_widget_set_margin_bottom(grid, 10);
+    gtk_window_set_child(GTK_WINDOW(window), grid);
+
+    // Create and populate clinic dropdown
+    GtkWidget *label = gtk_label_new("Select Clinic:");
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 0, 1, 1);
+    GtkComboBoxText *clinic_combo = GTK_COMBO_BOX_TEXT(gtk_combo_box_text_new());
+    populate_clinic_dropdown(clinic_combo);
+    gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(clinic_combo), 1, 0, 2, 1);
+    g_object_set_data(G_OBJECT(window), "clinic_combo", clinic_combo);
+
+    // Create and populate patient dropdown
+    label = gtk_label_new("Select Patient:");
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 1, 1, 1);
+    GtkComboBoxText *patient_combo = GTK_COMBO_BOX_TEXT(gtk_combo_box_text_new());
+    populate_patient_dropdown(patient_combo);
+    gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(patient_combo), 1, 1, 2, 1);
+    g_object_set_data(G_OBJECT(window), "patient_combo", patient_combo);
+
+    // Add button
+    GtkWidget *add_button = gtk_button_new_with_label("Add");
+    gtk_grid_attach(GTK_GRID(grid), add_button, 0, 2, 3, 1);
+    g_signal_connect(add_button, "clicked", G_CALLBACK(on_add_button_clicked), window);
+
+    // Main Menu button
+    GtkWidget *main_menu_button = gtk_button_new_with_label("Main Menu");
+    gtk_grid_attach(GTK_GRID(grid), main_menu_button, 0, 3, 3, 1);
+    g_signal_connect(main_menu_button, "clicked", G_CALLBACK(go_back_to_main_menu), window);
+
+    gtk_widget_show(window);
+}
+
+void on_add_button_clicked(GtkWidget *widget, gpointer data) {
+    GtkWidget *window = GTK_WIDGET(data);
+    GtkComboBoxText *clinic_combo = GTK_COMBO_BOX_TEXT(g_object_get_data(G_OBJECT(window), "clinic_combo"));
+    GtkComboBoxText *patient_combo = GTK_COMBO_BOX_TEXT(g_object_get_data(G_OBJECT(window), "patient_combo"));
+
+    std::string selected_clinic = gtk_combo_box_text_get_active_text(clinic_combo);
+    std::string selected_patient = gtk_combo_box_text_get_active_text(patient_combo);
+
+    searchByType(clinics_vector, selected_clinic).addtoWaiting(searchByName(patients_vector, selected_patient));
 
 
-void reserve_clinic(GtkWidget *widget, gpointer data) {
-    g_print("Reserve Clinic button clicked\n");
+}
+
+void open_clinic_schedule_window(GtkWidget *widget, gpointer data) {
+    GtkApplication *app = GTK_APPLICATION(data);
+    GtkWidget *window = gtk_application_window_new(app);
+    gtk_window_set_title(GTK_WINDOW(window), "Clinic Schedule");
+    gtk_window_set_default_size(GTK_WINDOW(window), 400, 300);
+
+    GtkWidget *grid = gtk_grid_new();
+    gtk_grid_set_column_homogeneous(GTK_GRID(grid), TRUE);
+    gtk_grid_set_row_spacing(GTK_GRID(grid), 10);
+    gtk_widget_set_margin_start(grid, 10);
+    gtk_widget_set_margin_end(grid, 10);
+    gtk_widget_set_margin_top(grid, 10);
+    gtk_widget_set_margin_bottom(grid, 10);
+    gtk_window_set_child(GTK_WINDOW(window), grid);
+
+    // Add label for "Select Clinic"
+    GtkWidget *label = gtk_label_new("Select Clinic");
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 0, 2, 1);
+    gtk_widget_set_halign(label, GTK_ALIGN_CENTER);
+
+    // Add a combo box (dropdown) for clinic selection
+    GtkComboBoxText *combo = GTK_COMBO_BOX_TEXT(gtk_combo_box_text_new());
+    populate_clinic_dropdown(combo);
+    gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(combo), 0, 1, 2, 1);
+
+    // Add a text view for displaying clinic schedule
+    GtkWidget *text_view = gtk_text_view_new();
+    gtk_text_view_set_editable(GTK_TEXT_VIEW(text_view), FALSE);
+    gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(text_view), GTK_WRAP_WORD);
+
+    GtkWidget *scroll_win = gtk_scrolled_window_new();
+    gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scroll_win), text_view);
+    gtk_widget_set_vexpand(scroll_win, TRUE);
+    gtk_widget_set_hexpand(scroll_win, TRUE);
+    gtk_grid_attach(GTK_GRID(grid), scroll_win, 0, 2, 2, 1);
+
+    // Connect the signal for combo box selection change
+    g_signal_connect(combo, "changed", G_CALLBACK(on_clinic_selected), text_view);
+
+    // Add a "Main Menu" button
+    GtkWidget *button = gtk_button_new_with_label("Main Menu");
+    g_signal_connect(button, "clicked", G_CALLBACK(go_back_to_main_menu), window);
+    gtk_grid_attach(GTK_GRID(grid), button, 0, 3, 2, 1);
+
+    gtk_widget_show(window);
+}
+
+
+
+void on_clinic_selected(GtkComboBox *combo, gpointer data) {
+    static std::string clinics[] = {"IM", "Cardio", "Surgery", "Ophthalmology", "Gynecology", "ENT", "Dermatology", "Ortho", "Dental", "Radiology"};
+    GtkWidget *text_view = GTK_WIDGET(data);
+    GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
+    int index = gtk_combo_box_get_active(combo);
+
+    if (index >= 0 && index < static_cast<int>(sizeof(clinics) / sizeof(clinics[0]))) {
+        std::string clinic_type = clinics[index];
+        std::vector<Doctor> clinic_docs = (searchByType(clinics_vector, clinic_type).getDoctor());
+        std::stringstream ss;
+
+        ss << "Clinic Type: " << clinic_type;
+        ss << "\n\nDoctors: ";
+
+        for (auto& it : clinic_docs) {
+            ss << "\n\tName: " << it.getName();
+            ss << "\n\tAvailable Days: " << it.getAvailableDaysTxt();
+        }
+
+        std::string result = ss.str();
+        gtk_text_buffer_set_text(buffer, result.c_str(), -1);
+    }
+}
+
+
+void populate_clinic_dropdown(GtkComboBoxText *combo) {
+    static std::string clinics[] = {"IM", "Cardio", "Surgery", "Ophthalmology", "Gynecology", "ENT", "Dermatology", "Ortho", "Dental", "Radiology"};
+    for (const auto& clinic : clinics) {
+        gtk_combo_box_text_append_text(combo, clinic.c_str());
+    }
+}
+
+void populate_patient_dropdown(GtkComboBoxText *combo) {
+    for (const auto& name : patient_names) {
+        gtk_combo_box_text_append_text(combo, name.c_str());
+    }
 }
 
 void display_clinic_schedule(GtkWidget *widget, gpointer data) {

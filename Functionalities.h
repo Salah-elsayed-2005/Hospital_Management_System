@@ -8,7 +8,6 @@
 #include "Patient.h"
 #include "Doctor.h"
 #include "Clinics.h"
-#include "Date.h"
 using namespace std;
 Patient* searchPatient_byid(string );
 Patient* searchPatient_byName(string );
@@ -16,25 +15,34 @@ void addPatient();
 void removePatient(string);
 void editPatient(string);
 void displaypatients();
+
 Doctor* searchDoctor_byid(string );
 Doctor* searchDoctor_byname(string );
-
 void addDoctor();
 void removeDoctor(string);
 void editDoctor(string);
 void displaydoctors();
 
+Clinic* searchClinic(string);
 void reserveClinic(); //needs to be implemented
 void displayClinicSchedule(); //needs to be implemented
 void displayclinics();
-Clinic*searchCLinic(string);
+void RemovePatientFromQueue();
+
+bool checkBack();
+int checkinput(int choice,int first,int last);
 
 void mainmenu();
 void editmenu();
 void displaymenu();
 void clinicmenu();
 void creditsmenu();
+void emergencymenu();
 
-int checkinput(int,int,int);
+string getcurrentday();
+
+// Function to capitalize the first letter of a string
+string capitalizeFirstLetter(const string& str);
+
 
 #endif //UNTITLED1_FUNCTIONALITIES_H

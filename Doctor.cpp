@@ -1,21 +1,28 @@
 #include "Doctor.h"
+#include <strstream>
 
 Doctor :: Doctor(){}
-Doctor :: Doctor(string nm, vector<string> avdays, int prices , string cltype ,string id11) : name(nm)
-,availableDays(avdays), appointmentPrice(prices),clinicType(cltype),id(id11) {}
+Doctor :: Doctor(string nm, vector<string> avdays,  string cltype ,string id11) : name(nm)
+,availableDays(avdays),clinicType(cltype),id(id11) {}
 
 
 vector<string> Doctor::getAvailableDays() { return availableDays;}
-int Doctor::getPrice() {return appointmentPrice;}
 string Doctor::getName() {return name;}
 string Doctor::getClinicType() {return clinicType;}
 string Doctor::getID() {return id;}
 
 void Doctor::setAvailableDays(vector<std::string>days) {availableDays=days;}
+string Doctor::getAvailableDaysTxt(){
+    strstream ss;
+
+    for (auto& it : availableDays){
+        ss << it;
+    }
+    return ss.str();
+}
 void Doctor::setClinicType(std::string t) {clinicType=t;}
 void Doctor::setID(std::string i) {id=i;}
 void Doctor::setName(std::string n) {name= n;}
-void Doctor::setPrice(int p) {appointmentPrice=p;}
 
 void Doctor :: displayinfo(){
     cout<<"Doctor's name is : "<< name << endl;
@@ -26,8 +33,6 @@ void Doctor :: displayinfo(){
             cout << " ,";
         }
     }
-    cout << "\b\b\b\b\b"<<endl;
-    cout << "Appointment price : "<< appointmentPrice<<endl;
-    cout << "Clinic Type : " << clinicType << endl;
+    cout << "\nClinic Type : " << clinicType << endl;
     cout<< "Doctor's id : "<<id<<endl;
 }
