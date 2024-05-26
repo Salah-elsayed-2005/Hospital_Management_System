@@ -15,6 +15,7 @@
 #include "Clinics.h"
 #include "Patient.h"
 
+
 // Function to activate the GTK application and set up the main window
 void activate(GtkApplication *app, gpointer user_data);
 

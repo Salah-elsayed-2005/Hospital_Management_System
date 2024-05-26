@@ -20,8 +20,6 @@ add_executable(Hospital_Management_System
         Diagnosis.h
         Clinics.cpp
         Clinics.h
-        DatabaseManager.cpp
-        DatabaseManager.h
         Doctor.cpp
         Doctor.h
         Date.cpp
@@ -34,3 +32,8 @@ add_executable(Hospital_Management_System
         gui.h
         gui.cpp)
 target_link_libraries(Hospital_Management_System ${GTK4_LIBRARIES})
+find_package (SQLite3)
+if (SQLITE3_FOUND)
+    include_directories(${SQLITE3_INCLUDE_DIRS})
+    target_link_libraries (Hospital_Management_System SQLite::SQLite3)
+endif (SQLITE3_FOUND)

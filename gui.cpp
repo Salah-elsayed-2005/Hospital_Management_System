@@ -12,8 +12,6 @@
 #include "CityGraph.h"
 #include "Patient.h"
 
-
-
 std::vector<Patient> patients_vector ={};
 std::vector<Doctor> doctors_vector ={};
 std::vector<Clinic> clinics_vector ={};
@@ -40,10 +38,6 @@ std::vector<std::string> emergency_names = {
         "Meadowlark Homes"
 
 };
-
-
-
-
 
 
 
@@ -147,7 +141,14 @@ void on_credits_button_clicked(GtkWidget *widget, gpointer data) {
     show_credits(parent_window, NULL);
 }
 
+// Declare the DatabaseManager instance globally if you want to access it across different functions.
+
+// Load data into the vectors when the application starts
 void activate(GtkApplication *app, gpointer user_data) {
+    // Load data from the database
+
+
+    // Existing code for creating the window and setting up the main menu
     GtkWidget *window = gtk_application_window_new(app);
     gtk_window_set_title(GTK_WINDOW(window), "Hospital Management System");
     gtk_window_set_default_size(GTK_WINDOW(window), 400, 300);
@@ -620,6 +621,9 @@ void save_patient_data(GtkWidget *widget, gpointer data) {
     g_print("Chemical Contamination: %d\n", occ);
     g_print("Temperature: %0.2f\n", temp);
 
+
+    // Save to database
+
     gtk_window_destroy(GTK_WINDOW(window));
 }
 
@@ -788,10 +792,12 @@ void delete_patient(GtkWidget *widget, gpointer data) {
     GtkComboBox *combo = GTK_COMBO_BOX(data);
     int index = gtk_combo_box_get_active(combo);
     if (index >= 0 && index < static_cast<int>(patient_names.size())) {
+        std::string name = patient_names[index];
         patient_names.erase(patient_names.begin() + index);
         patient_data.erase(patient_data.begin() + index);
         patients_vector.erase(patients_vector.begin() + index);
         populate_patient_dropdown(GTK_WIDGET(combo), patient_names);  // Ensure correct type
+
     }
 }
 
@@ -834,10 +840,12 @@ void delete_doctor(GtkWidget *widget, gpointer data) {
     GtkComboBox *combo = GTK_COMBO_BOX(data);
     int index = gtk_combo_box_get_active(combo);
     if (index >= 0 && index < static_cast<int>(doctor_names.size())) {
+        std::string name = doctor_names[index];
         doctor_names.erase(doctor_names.begin() + index);
         doctor_data.erase(doctor_data.begin() + index);
         doctors_vector.erase(doctors_vector.begin() + index);
         populate_doctor_dropdown(GTK_WIDGET(combo));  // Ensure correct type
+
     }
 }
 
