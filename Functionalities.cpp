@@ -582,20 +582,28 @@ void reserveClinic() {
     getline(cin,type);
     if(clinictypes.search(type)){
             bool isavailable= false;
-            for (auto it2 = 0 ; it2 < searchClinic(type)->getDoctor().size(); it2++){
-            for (auto it:searchClinic(type)->getDoctor()[it2].getAvailableDays()) {
-                if (it==getcurrentday())
-                isavailable= true;
-            }
+            int intemp ;
+            for (auto it2 = 0 ; it2 <hospitalClinics.size(); it2++) { // loop 3l clinics
+                vector<Doctor> temp = hospitalClinics[it2].getDoctor();
+                for (auto i = 0; i< temp.size() ; i++) { //loop3l doctors
+                    for (auto it: temp[i].getAvailableDays()) { // loop 3l available days
+                        if (it == getcurrentday()) {
+                            isavailable = true;
+                            intemp = it2;
+                        }
+                    }
                 }
+            }
             if (isavailable) {
             string input;
             cout << "Enter the id or name of the Patient : ";
             getline(cin,input);
                 if (searchPatient_byid(input) || searchPatient_byName(input)) {
-                searchPatient_byName(input) ? searchClinic(type)->addtoWaiting(*searchPatient_byName(input))
-                                            : searchClinic(type)->addtoWaiting(*searchPatient_byid(input));
+                    input= searchPatient_byName(input) ? searchPatient_byName(input)->getID() : searchPatient_byid(input)->getID();
+                    searchClinic(type)->addtoWaiting(*searchPatient_byid(input));
+                hospitalClinics[intemp].addtoWaiting(*searchPatient_byid(input));
                 cout << "CLinic reserved successfully" <<endl;//test
+
              } else
                 cout << "ID not found" << endl;
             } else
