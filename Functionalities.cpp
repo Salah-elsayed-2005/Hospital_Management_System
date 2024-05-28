@@ -363,17 +363,23 @@ void editPatient(string id_tobe_edited){
                 cin.ignore(); //clear the buffer to ensure that getline works correctly
                 getline(cin,name);
                 patientsnames.deleteWord(patientsids.search(id_tobe_edited)->getName());
-                patientsids.search(id_tobe_edited)->setName(name);
                 hospitalPatients[i].setName(name);
+                patientsids.deleteWord(id_tobe_edited);
+               // patientsids.search(id_tobe_edited)->setName(name);
                 patientsnames.insert(name,&hospitalPatients[i]);
+                patientsids.insert(id_tobe_edited,&hospitalPatients[i]);
              }
             else if (choice == 2){
                 string id;
                 cout << "Enter the new id of the patient : ";
                 cin >> id;
-                hospitalPatients[i].setId(id);
-                patientsids.insert(id,&hospitalPatients[i]);
+                string oldname = patientsids.search(id_tobe_edited)->getName();
+                patientsnames.deleteWord(patientsids.search(id_tobe_edited)->getName());
                 patientsids.deleteWord(id_tobe_edited);
+                hospitalPatients[i].setId(id);
+                patientsnames.insert(oldname,&hospitalPatients[i]);
+                patientsids.insert(id,&hospitalPatients[i]);
+
             }
             else if (choice == 3){
                 int age;
@@ -507,15 +513,18 @@ void editDoctor(string id_tobe_edited){
                     "Enter your choice : ";
             cin >> choice;
             choice = checkinput(choice,1,4);
-             if (choice == 1){
+
+            if (choice == 1){
                 string name;
                 cout <<"Enter the Doctor's right name: ";
                 cin.ignore(); //clear the buffer to ensure that getline works correctly
                 getline(cin,name); //get the whole line as the name as cin gets only the first word
+
                 doctorsnames.deleteWord(doctorsids.search(id_tobe_edited)->getName());
-                doctorsids.search(id_tobe_edited)->setName(name);
                 hospitalDoctors[i].setName(name); //set the name to the edited name
-                doctorsnames.insert(name,& hospitalDoctors[i]);
+                doctorsids.deleteWord(id_tobe_edited);
+                doctorsnames.insert(name,&hospitalDoctors[i]);
+                doctorsids.insert(id_tobe_edited,&hospitalDoctors[i]);
             }
             if (choice == 2){
                 vector<string> avd;
@@ -540,16 +549,18 @@ void editDoctor(string id_tobe_edited){
                 getline(cin,clinic); //function to obtain the whole line and store it in inputline
                 hospitalDoctors[i].setClinicType(clinic);
                 doctorsids.search(id_tobe_edited)->setClinicType(clinic);
-                //doctorsnames.search(id_tobe_edited)->setClinicType(clinic);
             }
             if (choice == 4){
                 string id;
                 cout << "Enter the Doctor's new id : ";
                 cin.ignore(); //take the id as input to give it to the setter
                 getline(cin,id);
+                string oldname=doctorsids.search(id_tobe_edited)->getName();
+                doctorsids.deleteWord(id_tobe_edited);
+                doctorsnames.deleteWord(oldname);
                 hospitalDoctors[i].setID(id); //set the id to the inserted idfrom the user
                 doctorsids.insert(id,&hospitalDoctors[i]);
-                doctorsids.deleteWord(doctorsids.search(id_tobe_edited)->getID());
+                doctorsnames.insert(oldname,&hospitalDoctors[i]);
             }
 
             cout << "\n=== Doctor  is edited successfully ==="<<endl;
