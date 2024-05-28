@@ -24,12 +24,15 @@ public:
     void setDoctor(vector<Doctor> d);
 
     void addtoWaiting(Patient);
+
     void removefromWaiting();
+
     void printInfo();
 
     void addDoctor(Doctor doc);
 
     string getType();
+
     PriorityQueue getWaitingList();
 
     vector<Doctor> getDoctor();

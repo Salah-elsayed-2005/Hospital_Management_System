@@ -40,7 +40,6 @@ std::vector<std::string> emergency_names = {
 };
 
 
-
 Clinic *searchByType(const string& type){
 
     for (int i = 0; i < clinics_vector.size(); ++i) {
@@ -1054,8 +1053,21 @@ void populate_patient_dropdown(GtkComboBoxText *combo) {
     }
 }
 
-void display_clinic_schedule(GtkWidget *widget, gpointer data) {
-    g_print("Clinic Schedule button clicked\n");
+
+Clinic searchByType(std::vector<Clinic> clinics, string type){
+    for(auto it : clinics) {
+        if (it.getType() == type)
+            return it;
+    }
+}
+
+Patient *searchByName(const string& pat_name){
+
+    for (int i = 0; i < patients_vector.size(); ++i) {
+        if (patients_vector[i].getName()==pat_name)
+            return &patients_vector[i];
+    }
+    return nullptr;
 }
 
 
